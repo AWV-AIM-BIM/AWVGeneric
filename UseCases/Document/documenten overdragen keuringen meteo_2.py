@@ -99,10 +99,21 @@ if __name__ == '__main__':
         if not bestandsnaam.exists():
             # geen match = zoeken op eerste stuk van het bestand (alles voor "_")
             # als er dan wel een bestand gevonden wordt, gebruik dat
-
-
-            print(f'Error: bestand {bestandsnaam} niet gevonden voor row {row_index}')
-            continue
+            keuringsrapporten_dir = Path(__file__).parent / 'keuringsrapporten'
+            originele_bestandsnaam = Path(row_values[0])
+            zoekterm = originele_bestandsnaam.stem.split('_')[0]  # Alles voor de eerste underscore
+            
+            gevonden_bestand = None
+            for bestand in keuringsrapporten_dir.glob('*.pdf'):
+                if bestand.stem.startswith(zoekterm):
+                    gevonden_bestand = bestand
+                    break
+            
+            if gevonden_bestand:
+                bestandsnaam = gevonden_bestand
+            else:
+                print(f'Error: bestand {bestandsnaam} niet gevonden voor row {row_index}')
+                continue
         dtc_doc = DtcDocumentWaarden()
         dtc_doc.bestandsnaam = bestandsnaam.name
         dtc_doc.mimeType = 'application/pdf'
