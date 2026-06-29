@@ -2,6 +2,8 @@ import json
 import logging
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from API.eminfra.EMInfraDomain import (BestekKoppeling, BestekRef, PagingModeEnum, SelectionDTO, OperatorEnum,
                                        ExpressionDTO, TermDTO, QueryDTO, BestekCategorieEnum,
                                        BestekKoppelingStatusEnum, AssetDTO)
@@ -192,6 +194,10 @@ class BestekService:
                 None,
         ):
             matching_koppeling.eindDatum = end_datetime
+            # Missing start date of an existing bestekkoppeling gives an error when ending the bestekkoppeling.
+            # Add dummy start date 10 years back in time.
+            if not matching_koppeling.startDatum:
+                matching_koppeling.startDatum = end_datetime - relativedelta(years=10)
         return self.change_bestekkoppelingen_by_uuid(asset_uuid, bestekkoppelingen)
 
     def end_bestekkoppeling(self, asset: AssetDTO, bestek_ref_uuid: str,
