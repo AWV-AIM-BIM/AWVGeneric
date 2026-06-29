@@ -2,6 +2,8 @@ import json
 import logging
 from datetime import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from API.eminfra.EMInfraDomain import (BestekKoppeling, BestekRef, PagingModeEnum, SelectionDTO, OperatorEnum,
                                        ExpressionDTO, TermDTO, QueryDTO, BestekCategorieEnum,
                                        BestekKoppelingStatusEnum, AssetDTO)
@@ -181,7 +183,7 @@ class BestekService:
         :param end_datetime: end-date of the bestek
         :return: response of the API call, or None when nothing is updated.
         """
-        end_datetime = format_datetime(end_datetime)
+        end_datetime_formatted = format_datetime(end_datetime)
         bestekkoppelingen = self.get_bestekkoppeling_by_uuid(asset_uuid=asset_uuid)
         if matching_koppeling := next(
                 (
@@ -191,7 +193,11 @@ class BestekService:
                 ),
                 None,
         ):
-            matching_koppeling.eindDatum = end_datetime
+            matching_koppeling.eindDatum = end_datetime_formatted
+            # Missing start date of an existing bestekkoppeling gives an error when ending the bestekkoppeling.
+            # Add dummy start date 10 years back in time.
+            if not matching_koppeling.startDatum:
+                matching_koppeling.startDatum = format_datetime(end_datetime - relativedelta(years=10))
         return self.change_bestekkoppelingen_by_uuid(asset_uuid, bestekkoppelingen)
 
     def end_bestekkoppeling(self, asset: AssetDTO, bestek_ref_uuid: str,
