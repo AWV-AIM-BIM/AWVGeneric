@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from pathlib import Path
 import pandas as pd
@@ -14,12 +15,14 @@ def read_excel_as_df(filepath: Path, usecols: list = None) -> pd.DataFrame:
         raise FileNotFoundError(f'Filepath "{filepath}" does not exist.')
 
     if not usecols:
-        usecols = ['assetId.identificator', 'typeURI', 'bs.AwvId.identificator', 'bs.besteknummer']
+        usecols = ['assetId.identificator', 'typeURI', 'bs.AwvId.identificator', 'bs.bestekRefId.identificator',
+                   'bs.besteknummer']
 
     df = pd.read_excel(filepath, sheet_name='Sheet1', header=0, usecols=usecols)
     df = df.rename(columns={
         'assetId.identificator': 'uuid',
-        'bs.AwvId.identificator': 'bestekRef_uuid',
+        'bs.AwvId.identificator': 'bestekRefAwv_uuid',
+        'bs.bestekRefId.identificator': 'bestekRef_uuid',
         'bs.besteknummer': 'bestekNummer'
     })
     df = df.dropna(subset=["uuid"])
@@ -59,10 +62,12 @@ if __name__ == '__main__':
 
         # Check if bestekkoppeling exists: Apply existing function replace_bestekkoppeling_by_uuid()
         if matching_koppeling := next(
-                (k for k in bestekkoppelingen if k.bestekRef.eDeltaBesteknummer == bestekNummer), None, ):
+                (k for k in bestekkoppelingen if k.bestekRef.uuid == bestekRef_uuid), None, ):
             logging.debug(f'Bestek "{bestekNummer}" bestaat, '
                           f'einddatum wordt leeggemaakt.')
-            start_datetime = matching_koppeling.startDatum
+            start_datetime_str = matching_koppeling.startDatum
+            start_datetime_with_tz = datetime.strptime(start_datetime_str, '%Y-%m-%dT%H:%M:%S.%f%z')
+            start_datetime = start_datetime_with_tz.replace(tzinfo=None)
             eminfra_client.bestek_service.adjust_date_bestekkoppeling_by_uuid(
                 asset_uuid=asset.uuid, bestek_ref_uuid=bestekRef_uuid, start_datetime=start_datetime, end_datetime=None)
 
