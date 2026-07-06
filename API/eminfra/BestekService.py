@@ -1,5 +1,6 @@
 import json
 import logging
+from asyncio.windows_events import NULL
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -155,6 +156,8 @@ class BestekService:
                 matching_koppeling.startDatum = format_datetime(start_datetime)
             if end_datetime:
                 matching_koppeling.eindDatum = format_datetime(end_datetime)
+            if end_datetime is None:
+                matching_koppeling.eindDatum = end_datetime
         return self.change_bestekkoppelingen_by_uuid(asset_uuid, bestekkoppelingen)
 
     def adjust_date_bestekkoppeling(self, asset: AssetDTO, bestek_ref_uuid: str, start_datetime: datetime = None,
