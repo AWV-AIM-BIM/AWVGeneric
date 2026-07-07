@@ -10,7 +10,6 @@ from API.Enums import AuthType, Environment
 from utils.date_helpers import format_datetime
 
 ENVIRONMENT = Environment.PRD
-# BESTANDSNAAM = 'assets_bestekRefs_2026-07-07.xlsx'
 BESTANDSNAAM = 'assets_bestekRefs.xlsx'
 EDELTA_DOSSIERNUMMER = 'INTERN-429'
 STARTDATUM = datetime(year=2026, month=6, day=1)
@@ -72,6 +71,7 @@ if __name__ == '__main__':
 
         # Check if bestekkoppeling exists: Apply existing function replace_bestekkoppeling_by_uuid()
         bestekkoppeling_new = None
+        idx_matching_bestek = None
         for i, koppeling in enumerate(bestekkoppelingen):
             if koppeling.bestekRef.uuid == bestekRef_uuid:
                 logging.debug(f'Bestek "{bestekNummer}" bestaat op index positie: {i}.')
@@ -83,15 +83,14 @@ if __name__ == '__main__':
                     eindDatum=EINDDDATUM,
                     categorie=BestekCategorieEnum.WERKBESTEK
                 )
+                idx_matching_bestek=  i
 
             else:
-                logging.critical(f'Ander bestek, geen actie.')
+                logging.info(f'Ander bestek, geen actie.')
 
         # Insert the new bestekkoppeling at index position i+1 (not append())
         # Insertion outside the loop
         if bestekkoppeling_new:
-            bestekkoppelingen.insert(i, bestekkoppeling_new)
+            bestekkoppelingen.insert(idx_matching_bestek + 1, bestekkoppeling_new)
 
-        eminfra_client.bestek_service.change_bestekkoppelingen_by_uuid(asset_uuid=asset.uuid, bestekkoppeling=bestekkoppelingen)
-            # eminfra_client.bestek_service.adjust_date_bestekkoppeling_by_uuid(
-            #     asset_uuid=asset.uuid, bestek_ref_uuid=bestekRef_uuid, start_datetime=start_datetime, end_datetime=None)
+        eminfra_client.bestek_service.change_bestekkoppelingen_by_uuid(asset_uuid=asset.uuid, bestekkoppelingen=bestekkoppelingen)
