@@ -723,7 +723,7 @@ class BetrokkenerelatieDTO(BaseDataclass):
     doel: dict # TODO wijzigen naar Object
     rol: str # TODO enum
     links: [Link]
-    geldigheid: dict | None
+    geldigheid: dict | None = None
 
     def __post_init__(self):
         self._fix_nested_list_classes({('links', Link)})
