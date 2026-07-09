@@ -715,21 +715,6 @@ class DocumentDTO(BaseDataclass):
         self._fix_nested_list_classes({('links', Link)})
         
 @dataclass
-class BetrokkenerelatieDTO(BaseDataclass):
-    uuid: str
-    createdOn: str
-    modifiedOn: str
-    bron: dict # TODO wijzigen naar Object
-    doel: dict # TODO wijzigen naar Object
-    rol: str # TODO enum
-    links: [Link]
-    geldigheid: dict | None = None
-
-    def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
-
-
-@dataclass
 class RelatieTypeDTO(BaseDataclass):
     _type: str
     uuid: str
@@ -784,6 +769,21 @@ class AgentDTO(BaseDataclass):
     def __post_init__(self):
         self._fix_nested_list_classes({('links', Link)})
 
+
+@dataclass
+class BetrokkenerelatieDTO(BaseDataclass):
+    uuid: str
+    createdOn: str
+    modifiedOn: str
+    bron: AssetDTO
+    doel: AgentDTO
+    rol: str # TODO enum
+    links: [Link]
+    geldigheid: dict | None = None
+
+    def __post_init__(self):
+        self._fix_nested_classes({('bron', AssetDTO), ('doel', AgentDTO)})
+        self._fix_nested_list_classes({('links', Link)})
 
 
 @dataclass

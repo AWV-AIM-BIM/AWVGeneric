@@ -222,3 +222,49 @@ def vervang_door_verweven_asset(client: EMInfraClient, asset = AssetDTO) -> type
     elif len(assets_gemigreerd) == 1:
         return assets_gemigreerd[0]  # Return the migrated asset
     return None  # Fallback (if needed)
+
+def update_agent(eminfra_client: EMInfraClient, asset: AssetDTO, agent_naam: str, agent_rol: str) -> None:
+    """
+    Update de betrokkenerelatie van een zekere asset, door een specifieke Agent (op basis van de geschreven naam)
+     en met een bepaalde rol.
+    Werpt een foutboodschap zodra de agent niet bestaat of zodra er al meerdere betrokkenerelaties bestaat met
+     eenzelfde rol.
+
+    :param eminfra_client: EMInfraClient
+    :param asset: AssetDTO
+    :param agent_naam: str
+    :param agent_rol: str
+    :return: None
+    """
+    agent = next(eminfra_client.agent_service.search_agent(naam=agent_naam), None)
+    if agent:
+        logging.info(f'Zoek naar de huidige betrokkenerelatie(s) van een asset ({asset.uuid}) en een zeker rol ({agent_rol}).')
+        query_dto = build_query_search_betrokkenerelaties(bron_asset=asset, rol=agent_rol)
+        betrokkenerelaties = eminfra_client.agent_service.search_betrokkenerelaties(query_dto=query_dto)
+        betrokkenerelaties_lst = list(betrokkenerelaties)
+
+        logging.info(f'Bestaat de betrokkenerelatie, met rol "{agent_rol}"?')
+        if len(betrokkenerelaties_lst) == 0:
+            logging.info('Voeg nieuwe betrokkenerelatie toe')
+            # De relatie met de nieuwe agent bestaat nog niet, en wordt aangemaakt.
+            eminfra_client.agent_service.add_betrokkenerelatie(
+                asset=asset, agent_uuid=agent.uuid, rol=agent_rol)
+        elif len(betrokkenerelaties_lst) == 1:
+            betrokkenerelatie = betrokkenerelaties_lst[0]
+            logging.info('Stemt de Agent overeen met de gewenste waarde?')
+            if agent.uuid != betrokkenerelatie.doel.uuid:
+                logging.info('Verwijder de huidige betrokkenerelatie')
+                eminfra_client.agent_service.remove_betrokkenerelatie(
+                    betrokkenerelatie_uuid=betrokkenerelatie.uuid)
+
+                logging.info('Voeg tot slot een nieuwe betrokkenerelatie toe')
+                eminfra_client.agent_service.add_betrokkenerelatie(
+                    asset=asset, agent_uuid=agent.uuid, rol=agent_rol)
+        else:
+            log_message = f'Asset: {asset.uuid}: meerdere betrokkenerelaties voor rol {agent_rol}.'
+            logging.critical(msg=log_message)
+            raise ValueError(log_message)
+    else:
+        log_message = f'Agent niet teruggevonden in Infra DB: {agent_naam}.'
+        logging.critical(msg=log_message)
+        raise ValueError(log_message)
