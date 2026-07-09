@@ -26,24 +26,42 @@ if __name__ == '__main__':
         asset_counter += 1
         logging.info(f"Processing asset ({asset_counter}):\tasset_uuid: {asset.uuid}")
 
-        query_dto_betrokkenerelaties = build_query_search_betrokkenerelaties(bron_asset=asset, agent=agent1)
-        betrokkenerelaties = eminfra_client.agent_service.search_betrokkenerelaties(
-            query_dto=query_dto_betrokkenerelaties)
+        logging.info(f"Zoek betrokkenerelaties bij asset: {asset.uuid} voor agent1: {agent1.naam}.")
+        logging.info(f"Deactiveer deze betrokkenerelatie indien aanwezig.")
+        query_dto_betrokkenerelaties1 = build_query_search_betrokkenerelaties(bron_asset=asset, agent=agent1)
+        betrokkenerelaties1 = eminfra_client.agent_service.search_betrokkenerelaties(
+            query_dto=query_dto_betrokkenerelaties1)
 
-        for betrokkenerelatie in betrokkenerelaties:
-            logging.info(f"Deactiveer betrokkenerelatie: {betrokkenerelatie.uuid}")
-            eminfra_client.agent_service.remove_betrokkenerelatie(betrokkenerelatie_uuid=betrokkenerelatie.uuid)
+        for betrokkenerelatie_old in betrokkenerelaties1:
+            logging.info(f"Deactiveer betrokkenerelatie: {betrokkenerelatie_old.uuid}")
+            eminfra_client.agent_service.remove_betrokkenerelatie(betrokkenerelatie_uuid=betrokkenerelatie_old.uuid)
 
-            logging.info(f'Voeg nieuwe betrokkenerelatie toe, met dezelfde rol, maar naar een nieuwe agent.')
-            betrokkenerelatie_new_dict = eminfra_client.agent_service.add_betrokkenerelatie(
-                asset=asset, agent_uuid=AGENT_UUID_TOV2, rol=betrokkenerelatie.rol)
+            logging.info(f"Zoek betrokkenerelaties bij asset: {asset.uuid} voor agent2: {agent2.naam}.")
+            logging.info(f"Voeg deze betrokkenerelatie toe indien afwezig.")
+            query_dto_betrokkenerelaties2 = build_query_search_betrokkenerelaties(
+                bron_asset=asset, agent=agent2, rol=betrokkenerelatie_old.rol)
+            betrokkenerelaties2 = eminfra_client.agent_service.search_betrokkenerelaties(
+                query_dto=query_dto_betrokkenerelaties2)
+
+            try:
+                first_element = next(betrokkenerelaties2)
+                # If we get here, the generator is not empty
+                betrokkenerelatie_uuid_new = first_element.uuid
+                # If there are more elements, iterate over the rest
+                for betrokkenerelatie_new in betrokkenerelaties2:
+                    betrokkenerelatie_uuid_new = betrokkenerelatie_new.uuid
+            except StopIteration:
+                # De relatie met de nieuwe agent bestaat nog niet, en wordt aangemaakt.
+                betrokkenerelatie_new_dict = eminfra_client.agent_service.add_betrokkenerelatie(
+                    asset=asset, agent_uuid=AGENT_UUID_TOV2, rol=betrokkenerelatie_old.rol)
+                betrokkenerelatie_uuid_new = betrokkenerelatie_new_dict["uuid"]
 
             row = {
                 "uuid": asset.uuid,
                 "uuid.hyperlink": f'{HYPERLINK_FIRST_PART}{asset.uuid}',
-                "betrokkenerelatie_rol": betrokkenerelatie.rol,
-                "betrokkenerelatie_uuid_old": betrokkenerelatie.uuid,
-                "betrokkenerelatie_uuid_new": betrokkenerelatie_new_dict["uuid"]
+                "betrokkenerelatie_rol": betrokkenerelatie_old.rol,
+                "betrokkenerelatie_uuid_old": betrokkenerelatie_old.uuid,
+                "betrokkenerelatie_uuid_new": betrokkenerelatie_uuid_new
             }
             rows.append(row)
 
