@@ -10,8 +10,7 @@ from API.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, Selec
                                        AssetRelatieDTO, DocumentDTO, DocumentCategorieEnum)
 from API.eminfra.Generic import get_kenmerktype_and_relatietype_id
 from collections.abc import Generator
-from otlmow_model.OtlmowModel.Classes.ImplementatieElement.RelatieObject import RelatieObject
-from otlmow_model.OtlmowModel.Helpers.RelationCreator import create_betrokkenerelation
+
 
 
 
@@ -100,7 +99,9 @@ def build_query_search_by_naampad(naampad: str) -> QueryDTO:
 
 
 def get_bestaande_betrokkenerelaties(client: EMInfraClient, asset: AssetDTO, rol: str, is_actief: bool) \
-        -> Generator[RelatieObject]:
+        -> Generator[Any]:
+    from otlmow_model.OtlmowModel.Helpers.RelationCreator import create_betrokkenerelation
+
     generator = client.asset_service.get_objects_from_oslo_search_endpoint(
         url_part='betrokkenerelaties', filter_dict={"bronAsset": asset.uuid, 'rol': rol})
 
@@ -118,9 +119,10 @@ def get_bestaande_betrokkenerelaties(client: EMInfraClient, asset: AssetDTO, rol
         yield relatie
 
 
-def build_betrokkenerelatie(client: EMInfraClient, source: AssetDTO, agent_naam: str, rol: str) -> RelatieObject | None:
+def build_betrokkenerelatie(client: EMInfraClient, source: AssetDTO, agent_naam: str, rol: str) -> Any | None:
     generator_agents = client.asset_service.get_objects_from_oslo_search_endpoint(
         url_part='agents_service', filter_dict={"naam": agent_naam})
+    from otlmow_model.OtlmowModel.Helpers.RelationCreator import create_betrokkenerelation
     agents = list(generator_agents)
     if len(agents) != 1:
         return None
