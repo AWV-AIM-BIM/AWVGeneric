@@ -125,7 +125,12 @@ class GeometrieService:
         :type wkt_geometry: str
         :return:
         """
-        return self.update_geometrie_by_uuid(asset_uuid=asset_uuid, wkt_geometry=wkt_geometry)
+
+        geometriekenmerk = self.get_geometrie_by_uuid(asset_uuid=asset_uuid)
+        if geometriekenmerk.logs:
+            if log_id := geometriekenmerk.logs[0].uuid:
+                self.delete_geometrie_by_uuid(asset_uuid=asset_uuid, log_id=log_id)
+        self.add_geometrie_by_uuid(asset_uuid=asset_uuid, wkt_geometry=wkt_geometry)
 
     def update_geometrie(self, asset: AssetDTO, wkt_geometry: str) -> None:
         """
@@ -138,16 +143,4 @@ class GeometrieService:
         :param wkt_geometry: Well Known Text representation of the geometrie
         :return:
         """
-        if not is_valid_wkt(wkt_string=wkt_geometry):
-            raise ValueError(f'WKT Geometry is invalid: {wkt_geometry}.')
-
-        # step 1: search existing geometry
-        geometriekenmerk = self.get_geometrie_by_uuid(asset_uuid=asset)
-
-        # step 2: remove existing geometry
-        if geometriekenmerk.logs:
-            if log_id := geometriekenmerk.logs[0].uuid:
-                self.delete_geometrie_by_uuid(asset_uuid=asset, log_id=log_id)
-
-        # step 3: add new geometry
-        self.add_geometrie_by_uuid(asset_uuid=asset, wkt_geometry=wkt_geometry)
+        return self.update_geometrie_by_uuid(asset_uuid=asset.uuid, wkt_geometry=wkt_geometry)
