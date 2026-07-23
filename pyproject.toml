@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "awvgeneric"
+version = "0.1.0"
+description = "Python SDK for AWV road infrastructure asset management (EM-Infra, Davie, ServiceNow Gateway, etc.)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.14"
+authors = [
+    { name = "AWV Team" }
+]
+keywords = ["awv", "eminfra", "otl", "infrastructure", "api"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+dependencies = [
+    "requests",
+    "pyjwt[crypto]>=1.3.1",
+    "pandas",
+    "geopandas",
+    "openpyxl",
+    "tqdm",
+    "prettytable",
+    "pytz",
+    "msal",
+    "shapely",
+    "python-dateutil",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["API", "utils"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.pytest.ini_options]
+testpaths = ["UnitTests"]
+python_files = ["*_tests.py", "test_*.py"]
+python_functions = ["test_*"]
