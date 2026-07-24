@@ -8,7 +8,6 @@ Based on a line-by-line review of the `API/` folder (requesters, domain models, 
 
 | File | Issue | Suggestion |
 |------|-------|------------|
-| `GeometrieService.py:145` | `update_geometrie` passes an `AssetDTO` object to `get_geometrie_by_uuid(...)` where `asset_uuid` expects a `str`. | Pass `asset.uuid` instead of `asset`. |
 | `LocatieService.py:38` | `update_locatie_by_uuid` parameter `bron_asset_uuid` is typed as `AssetDTO` but used as a `str`. | Fix the type hint to `str`, or accept both via overload. |
 
 ---
