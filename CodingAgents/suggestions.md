@@ -4,11 +4,9 @@ Based on a line-by-line review of the `API/` folder (requesters, domain models, 
 
 ---
 
-## 1. Critical Bugs (Fix First)
+## 1. Critical Bugs
 
-| File | Issue | Suggestion |
-|------|-------|------------|
-| `LocatieService.py:38` | `update_locatie_by_uuid` parameter `bron_asset_uuid` is typed as `AssetDTO` but used as a `str`. | Fix the type hint to `str`, or accept both via overload. |
+*Done*
 
 ---
 

@@ -35,7 +35,7 @@ class LocatieService:
         """
         return self.get_locatie_by_uuid(asset_uuid=asset.uuid)
 
-    def update_locatie_by_uuid(self, bron_asset_uuid: AssetDTO, doel_asset_uuid: AssetDTO = None, wkt_geometry: str = None) -> None:
+    def update_locatie_by_uuid(self, bron_asset_uuid: str, doel_asset_uuid: AssetDTO = None, wkt_geometry: str = None) -> None:
         """
         Update locatie based on a WKT-string or via an existing relation
         Call this function with parameter doelAsset to set the locatie via an existing relationship.
