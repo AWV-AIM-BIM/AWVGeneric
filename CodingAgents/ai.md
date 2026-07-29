@@ -52,6 +52,7 @@ Follow a TDD-style cycle:
 
 ## Tools
 
+- in ./CodingAgents/PROJECT.md you'll find an overview of the project structure
 - ALWAYS execute scripts within a .venv (virtual environment)
 - use uv to install/use python scripts
 - if not installed, advise the user on how to install it
