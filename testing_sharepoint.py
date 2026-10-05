@@ -1,6 +1,10 @@
 import os
+from pathlib import Path
 
 from API.SharepointClient import SharepointClient
+from load_env import load_env
+
+load_env(Path('.env'))
 
 if __name__ == '__main__':
     client = SharepointClient(
