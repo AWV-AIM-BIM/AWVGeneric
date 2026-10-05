@@ -1,17 +1,18 @@
-import os
+import json
 from pathlib import Path
 
 from API.SharepointClient import SharepointClient
-from load_env import load_env
 
-load_env(Path('.env'))
+config_path = Path(__file__).parent.parent / "config" / "settings_Sharepoint.json"
+with open(config_path) as f:
+    config = json.load(f)
 
 if __name__ == '__main__':
     client = SharepointClient(
-        client_id=os.getenv("CLIENT_ID"),
-        tenant_id=os.getenv("TENANT_ID"),
-        client_secret=os.getenv("SECRET"),
-        site_url="https://vlaamseoverheid.sharepoint.com/sites/AIW_AIM_BIM/AIMData",
+        client_id=config["client_id"],
+        tenant_id=config["tenant_id"],
+        client_secret=config["secret"],
+        site_url=config["site_url"],
     )
 
     client.list_drives()  # List all drives
