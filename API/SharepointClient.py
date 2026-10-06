@@ -938,6 +938,169 @@ class SharepointClient:
             logging.error(f"upload_folder_to_library failed: {exc}")
             return False
 
+    # ---------- Local Mirror Validation ----------
+
+    def _discover_expected_buckets(self, local_folder: Path) -> set[str]:
+        """
+        Scan Reports/ and ArchivedReports/ directories for Report#### files
+        to compute the expected set of bucket folder names (0000-0099, etc.).
+
+        Args:
+            local_folder: Local mirror root folder
+
+        Returns:
+            Set of expected bucket folder names (e.g., {'0000-0099', '0100-0199'})
+        """
+        import re
+
+        expected = set()
+        bucket_pattern = re.compile(r"^(\d{4})-(\d{4})$")
+
+        for subdir in ("Reports", "ArchivedReports"):
+            reports_dir = local_folder / subdir
+            if not reports_dir.exists():
+                continue
+
+            for item in reports_dir.iterdir():
+                if item.is_file() and item.name.startswith("Report") and item.name[6:].isdigit():
+                    # Extract report number from filename like "Report0042.xlsx"
+                    try:
+                        report_num = int(item.name[6:10])
+                        bucket_start = (report_num // 100) * 100
+                        bucket_end = bucket_start + 99
+                        bucket_name = f"{bucket_start:04d}-{bucket_end:04d}"
+                        expected.add(bucket_name)
+                    except (ValueError, IndexError):
+                        pass
+
+        return expected
+
+    def validate_local_mirror(self, local_folder: Path) -> tuple[bool, str]:
+        """
+        Validate local mirror layout.
+
+        Checks that the local mirror contains at minimum:
+        - An 'Overzicht' folder (case-insensitive, created if missing)
+        - An 'Overzicht/[RSA] Overzicht rapporten.xlsx' workbook
+        - A 'logs' folder (created if missing)
+        - All expected bucket folders (created if missing)
+        - At least one bucket folder
+
+        Args:
+            local_folder: Local mirror root folder
+
+        Returns:
+            Tuple of (is_valid, reason)
+        """
+        local_path = Path(local_folder)
+
+        # Ensure Overzicht folder exists
+        overzicht_dir = None
+        for item in local_path.iterdir():
+            if item.is_dir() and item.name.lower() == "overzicht":
+                overzicht_dir = item
+                break
+
+        if overzicht_dir is None:
+            overzicht_dir = local_path / "Overzicht"
+            overzicht_dir.mkdir(parents=True, exist_ok=True)
+            logging.info("Created missing 'Overzicht' folder")
+
+        # Check for Overzicht workbook
+        workbook_found = False
+        for item in overzicht_dir.iterdir():
+            if item.is_file() and "overzicht" in item.name.lower() and "rapport" in item.name.lower():
+                workbook_found = True
+                break
+
+        if not workbook_found:
+            return False, "Missing '[RSA] Overzicht rapporten.xlsx' in Overzicht folder"
+
+        # Ensure logs folder exists
+        logs_dir = local_path / "logs"
+        if not logs_dir.exists():
+            logs_dir.mkdir(parents=True, exist_ok=True)
+            logging.info("Created missing 'logs' folder")
+
+        # Discover and ensure expected bucket folders
+        expected_buckets = self._discover_expected_buckets(local_path)
+        if not expected_buckets:
+            return False, "No expected buckets found (no Report#### files in Reports/ or ArchivedReports/)"
+
+        for bucket in expected_buckets:
+            bucket_dir = local_path / bucket
+            if not bucket_dir.exists():
+                bucket_dir.mkdir(parents=True, exist_ok=True)
+                logging.info(f"Created missing bucket folder: {bucket}")
+
+        # Verify at least one bucket folder exists
+        existing_buckets = [b for b in expected_buckets if (local_path / b).exists()]
+        if not existing_buckets:
+            return False, "No bucket folders present in local mirror"
+
+        return True, "Local mirror layout is valid"
+
+    # ---------- Run Log Management ----------
+
+    def write_daily_run_log(
+        self,
+        local_folder: Path,
+        status: str,
+    ) -> None:
+        """
+        Write a dated run log entry.
+
+        Appends a timestamped status line (e.g., POST_RUN_UPLOAD_START,
+        POST_RUN_UPLOAD_DONE, POST_RUN_UPLOAD_FAILED) into a
+        logs/run_YYYYMMDD.log file inside the local folder.
+
+        Args:
+            local_folder: Local mirror root folder
+            status: Status string to log
+        """
+        from datetime import datetime
+
+        local_path = Path(local_folder)
+        logs_dir = local_path / "logs"
+        logs_dir.mkdir(parents=True, exist_ok=True)
+
+        today = datetime.now().strftime("%Y%m%d")
+        log_file = logs_dir / f"run_{today}.log"
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(f"{timestamp} - {status}\n")
+
+    def prune_daily_run_logs(
+        self,
+        local_folder: Path,
+        keep: int = 14,
+    ) -> None:
+        """
+        Prune old daily run logs, keeping only the newest N files.
+
+        Args:
+            local_folder: Local mirror root folder
+            keep: Number of recent log files to keep (default 14)
+        """
+        local_path = Path(local_folder)
+        logs_dir = local_path / "logs"
+        if not logs_dir.exists():
+            return
+
+        log_files = sorted(
+            logs_dir.glob("run_*.log"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+
+        for old_log in log_files[keep:]:
+            try:
+                old_log.unlink()
+                logging.info(f"Pruned old run log: {old_log.name}")
+            except Exception as exc:
+                logging.warning(f"Failed to prune {old_log.name}: {exc}")
+
     # ---------- Token persistence ----------
 
     def _save_token(self, token_data: dict, token_file: Path) -> None:
