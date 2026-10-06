@@ -15,6 +15,12 @@ if __name__ == '__main__':
         site_url=config["site_url"],
     )
 
-    client.list_drives()  # List all drives
-    client.list_root_files()  # List files in all drives
-    client.list_drive_files('b!GOUfzY4L9U--LXscHHb0hfzWhuzY3f5IsZck59FWs06h6NB4Vk2bSKIGr6651wus')  # List files in a specific drive
+    client.list_document_libraries()  # List all document libraries
+
+    # Download entire document library to local mirror
+    local_mirror = Path("local_mirror") / "AIMData"
+    success = client.sync_drive_to_local("", local_mirror, 'b!GOUfzY4L9U--LXscHHb0hfzWhuzY3f5IsZck59FWs06h6NB4Vk2bSKIGr6651wus')
+    if success:
+        print(f"✅ Download completed to {local_mirror}")
+    else:
+        print("❌ Download failed")

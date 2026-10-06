@@ -390,6 +390,261 @@ class SharepointClient:
                 return item
         return None
 
+    # ---------- Temporary File & Skip Filters ----------
+
+    def _is_temporary_workbook(self, filename: str) -> bool:
+        """
+        Return True for temporary/lock workbook filenames.
+
+        Matches: '_tmp_' suffix, '~$' lock prefix, '.lock' suffix.
+        """
+        return (
+            "_tmp_" in filename
+            or filename.startswith("~$")
+            or filename.endswith(".lock")
+        )
+
+    def _should_skip(self, name: str) -> bool:
+        """
+        Return True for folder/file names that should never be mirrored.
+        """
+        return name.lower() in {"archief", "archivedreports", "staged_summaries", "logs"}
+
+    def _is_safe_name(self, name: str) -> bool:
+        """
+        Validate a safe component name for local filesystem.
+
+        Rejects: empty, '.', '..', names containing '/' or '\\', control characters.
+        """
+        if not name or name in (".", ".."):
+            return False
+        if "/" in name or "\\" in name:
+            return False
+        if any(ord(c) < 32 or ord(c) == 127 for c in name):
+            return False
+        return True
+
+    def _is_expected_root_folder_name(self, name: str) -> bool:
+        """
+        Return True for expected root-level folder names.
+
+        Matches 'overzicht' (case-insensitive) or bucket pattern 'NNNN-NNNN'.
+        """
+        import re
+        return name.lower() == "overzicht" or bool(re.match(r"^\d{4}-\d{4}$", name))
+
+    # ---------- Retry & Error Handling ----------
+
+    def _is_retryable_drive_error(self, exc: Exception) -> bool:
+        """
+        Classify an exception as transient/retryable.
+
+        Retryable: timeouts, connection errors, HTTP 408/429/5xx, rate-limit/quota keywords.
+        """
+        import requests.exceptions as req_exc
+
+        if isinstance(exc, (req_exc.Timeout, req_exc.ConnectionError)):
+            return True
+
+        if isinstance(exc, req_exc.HTTPError):
+            resp = getattr(exc, "response", None)
+            if resp is not None:
+                status = resp.status_code
+                if status in {408, 429} or 500 <= status < 600:
+                    return True
+                # Check for rate-limit/quota keywords in response
+                try:
+                    text = resp.text.lower()
+                    if any(kw in text for kw in ("rate limit", "quota", "throttle", "too many requests")):
+                        return True
+                except Exception:
+                    pass
+
+        # Check exception message for rate-limit keywords
+        msg = str(exc).lower()
+        if any(kw in msg for kw in ("rate limit", "quota", "throttle", "too many requests")):
+            return True
+
+        return False
+
+    def _retry_on_drive_error(self, func, *args, **kwargs):
+        """
+        Retry a wrapped API call with exponential backoff.
+
+        Base delay 2s, max delay 120s, max retries 5.
+        """
+        import time
+        import random
+
+        base_delay = 2
+        max_delay = 120
+        max_retries = 5
+
+        for attempt in range(max_retries + 1):
+            try:
+                return func(*args, **kwargs)
+            except Exception as exc:
+                if attempt == max_retries or not self._is_retryable_drive_error(exc):
+                    raise
+                delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
+                logging.warning(f"Retryable error (attempt {attempt + 1}/{max_retries}): {exc}. Waiting {delay:.1f}s...")
+                time.sleep(delay)
+
+    # ---------- Download (SharePoint → Local Mirror) ----------
+
+    def _clear_local_mirror_target(self, local_folder: Path) -> None:
+        """
+        Remove all contents of a local folder before downloading,
+        while preserving local-only control folders.
+        """
+        if not local_folder.exists():
+            local_folder.mkdir(parents=True, exist_ok=True)
+            return
+
+        preserved = {"archief", "archivedreports", "staged_summaries", "logs"}
+        for item in local_folder.iterdir():
+            if item.name.lower() in preserved:
+                continue
+            if item.is_dir():
+                import shutil
+                shutil.rmtree(item)
+            else:
+                item.unlink()
+
+    def _download_file(
+        self,
+        item_id: str,
+        local_path: Path,
+        document_library_id: str = None,
+        chunk_size: int = 8192,
+    ) -> None:
+        """
+        Download a single file by its item-id into a local path,
+        with resumable/streaming capability.
+
+        Args:
+            item_id: Graph item ID of the file
+            local_path: Local file path to save to
+            document_library_id: Document library ID. If not provided, uses the default.
+            chunk_size: Streaming chunk size in bytes
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        headers = self._get_headers()
+        url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{item_id}/content"
+
+        def _do_download():
+            resp = requests.get(url, headers=headers, stream=True)
+            if resp.status_code != 200:
+                raise RuntimeError(f"Failed to download file {item_id}: {resp.status_code} - {resp.text}")
+            local_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(local_path, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=chunk_size):
+                    if chunk:
+                        f.write(chunk)
+
+        self._retry_on_drive_error(_do_download)
+
+    def _download_tree(
+        self,
+        parent_id: str,
+        local_folder: Path,
+        document_library_id: str = None,
+        is_root: bool = True,
+        apply_root_filter: bool = False,
+    ) -> None:
+        """
+        Recursively download a folder tree and mirror all files into a local directory.
+
+        Args:
+            parent_id: Remote parent folder/item ID (or 'root')
+            local_folder: Local directory to mirror into
+            document_library_id: Document library ID. If not provided, uses the default.
+            is_root: Whether this is the root call (applies root-level filters if apply_root_filter=True)
+            apply_root_filter: If True, apply the expected root folder name filter (for structured sync)
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        for item in self._list_children(parent_id, document_library_id):
+            name = item.get("name", "")
+            if not name:
+                continue
+
+            # Skip temporary/lock workbooks
+            if self._is_temporary_workbook(name):
+                logging.debug(f"Skipping temporary workbook: {name}")
+                continue
+
+            # Skip unsafe names
+            if not self._is_safe_name(name):
+                logging.debug(f"Skipping unsafe name: {name}")
+                continue
+
+            # At root level, apply expected folder name filter only if requested
+            if is_root and apply_root_filter and not self._is_expected_root_folder_name(name):
+                logging.debug(f"Skipping unexpected root folder: {name}")
+                continue
+
+            # Skip control folders
+            if self._should_skip(name):
+                logging.debug(f"Skipping control folder: {name}")
+                continue
+
+            local_item_path = local_folder / name
+
+            if "folder" in item:
+                # Create the directory for this folder (even if empty)
+                local_item_path.mkdir(parents=True, exist_ok=True)
+                # Recurse into subfolder
+                self._download_tree(item["id"], local_item_path, document_library_id, is_root=False, apply_root_filter=apply_root_filter)
+            elif "file" in item:
+                # Download file
+                logging.info(f"Downloading: {local_item_path}")
+                self._download_file(item["id"], local_item_path, document_library_id)
+
+    def sync_drive_to_local(
+        self,
+        remote_folder_path: str,
+        local_folder: str | Path,
+        document_library_id: str = None,
+    ) -> bool:
+        """
+        Public download mirror: resolve/ensure a remote folder path,
+        clear the local mirror target, download the full tree,
+        return success/failure.
+
+        Args:
+            remote_folder_path: Remote folder path like 'RSA/RSA_OneDrive'.
+                               Empty string means the entire document library root.
+            local_folder: Local directory to mirror into
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            True on success, False on failure.
+        """
+        try:
+            local_path = Path(local_folder)
+            self._clear_local_mirror_target(local_path)
+
+            # Resolve/create the remote folder path
+            if remote_folder_path and remote_folder_path.strip("/"):
+                remote_folder = self._get_or_create_folder_path(remote_folder_path, document_library_id)
+                parent_id = remote_folder["id"]
+            else:
+                # Empty path = entire document library root
+                parent_id = "root"
+
+            # Download the tree
+            apply_root_filter = bool(remote_folder_path and remote_folder_path.strip("/"))
+            self._download_tree(parent_id, local_path, document_library_id, apply_root_filter=apply_root_filter)
+
+            return True
+        except Exception as exc:
+            logging.error(f"sync_drive_to_local failed: {exc}")
+            return False
+
     # ---------- Token persistence ----------
 
     def _save_token(self, token_data: dict, token_file: Path) -> None:
