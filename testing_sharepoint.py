@@ -17,9 +17,9 @@ if __name__ == '__main__':
 
     client.list_document_libraries()  # List all document libraries
 
-    # Download entire document library to local mirror
+# Download entire document library to local mirror
     local_mirror = Path("local_mirror") / "AIMData"
-    success = client.sync_drive_to_local("", local_mirror, 'b!GOUfzY4L9U--LXscHHb0hfzWhuzY3f5IsZck59FWs06h6NB4Vk2bSKIGr6651wus')
+    success = client.sync_library_to_local("", local_mirror, 'b!GOUfzY4L9U--LXscHHb0hfzWhuzY3f5IsZck59FWs06h6NB4Vk2bSKIGr6651wus')
     if success:
         print(f"✅ Download completed to {local_mirror}")
     else:

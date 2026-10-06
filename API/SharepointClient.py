@@ -435,7 +435,7 @@ class SharepointClient:
 
     # ---------- Retry & Error Handling ----------
 
-    def _is_retryable_drive_error(self, exc: Exception) -> bool:
+    def _is_retryable_library_error(self, exc: Exception) -> bool:
         """
         Classify an exception as transient/retryable.
 
@@ -467,7 +467,7 @@ class SharepointClient:
 
         return False
 
-    def _retry_on_drive_error(self, func, *args, **kwargs):
+    def _retry_on_library_error(self, func, *args, **kwargs):
         """
         Retry a wrapped API call with exponential backoff.
 
@@ -484,7 +484,7 @@ class SharepointClient:
             try:
                 return func(*args, **kwargs)
             except Exception as exc:
-                if attempt == max_retries or not self._is_retryable_drive_error(exc):
+                if attempt == max_retries or not self._is_retryable_library_error(exc):
                     raise
                 delay = min(base_delay * (2 ** attempt) + random.uniform(0, 1), max_delay)
                 logging.warning(f"Retryable error (attempt {attempt + 1}/{max_retries}): {exc}. Waiting {delay:.1f}s...")
@@ -544,7 +544,7 @@ class SharepointClient:
                     if chunk:
                         f.write(chunk)
 
-        self._retry_on_drive_error(_do_download)
+        self._retry_on_library_error(_do_download)
 
     def _download_tree(
         self,
@@ -604,7 +604,7 @@ class SharepointClient:
                 logging.info(f"Downloading: {local_item_path}")
                 self._download_file(item["id"], local_item_path, document_library_id)
 
-    def sync_drive_to_local(
+    def sync_library_to_local(
         self,
         remote_folder_path: str,
         local_folder: str | Path,
@@ -642,7 +642,300 @@ class SharepointClient:
 
             return True
         except Exception as exc:
-            logging.error(f"sync_drive_to_local failed: {exc}")
+            logging.error(f"sync_library_to_local failed: {exc}")
+            return False
+
+    # ---------- Deletion ----------
+
+    def _delete_library_item_recursive(self, item_id: str, document_library_id: str = None) -> None:
+        """
+        Delete an item and, if it is a folder, delete all its contents first.
+
+        Args:
+            item_id: Graph item ID to delete
+            document_library_id: Document library ID. If not provided, uses the default.
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        headers = self._get_headers()
+        url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{item_id}"
+
+        def _do_delete():
+            # First get the item to check if it's a folder
+            resp = requests.get(url, headers=headers)
+            if resp.status_code != 200:
+                raise RuntimeError(f"Failed to get item {item_id}: {resp.status_code} - {resp.text}")
+            item = resp.json()
+
+            # If it's a folder, recursively delete children first
+            if "folder" in item:
+                children_url = f"{url}/children"
+                children_resp = requests.get(children_url, headers=headers)
+                if children_resp.status_code == 200:
+                    for child in children_resp.json().get("value", []):
+                        self._delete_library_item_recursive(child["id"], document_library_id)
+
+            # Delete the item itself
+            del_resp = requests.delete(url, headers=headers)
+            if del_resp.status_code not in {200, 204}:
+                raise RuntimeError(f"Failed to delete item {item_id}: {del_resp.status_code} - {del_resp.text}")
+
+        self._retry_on_library_error(_do_delete)
+
+    # ---------- Upload (Local Mirror → SharePoint) ----------
+
+    def _upload_or_update_file_once(
+        self,
+        local_path: Path,
+        parent_id: str,
+        document_library_id: str = None,
+    ) -> dict:
+        """
+        Create a new file or update an existing one in a target folder,
+        replacing a conflicting folder with file deletion when names collide.
+
+        Args:
+            local_path: Local file path to upload
+            parent_id: Remote parent folder ID (or 'root')
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            The uploaded/updated item dict.
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        if not local_path.exists():
+            raise FileNotFoundError(f"Local file not found: {local_path}")
+
+        filename = local_path.name
+        headers = self._get_headers()
+
+        # Check for existing item with same name
+        existing = self._find_child_by_name(parent_id, filename, document_library_id)
+
+        # If there's a folder with the same name, delete it first
+        if existing and "folder" in existing:
+            logging.info(f"Removing conflicting folder: {filename}")
+            self._delete_drive_item_recursive(existing["id"], document_library_id)
+            existing = None
+
+        if existing and "file" in existing:
+            # Update existing file
+            upload_url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{existing['id']}/content"
+            method = "PUT"
+        else:
+            # Create new file
+            if parent_id == "root":
+                upload_url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root:/{filename}:/content"
+            else:
+                upload_url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{parent_id}:/{filename}:/content"
+            method = "PUT"
+
+        headers["Content-Type"] = "application/octet-stream"
+
+        def _do_upload():
+            with open(local_path, "rb") as f:
+                if method == "PUT" and "items/" in upload_url and "/content" in upload_url and ":" not in upload_url.split("items/")[1].split("/")[0]:
+                    # Updating existing file by ID
+                    resp = requests.put(upload_url, headers=headers, data=f)
+                else:
+                    # Creating new file using :/path:/content
+                    resp = requests.put(upload_url, headers=headers, data=f)
+
+            if resp.status_code not in {200, 201}:
+                raise RuntimeError(f"Failed to upload {filename}: {resp.status_code} - {resp.text}")
+            return resp.json()
+
+        return self._retry_on_library_error(_do_upload)
+
+    def _upload_or_update_file(
+        self,
+        local_path: Path,
+        parent_id: str,
+        document_library_id: str = None,
+    ) -> dict:
+        """
+        Upload or update a single file with retries, building a fresh upload session per attempt.
+
+        Args:
+            local_path: Local file path to upload
+            parent_id: Remote parent folder ID (or 'root')
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            The uploaded/updated item dict.
+        """
+        return self._retry_on_library_error(
+            self._upload_or_update_file_once,
+            local_path, parent_id, document_library_id
+        )
+
+    def _sync_local_dir_to_library(
+        self,
+        local_folder: Path,
+        parent_id: str,
+        document_library_id: str = None,
+    ) -> tuple[int, int, int]:
+        """
+        Recursively sync a local directory tree to a remote folder:
+        create missing folders, upload new files, update changed files,
+        and delete remote-only files/folders that no longer exist locally.
+
+        Args:
+            local_folder: Local directory to sync
+            parent_id: Remote parent folder ID (or 'root')
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            Tuple of (uploaded_count, updated_count, errors_count)
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        if not local_folder.exists():
+            raise FileNotFoundError(f"Local folder not found: {local_folder}")
+
+        uploaded = 0
+        updated = 0
+        errors = 0
+
+        # Get existing remote items
+        remote_items = {item["name"]: item for item in self._list_children(parent_id, document_library_id)}
+        local_names = set()
+
+        # Process local files and folders
+        for local_item in local_folder.iterdir():
+            name = local_item.name
+            local_names.add(name)
+
+            if self._should_skip(name) or self._is_temporary_workbook(name) or not self._is_safe_name(name):
+                logging.debug(f"Skipping local item: {name}")
+                continue
+
+            if local_item.is_dir():
+                # Get or create remote folder
+                remote_folder = self._get_or_create_folder(parent_id, name, document_library_id)
+                # Recurse
+                u, up, e = self._sync_local_dir_to_library(local_item, remote_folder["id"], document_library_id)
+                uploaded += u
+                updated += up
+                errors += e
+            elif local_item.is_file():
+                remote_item = remote_items.get(name)
+                try:
+                    result = self._upload_or_update_file(local_item, parent_id, document_library_id)
+                    if remote_item and "file" in remote_item:
+                        updated += 1
+                        logging.info(f"Updated: {name}")
+                    else:
+                        uploaded += 1
+                        logging.info(f"Uploaded: {name}")
+                except Exception as exc:
+                    errors += 1
+                    logging.error(f"Failed to upload {name}: {exc}")
+
+        # Delete remote-only items that no longer exist locally
+        for name, remote_item in remote_items.items():
+            if name not in local_names and not self._should_skip(name):
+                try:
+                    logging.info(f"Deleting remote-only item: {name}")
+                    self._delete_library_item_recursive(remote_item["id"], document_library_id)
+                except Exception as exc:
+                    errors += 1
+                    logging.error(f"Failed to delete remote item {name}: {exc}")
+
+        return uploaded, updated, errors
+
+    def sync_local_to_library(
+        self,
+        local_folder: str | Path,
+        remote_folder_path: str,
+        document_library_id: str = None,
+    ) -> bool:
+        """
+        Public upload mirror: authenticate, ensure remote folder path,
+        run _sync_local_dir_to_library, log summary, return success/failure.
+
+        Args:
+            local_folder: Local directory to sync
+            remote_folder_path: Remote folder path like 'RSA/RSA_OneDrive'
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            True on success, False on failure.
+        """
+        try:
+            local_path = Path(local_folder)
+            if not local_path.exists():
+                raise FileNotFoundError(f"Local folder not found: {local_path}")
+
+            # Resolve/create the remote folder path
+            if remote_folder_path and remote_folder_path.strip("/"):
+                remote_folder = self._get_or_create_folder_path(remote_folder_path, document_library_id)
+                parent_id = remote_folder["id"]
+            else:
+                parent_id = "root"
+
+            # Sync
+            uploaded, updated, errors = self._sync_local_dir_to_library(local_path, parent_id, document_library_id)
+
+            logging.info(f"sync_local_to_library summary: uploaded={uploaded}, updated={updated}, errors={errors}")
+            return errors == 0
+        except Exception as exc:
+            logging.error(f"sync_local_to_library failed: {exc}")
+            return False
+
+    def upload_folder_to_library(
+        self,
+        local_folder: str | Path,
+        document_library_id: str = None,
+        extensions: tuple = (".xlsx",),
+    ) -> bool:
+        """
+        Legacy top-level upload: upload only top-level files matching a set of extensions
+        (e.g. .xlsx), skipping root-level files and temporary workbooks.
+
+        Args:
+            local_folder: Local directory containing files to upload
+            document_library_id: Document library ID. If not provided, uses the default.
+            extensions: File extensions to include (default: .xlsx)
+
+        Returns:
+            True on success, False on failure.
+        """
+        try:
+            local_path = Path(local_folder)
+            if not local_path.exists():
+                raise FileNotFoundError(f"Local folder not found: {local_path}")
+
+            if document_library_id is None:
+                document_library_id = self._get_default_document_library_id()
+
+            uploaded = 0
+            errors = 0
+
+            for local_file in local_path.iterdir():
+                if not local_file.is_file():
+                    continue
+                if local_file.suffix.lower() not in extensions:
+                    continue
+                if self._is_temporary_workbook(local_file.name):
+                    continue
+
+                try:
+                    self._upload_or_update_file(local_file, "root", document_library_id)
+                    uploaded += 1
+                    logging.info(f"Uploaded: {local_file.name}")
+                except Exception as exc:
+                    errors += 1
+                    logging.error(f"Failed to upload {local_file.name}: {exc}")
+
+            logging.info(f"upload_folder_to_library summary: uploaded={uploaded}, errors={errors}")
+            return errors == 0
+        except Exception as exc:
+            logging.error(f"upload_folder_to_library failed: {exc}")
             return False
 
     # ---------- Token persistence ----------
