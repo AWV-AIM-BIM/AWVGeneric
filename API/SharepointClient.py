@@ -15,6 +15,7 @@ import logging
 import json
 import time
 from pathlib import Path
+from dataclasses import dataclass
 
 import msal
 import requests
@@ -1271,7 +1272,331 @@ class SharepointClient:
         return session
 
 
+# ---------- Microsoft Graph Uploader Abstraction ----------
+
+@dataclass
+class GraphUploadTarget:
+    """
+    Holds a document library ID and folder path identifying a SharePoint/OneDrive destination.
+    """
+    document_library_id: str
+    folder_path: str
+
+
+class MsGraphUploader:
+    """
+    Single-file Microsoft Graph uploader.
+
+    Uploads a single local file to a GraphUploadTarget via the Microsoft Graph API.
+    """
+
+    def __init__(self, client: "SharepointClient"):
+        self.client = client
+
+    def upload_file(
+        self,
+        local_path: Path,
+        target: GraphUploadTarget,
+    ) -> dict:
+        """
+        Upload a single local file to a GraphUploadTarget.
+
+        Args:
+            local_path: Local file path to upload
+            target: GraphUploadTarget with document_library_id and folder_path
+
+        Returns:
+            The uploaded item dict.
+        """
+        if not local_path.exists():
+            raise FileNotFoundError(f"Local file not found: {local_path}")
+
+        # Resolve folder path
+        if target.folder_path and target.folder_path.strip("/"):
+            remote_folder = self.client._get_or_create_folder_path(
+                target.folder_path, target.document_library_id
+            )
+            parent_id = remote_folder["id"]
+        else:
+            parent_id = "root"
+
+        return self.client._upload_or_update_file(local_path, parent_id, target.document_library_id)
+
+
+# ---------- Cross-Module Compatibility ----------
+
+def report_bucket_name(report_number: int) -> str:
+    """
+    Compute the bucket folder name for a report number.
+
+    Convention: <start>-<end> where start = (n // 100) * 100, end = start + 99
+    e.g., report 42 -> '0000-0099', report 157 -> '0100-0199'
+
+    Args:
+        report_number: Report number
+
+    Returns:
+        Bucket folder name string.
+    """
+    bucket_start = (report_number // 100) * 100
+    bucket_end = bucket_start + 99
+    return f"{bucket_start:04d}-{bucket_end:04d}"
+
+
+def report_sharepoint_url(
+    site_url: str,
+    document_library_name: str,
+    report_number: int,
+    filename: str,
+) -> str:
+    """
+    Generate a SharePoint URL for a report workbook.
+
+    Args:
+        site_url: SharePoint site URL
+        document_library_name: Document library name
+        report_number: Report number
+        filename: Workbook filename
+
+    Returns:
+        SharePoint URL string.
+    """
+    bucket = report_bucket_name(report_number)
+    base = site_url.rstrip("/")
+    return f"{base}/{document_library_name}/{bucket}/{filename}"
+
+
+# ---------- Pipeline State Integration ----------
+
+class DailyLibrarySyncGate:
+    """
+    External orchestrator polling gate.
+
+    Observes an external pipeline-state store (SQLite) for
+    'sharepoint_download' and 'sharepoint_upload' phases/statuses
+    to coordinate when report execution may proceed.
+    """
+
+    def __init__(self, db_path: str | Path):
+        self.db_path = Path(db_path)
+
+    def wait_for_download(self, timeout: float = 3600, poll_interval: float = 30) -> bool:
+        """
+        Wait for sharepoint_download phase to complete.
+
+        Args:
+            timeout: Maximum wait time in seconds
+            poll_interval: Poll interval in seconds
+
+        Returns:
+            True if download completed, False on timeout/error.
+        """
+        import sqlite3
+        import time
+
+        start = time.time()
+        while time.time() - start < timeout:
+            try:
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.row_factory = sqlite3.Row
+                    row = conn.execute(
+                        "SELECT status FROM pipeline_state WHERE phase = 'sharepoint_download'"
+                    ).fetchone()
+                    if row and row["status"] == "completed":
+                        return True
+                    if row and row["status"] == "failed":
+                        return False
+            except Exception:
+                pass
+            time.sleep(poll_interval)
+        return False
+
+    def wait_for_upload(self, timeout: float = 3600, poll_interval: float = 30) -> bool:
+        """
+        Wait for sharepoint_upload phase to complete.
+
+        Args:
+            timeout: Maximum wait time in seconds
+            poll_interval: Poll interval in seconds
+
+        Returns:
+            True if upload completed, False on timeout/error.
+        """
+        import sqlite3
+        import time
+
+        start = time.time()
+        while time.time() - start < timeout:
+            try:
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.row_factory = sqlite3.Row
+                    row = conn.execute(
+                        "SELECT status FROM pipeline_state WHERE phase = 'sharepoint_upload'"
+                    ).fetchone()
+                    if row and row["status"] == "completed":
+                        return True
+                    if row and row["status"] == "failed":
+                        return False
+            except Exception:
+                pass
+            time.sleep(poll_interval)
+        return False
+
+
+def upload_after_run(
+    client: "SharepointClient",
+    local_folder: str | Path,
+    remote_folder_path: str,
+    document_library_id: str,
+    db_path: str | Path,
+) -> bool:
+    """
+    Upload-after-run hook for ReportLoopRunner.on_run_complete.
+
+    Sets pipeline-state phase to 'sharepoint_upload', uploads the local mirror
+    via sync_local_to_library, and updates pipeline-state to 'completed'
+    or 'failed' accordingly.
+
+    Args:
+        client: SharepointClient instance
+        local_folder: Local mirror path
+        remote_folder_path: Remote folder path
+        document_library_id: Document library ID
+        db_path: SQLite database path for pipeline state
+
+    Returns:
+        True on success, False on failure.
+    """
+    import sqlite3
+    from datetime import datetime
+
+    def set_phase(phase: str, status: str):
+        with sqlite3.connect(db_path) as conn:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO pipeline_state (phase, status, updated_at)
+                VALUES (?, ?, ?)
+                """,
+                (phase, status, datetime.now().isoformat()),
+            )
+            conn.commit()
+
+    set_phase("sharepoint_upload", "in_progress")
+    try:
+        success = client.sync_local_to_library(local_folder, remote_folder_path, document_library_id)
+        set_phase("sharepoint_upload", "completed" if success else "failed")
+        return success
+    except Exception as exc:
+        logging.error(f"upload_after_run failed: {exc}")
+        set_phase("sharepoint_upload", "failed")
+        return False
+
+
+# ---------- CLI Interface ----------
+
+def _main():
+    """Command-line interface for SharepointClient."""
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description="SharePoint CLI")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # Common arguments
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument("--client-id", required=True, help="Azure AD client ID")
+    common.add_argument("--tenant-id", required=True, help="Azure AD tenant ID")
+    common.add_argument("--site-url", required=True, help="SharePoint site URL")
+    common.add_argument("--document-library-id", help="Document library ID (optional, uses default)")
+    common.add_argument("--token-file", default="sharepoint_token.json", help="Token file path")
+
+    # login command
+    login_parser = subparsers.add_parser("login", parents=[common], help="Perform interactive login and persist token")
+    login_parser.add_argument("--client-secret", help="Client secret (optional for device code flow)")
+
+    # sync-down command
+    sync_down_parser = subparsers.add_parser("sync-down", parents=[common], help="Mirror SharePoint folder to local folder")
+    sync_down_parser.add_argument("--remote-path", default="", help="Remote folder path (empty = entire library)")
+    sync_down_parser.add_argument("--local-folder", required=True, help="Local folder to mirror into")
+
+    # sync-up command
+    sync_up_parser = subparsers.add_parser("sync-up", parents=[common], help="Mirror local folder to SharePoint folder")
+    sync_up_parser.add_argument("--local-folder", required=True, help="Local folder to sync")
+    sync_up_parser.add_argument("--remote-path", required=True, help="Remote folder path")
+
+    # upload command
+    upload_parser = subparsers.add_parser("upload", parents=[common], help="Legacy top-level file upload")
+    upload_parser.add_argument("--local-folder", required=True, help="Local folder containing files")
+    upload_parser.add_argument("--extensions", default=".xlsx", help="Comma-separated extensions (e.g., .xlsx,.pdf)")
+
+    args = parser.parse_args()
+
+    # Build client
+    if args.command == "login":
+        # For login, we don't need site_url or client_secret for device code
+        client = SharepointClient(
+            client_id=args.client_id,
+            tenant_id=args.tenant_id,
+            client_secret=args.client_secret or "",
+            site_url=args.site_url,
+        )
+    else:
+        client = SharepointClient(
+            client_id=args.client_id,
+            tenant_id=args.tenant_id,
+            client_secret="",  # Will use token file
+            site_url=args.site_url,
+            use_client_credentials=False,
+            token_file=args.token_file,
+        )
+
+    try:
+        if args.command == "login":
+            token = client.first_login(args.token_file)
+            print(f"Login successful. Token saved to {args.token_file}")
+            return 0
+
+        elif args.command == "sync-down":
+            success = client.sync_library_to_local(
+                args.remote_path,
+                args.local_folder,
+                args.document_library_id,
+            )
+            print("Sync-down completed successfully" if success else "Sync-down failed")
+            return 0 if success else 1
+
+        elif args.command == "sync-up":
+            success = client.sync_local_to_library(
+                args.local_folder,
+                args.remote_path,
+                args.document_library_id,
+            )
+            print("Sync-up completed successfully" if success else "Sync-up failed")
+            return 0 if success else 1
+
+        elif args.command == "upload":
+            extensions = tuple(e.strip() for e in args.extensions.split(","))
+            success = client.upload_folder_to_library(
+                args.local_folder,
+                args.document_library_id,
+                extensions,
+            )
+            print("Upload completed successfully" if success else "Upload failed")
+            return 0 if success else 1
+
+    except Exception as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+
+
 if __name__ == "__main__":
+    import sys
+
+    # If command-line args provided (beyond script name), run CLI
+    if len(sys.argv) > 1:
+        sys.exit(_main())
+
+    # Otherwise run the original test code
     import os
 
     settings = load_settings("settings.json")
@@ -1290,8 +1615,8 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Token error: {e}")
 
-    print("\n=== List drives ===")
-    client.list_drives()
+    print("\n=== List document libraries ===")
+    client.list_document_libraries()
 
-    print("\n=== List root files (default drive) ===")
-    client.list_root_files()
+    print("\n=== List root items (default document library) ===")
+    client.list_root_items()
