@@ -48,21 +48,61 @@ class SharepointClient:
         self,
         client_id: str,
         tenant_id: str,
-        client_secret: str,
         site_url: str,
+        client_secret: str = None,
         scopes: list = None,
+        token_file: Path = None,
+        use_client_credentials: bool = True,
     ):
+        """
+        Initialize the SharePoint client.
+
+        Args:
+            client_id: Azure AD application client ID
+            tenant_id: Azure AD tenant ID
+            site_url: SharePoint site URL (required for site operations)
+            client_secret: Azure AD application client secret (required for client credentials flow)
+            scopes: OAuth scopes required for SharePoint access
+            token_file: Path to store/load persisted token (for user-delegated auth)
+            use_client_credentials: If True, use app-only client credentials flow.
+                                   If False, use interactive user-delegated flow with token persistence.
+
+        Attributes:
+            client_id (str): Azure AD application client ID
+            tenant_id (str): Azure AD tenant ID
+            client_secret (str): Azure AD application client secret
+            site_url (str): SharePoint site URL
+            scopes (list): OAuth scopes required for SharePoint access
+            token_file (Path): Path for token persistence (user-delegated mode)
+            use_client_credentials (bool): Authentication mode flag
+            app (ConfidentialClientApplication): MSAL application instance (client credentials mode)
+        """
+        if not site_url:
+            raise ValueError("site_url is required for SharepointClient operations")
+
         self.client_id = client_id
         self.tenant_id = tenant_id
         self.client_secret = client_secret
         self.site_url = site_url.rstrip('/')
         self.scopes = scopes or ["https://graph.microsoft.com/.default"]
+        self.token_file = Path(token_file) if token_file else None
+        self.use_client_credentials = use_client_credentials
+
         authority = f"https://login.microsoftonline.com/{tenant_id}"
-        self.app = msal.ConfidentialClientApplication(
-            self.client_id,
-            authority=authority,
-            client_credential=self.client_secret,
-        )
+
+        if use_client_credentials:
+            if not client_secret:
+                raise ValueError("client_secret is required for client credentials flow")
+            self.app = msal.ConfidentialClientApplication(
+                self.client_id,
+                authority=authority,
+                client_credential=self.client_secret,
+            )
+        else:
+            self.app = msal.PublicClientApplication(
+                self.client_id,
+                authority=authority,
+            )
         # Extract the parent site URL (up to /sites/<site_name>)
         # The site_url might be a subsite, but we need the parent site for Graph API access
         parts = self.site_url.split("/sites/")
@@ -190,10 +230,10 @@ class SharepointClient:
     def get_drive_by_name(self, drive_name: str) -> dict:
         """
         Get a drive by name from the SharePoint site.
-        
+
         Args:
             drive_name: Name of the drive to find
-            
+
         Returns:
             Drive object if found, None otherwise
         """
@@ -208,6 +248,175 @@ class SharepointClient:
                 if item.get("name") == drive_name:
                     return item
         return None
+
+    # ---------- Token persistence ----------
+
+    def _save_token(self, token_data: dict, token_file: Path) -> None:
+        """Save token data to a JSON file."""
+        with token_file.open("w", encoding="utf-8") as f:
+            json.dump(token_data, f, indent=2)
+
+    # ---------- Authentication ----------
+
+    @classmethod
+    def login_only(
+        cls,
+        client_id: str,
+        tenant_id: str,
+        scopes: list = None,
+        token_file: Path = None,
+    ) -> "SharepointClient":
+        """
+        Perform interactive browser login and persist token for future sessions.
+
+        Use this classmethod when you only need to obtain and store a token — no
+        SharePoint site is accessed, so no `site_url` is required. Later, construct
+        a regular SharepointClient with a `site_url` and call `_load_credentials()`
+        to silently reuse the persisted token.
+
+        Args:
+            client_id: Azure AD application client ID
+            tenant_id: Azure AD tenant ID
+            scopes: OAuth scopes required for SharePoint access
+            token_file: Path to store the token. Defaults to 'sharepoint_token.json'.
+
+        Returns:
+            A SharepointClient instance configured for user-delegated auth with the
+            persisted token loaded.
+
+        Raises:
+            RuntimeError: If login fails.
+        """
+        if token_file is None:
+            token_file = Path("sharepoint_token.json")
+        token_file = Path(token_file)
+
+        authority = f"https://login.microsoftonline.com/{tenant_id}"
+        app = msal.PublicClientApplication(
+            client_id,
+            authority=authority,
+        )
+
+        result = app.acquire_token_interactive(
+            scopes=scopes or ["https://graph.microsoft.com/.default"]
+        )
+        if "access_token" not in result:
+            raise RuntimeError(f"Login fout: {result.get('error_description')}")
+
+        result["expires_at"] = time.time() + result.get("expires_in", 3600)
+        with token_file.open("w", encoding="utf-8") as f:
+            json.dump(result, f, indent=2)
+        logging.info(f"Token opgeslagen in {token_file.resolve()}")
+
+        return result["access_token"]
+
+    def first_login(self, token_file: Path = None) -> str:
+        """
+        Perform interactive login via browser and persist token for future sessions.
+
+        Convenience wrapper around `SharepointClient.login_only` using this instance's
+        client_id, tenant_id and scopes.
+
+        Args:
+            token_file: Path to store the token. Defaults to 'sharepoint_token.json'.
+
+        Returns:
+            The access token string.
+
+        Raises:
+            RuntimeError: If login fails.
+        """
+        return SharepointClient.login_only(
+            client_id=self.client_id,
+            tenant_id=self.tenant_id,
+            scopes=self.scopes,
+            token_file=token_file,
+        )
+
+    def _load_credentials(self, token_file: Path = None) -> dict:
+        """
+        Load stored credential/token, detect expiry, and refresh automatically using refresh token.
+
+        Args:
+            token_file: Path to the token file. Defaults to 'sharepoint_token.json'.
+
+        Returns:
+            Token data dictionary with access_token, or empty dict if not found and login required.
+        """
+        if token_file is None:
+            token_file = Path("sharepoint_token.json")
+        token_file = Path(token_file)
+
+        if not token_file.exists():
+            return {}
+
+        with token_file.open("r", encoding="utf-8") as f:
+            token_data = json.load(f)
+
+        expires_at = token_data.get("expires_at", 0)
+        if time.time() > expires_at - 60:
+            logging.info("Token verlopen of bijna verlopen, verversen...")
+            refreshed = self._refresh_token(token_data, token_file)
+            if refreshed:
+                token_data = refreshed
+            else:
+                return {}
+
+        return token_data
+
+    def _refresh_token(self, token_data: dict, token_file: Path) -> dict:
+        """
+        Refresh the access token using a refresh token.
+
+        Args:
+            token_data: Current token data containing refresh_token.
+            token_file: Path to save the refreshed token.
+
+        Returns:
+            Refreshed token data, or empty dict if refresh failed.
+        """
+        authority = f"https://login.microsoftonline.com/{self.tenant_id}"
+        app = msal.PublicClientApplication(
+            self.client_id,
+            authority=authority,
+        )
+
+        refreshed = app.acquire_token_by_refresh_token(
+            token_data.get("refresh_token"),
+            self.scopes
+        )
+
+        if "access_token" in refreshed:
+            refreshed["expires_at"] = time.time() + refreshed.get("expires_in", 3600)
+            self._save_token(refreshed, token_file)
+            return refreshed
+        else:
+            logging.warning(f"Kon token niet verversen: {refreshed.get('error_description')}")
+            return {}
+
+    def _build_service(self, token_file: Path = None) -> requests.Session:
+        """
+        Construct an authenticated Microsoft Graph API HTTP session from persisted token.
+
+        Args:
+            token_file: Path to the token file. Defaults to 'sharepoint_token.json'.
+
+        Returns:
+            A requests.Session with Authorization header set.
+
+        Raises:
+            RuntimeError: If no valid token is available.
+        """
+        token_data = self._load_credentials(token_file)
+        if not token_data or "access_token" not in token_data:
+            raise RuntimeError("Geen geldige token beschikbaar. Eerst inloggen met first_login().")
+
+        session = requests.Session()
+        session.headers.update({
+            "Authorization": f"Bearer {token_data['access_token']}",
+            "Content-Type": "application/json",
+        })
+        return session
 
 
 if __name__ == "__main__":
