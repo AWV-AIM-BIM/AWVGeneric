@@ -95,7 +95,7 @@ class JWTRequester(AbstractRequester):
 
         with open(self.private_key_path) as private_key:
             private_key_json = json.load(private_key)
-            key = jwt_algo.RSAAlgorithm.from_jwk(private_key_json)
+            key = jwt_algo.RSAAlgorithm.from_jwk(json.dumps(private_key_json))
             token = encode(payload=payload, key=key, algorithm='RS256')
 
         return token

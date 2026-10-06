@@ -18,6 +18,7 @@ from API.eminfra.PostitService import PostitService
 from API.eminfra.RelatieService import RelatieService
 from API.eminfra.SchadebeheerderService import SchadebeheerderService
 from API.eminfra.ToezichterService import ToezichterService
+from API.eminfra.VPlanService import VPlanService
 
 from API.Enums import AuthType, Environment
 from API.RequesterFactory import RequesterFactory
@@ -47,6 +48,7 @@ class EMInfraClient:
         self.relatie_service = RelatieService(self.requester)
         self.schadebeheerder_service = SchadebeheerderService(self.requester)
         self.toezichter_service = ToezichterService(self.requester)
+        self.vplan_service = VPlanService(self.requester)
 
     def get_oef_schema_as_json(self, name: str) -> str:
         url = f"core/api/otl/schema/oef/{name}"

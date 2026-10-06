@@ -85,6 +85,7 @@ class KenmerkTypeEnum(Enum):
     GEEFT_STURING_AAN = 'Geeft sturing aan'
     ELEKTRISCH_AANSLUITPUNT = 'Elektrisch aansluitpunt'
     VTC = 'VTC'
+    VPLAN = 'Vplan'
 
 RESERVED_WORD_LIST = ('from_', '_next')
 
