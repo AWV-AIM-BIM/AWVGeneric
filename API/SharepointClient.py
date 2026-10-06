@@ -168,18 +168,11 @@ class SharepointClient:
 
     def list_library_items(self, document_library_id: str):
         """List files/folders in a specific document library."""
-        headers = self._get_headers()
-        url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
-        resp = requests.get(url, headers=headers)
-
-        if resp.status_code == 200:
-            items = resp.json().get("value", [])
-            print(f"📂 Items in document library {document_library_id}:")
-            for item in items:
-                soort = "Map" if "folder" in item else "Bestand"
-                print(f"- {item['name']} ({soort})")
-        else:
-            print(f"Fout {resp.status_code}: {resp.text}")
+        items = list(self._list_children("root", document_library_id))
+        print(f"📂 Items in document library {document_library_id}:")
+        for item in items:
+            soort = "Map" if "folder" in item else "Bestand"
+            print(f"- {item['name']} ({soort})")
 
     def list_root_items(self, document_library_id: str = None):
         """
@@ -188,14 +181,16 @@ class SharepointClient:
         Args:
             document_library_id: Optional document library ID. If not provided, lists items from all document libraries.
         """
-        site_id = self._get_site_id()
-        headers = self._get_headers()
-        
         if document_library_id:
-            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
-            resp = requests.get(url, headers=headers)
+            items = list(self._list_children("root", document_library_id))
+            print("📂 Items in SharePoint root:")
+            for item in items:
+                soort = "Map" if "folder" in item else "Bestand"
+                print(f"- {item['name']} ({soort})")
         else:
             # List all document libraries and their contents
+            site_id = self._get_site_id()
+            headers = self._get_headers()
             url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
             resp = requests.get(url, headers=headers)
             if resp.status_code == 200:
@@ -204,28 +199,12 @@ class SharepointClient:
                     library_name = library.get("name", "(default)")
                     library_id = library.get("id")
                     print(f"\n📂 Document Library: {library_name}")
-                    library_url = f"https://graph.microsoft.com/v1.0/drives/{library_id}/root/children"
-                    library_resp = requests.get(library_url, headers=headers)
-                    if library_resp.status_code == 200:
-                        items = library_resp.json().get("value", [])
-                        for item in items:
-                            soort = "Map" if "folder" in item else "Bestand"
-                            print(f"  - {item['name']} ({soort})")
-                    else:
-                        print(f"  Fout {library_resp.status_code}: {library_resp.text}")
-                return
+                    items = list(self._list_children("root", library_id))
+                    for item in items:
+                        soort = "Map" if "folder" in item else "Bestand"
+                        print(f"  - {item['name']} ({soort})")
             else:
                 print(f"Fout {resp.status_code}: {resp.text}")
-                return
-        
-        if resp.status_code == 200:
-            items = resp.json().get("value", [])
-            print("📂 Items in SharePoint root:")
-            for item in items:
-                soort = "Map" if "folder" in item else "Bestand"
-                print(f"- {item['name']} ({soort})")
-        else:
-            print(f"Fout {resp.status_code}: {resp.text}")
 
     def get_document_library_by_name(self, library_name: str) -> dict:
         """
@@ -343,6 +322,73 @@ class SharepointClient:
         if resp.status_code == 200:
             return resp.json()["id"]
         raise RuntimeError(f"Failed to get default document library: {resp.status_code} - {resp.text}")
+
+    # ---------- Listing & Lookup ----------
+
+    def _list_children(
+        self,
+        parent_id: str,
+        document_library_id: str = None,
+        page_size: int = 200,
+    ):
+        """
+        Enumerate all immediate child items (folders and files) within a given
+        parent folder, with pagination.
+
+        Args:
+            parent_id: The parent folder/item ID (or 'root' for document library root)
+            document_library_id: Document library ID. If not provided, uses the default.
+            page_size: Number of items per page (max 999 per Graph API).
+
+        Yields:
+            Item dicts for each child (folder or file).
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        headers = self._get_headers()
+
+        if parent_id == "root":
+            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
+        else:
+            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{parent_id}/children"
+
+        # Add page size parameter
+        params = {"$top": page_size}
+
+        while url:
+            resp = requests.get(url, headers=headers, params=params)
+            params = None  # Only use $top on first request; subsequent pages use @odata.nextLink
+            if resp.status_code != 200:
+                raise RuntimeError(f"Failed to list children: {resp.status_code} - {resp.text}")
+
+            data = resp.json()
+            for item in data.get("value", []):
+                yield item
+
+            url = data.get("@odata.nextLink")
+
+    def _find_child_by_name(
+        self,
+        parent_id: str,
+        name: str,
+        document_library_id: str = None,
+    ) -> dict | None:
+        """
+        Locate a single child item (file or folder) by name within a parent folder.
+
+        Args:
+            parent_id: The parent folder/item ID (or 'root' for document library root)
+            name: Name of the child item to find
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            Item dict if found, None otherwise.
+        """
+        for item in self._list_children(parent_id, document_library_id):
+            if item.get("name") == name:
+                return item
+        return None
 
     # ---------- Token persistence ----------
 
