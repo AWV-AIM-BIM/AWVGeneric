@@ -14,6 +14,10 @@ if __name__ == '__main__':
     asset = eminfra_client.asset_service.get_asset_by_uuid(asset_uuid=asset_uuid)
     print(f'Asset: {asset.naam} ({asset.uuid})')
 
+
+    eminfra_client.vplan_service.verwijder_alle_vplankoppelingen(asset=asset)
+
+
     vplankoppelingen = eminfra_client.vplan_service.get_vplankoppelingen(asset=asset)
 
     print(f'Aantal vplankoppelingen: {len(vplankoppelingen)}')
