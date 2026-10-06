@@ -151,8 +151,8 @@ class SharepointClient:
             raise RuntimeError(f"Fout bij ophalen site: {resp.status_code} - {resp.text}")
         return resp.json()["id"]
 
-    def list_drives(self):
-        """List all drives in the SharePoint site."""
+    def list_document_libraries(self):
+        """List all document libraries in the SharePoint site."""
         site_id = self._get_site_id()
         headers = self._get_headers()
         url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
@@ -160,59 +160,59 @@ class SharepointClient:
 
         if resp.status_code == 200:
             items = resp.json().get("value", [])
-            print("📂 Drives in SharePoint site:")
+            print("📂 Document libraries in SharePoint site:")
             for item in items:
                 print(f"- {item.get('name', '(default)')} (id: {item['id']})")
         else:
             print(f"Fout {resp.status_code}: {resp.text}")
 
-    def list_drive_files(self, drive_id: str):
-        """List files/folders in a specific drive."""
+    def list_library_items(self, document_library_id: str):
+        """List files/folders in a specific document library."""
         headers = self._get_headers()
-        url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root/children"
+        url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
         resp = requests.get(url, headers=headers)
 
         if resp.status_code == 200:
             items = resp.json().get("value", [])
-            print(f"📂 Bestanden in drive {drive_id}:")
+            print(f"📂 Items in document library {document_library_id}:")
             for item in items:
                 soort = "Map" if "folder" in item else "Bestand"
                 print(f"- {item['name']} ({soort})")
         else:
             print(f"Fout {resp.status_code}: {resp.text}")
 
-    def list_root_files(self, drive_id: str = None):
+    def list_root_items(self, document_library_id: str = None):
         """
         List files/folders in the root of the SharePoint site.
         
         Args:
-            drive_id: Optional drive ID. If not provided, lists files from all drives.
+            document_library_id: Optional document library ID. If not provided, lists items from all document libraries.
         """
         site_id = self._get_site_id()
         headers = self._get_headers()
         
-        if drive_id:
-            url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root/children"
+        if document_library_id:
+            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
             resp = requests.get(url, headers=headers)
         else:
-            # List all drives and their contents
+            # List all document libraries and their contents
             url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drives"
             resp = requests.get(url, headers=headers)
             if resp.status_code == 200:
-                drives = resp.json().get("value", [])
-                for drive in drives:
-                    drive_name = drive.get("name", "(default)")
-                    drive_id = drive.get("id")
-                    print(f"\n📂 Drive: {drive_name}")
-                    drive_url = f"https://graph.microsoft.com/v1.0/drives/{drive_id}/root/children"
-                    drive_resp = requests.get(drive_url, headers=headers)
-                    if drive_resp.status_code == 200:
-                        items = drive_resp.json().get("value", [])
+                libraries = resp.json().get("value", [])
+                for library in libraries:
+                    library_name = library.get("name", "(default)")
+                    library_id = library.get("id")
+                    print(f"\n📂 Document Library: {library_name}")
+                    library_url = f"https://graph.microsoft.com/v1.0/drives/{library_id}/root/children"
+                    library_resp = requests.get(library_url, headers=headers)
+                    if library_resp.status_code == 200:
+                        items = library_resp.json().get("value", [])
                         for item in items:
                             soort = "Map" if "folder" in item else "Bestand"
                             print(f"  - {item['name']} ({soort})")
                     else:
-                        print(f"  Fout {drive_resp.status_code}: {drive_resp.text}")
+                        print(f"  Fout {library_resp.status_code}: {library_resp.text}")
                 return
             else:
                 print(f"Fout {resp.status_code}: {resp.text}")
@@ -220,22 +220,22 @@ class SharepointClient:
         
         if resp.status_code == 200:
             items = resp.json().get("value", [])
-            print("📂 Bestanden in SharePoint-root:")
+            print("📂 Items in SharePoint root:")
             for item in items:
                 soort = "Map" if "folder" in item else "Bestand"
                 print(f"- {item['name']} ({soort})")
         else:
             print(f"Fout {resp.status_code}: {resp.text}")
 
-    def get_drive_by_name(self, drive_name: str) -> dict:
+    def get_document_library_by_name(self, library_name: str) -> dict:
         """
-        Get a drive by name from the SharePoint site.
+        Get a document library by name from the SharePoint site.
 
         Args:
-            drive_name: Name of the drive to find
+            library_name: Name of the document library to find
 
         Returns:
-            Drive object if found, None otherwise
+            Document library object if found, None otherwise
         """
         site_id = self._get_site_id()
         headers = self._get_headers()
@@ -245,9 +245,104 @@ class SharepointClient:
         if resp.status_code == 200:
             items = resp.json().get("value", [])
             for item in items:
-                if item.get("name") == drive_name:
+                if item.get("name") == library_name:
                     return item
         return None
+
+    # ---------- Folder Resolution & Creation ----------
+
+    def _get_or_create_folder(
+        self,
+        parent_id: str,
+        folder_name: str,
+        document_library_id: str = None,
+    ) -> dict:
+        """
+        Find an existing folder by name under a parent, or create it if missing.
+
+        Args:
+            parent_id: The parent folder/item ID (or 'root' for document library root)
+            folder_name: Name of the folder to find or create
+            document_library_id: Document library ID. If not provided, uses the default document library.
+
+        Returns:
+            Folder item dict with 'id', 'name', 'folder' properties.
+        """
+        if document_library_id is None:
+            document_library_id = self._get_default_document_library_id()
+
+        headers = self._get_headers()
+
+        # First, try to find existing folder
+        if parent_id == "root":
+            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
+        else:
+            url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{parent_id}/children"
+
+        resp = requests.get(url, headers=headers)
+        if resp.status_code == 200:
+            items = resp.json().get("value", [])
+            for item in items:
+                if item.get("name") == folder_name and "folder" in item:
+                    return item
+
+        # Not found, create it
+        if parent_id == "root":
+            create_url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/root/children"
+        else:
+            create_url = f"https://graph.microsoft.com/v1.0/drives/{document_library_id}/items/{parent_id}/children"
+
+        create_payload = {
+            "name": folder_name,
+            "folder": {},
+            "@microsoft.graph.conflictBehavior": "rename",
+        }
+        resp = requests.post(create_url, headers=headers, json=create_payload)
+        if resp.status_code in {200, 201}:
+            return resp.json()
+        else:
+            raise RuntimeError(f"Failed to create folder '{folder_name}': {resp.status_code} - {resp.text}")
+
+    def _get_or_create_folder_path(
+        self,
+        folder_path: str,
+        document_library_id: str = None,
+    ) -> dict:
+        """
+        Resolve a nested folder path, creating missing parent folders.
+
+        Given a path like 'RSA/RSA_OneDrive', walk segments and create each
+        missing parent folder, returning the final folder identifier.
+
+        Args:
+            folder_path: Relative path like 'FolderA/FolderB/FolderC'
+            document_library_id: Document library ID. If not provided, uses the default.
+
+        Returns:
+            Final folder item dict.
+        """
+        segments = [seg for seg in folder_path.strip("/").split("/") if seg]
+        if not segments:
+            raise ValueError("folder_path must not be empty")
+
+        current_parent = "root"
+        final_folder = None
+
+        for segment in segments:
+            final_folder = self._get_or_create_folder(current_parent, segment, document_library_id)
+            current_parent = final_folder["id"]
+
+        return final_folder
+
+    def _get_default_document_library_id(self) -> str:
+        """Get the default document library ID for the site."""
+        site_id = self._get_site_id()
+        headers = self._get_headers()
+        url = f"https://graph.microsoft.com/v1.0/sites/{site_id}/drive"
+        resp = requests.get(url, headers=headers)
+        if resp.status_code == 200:
+            return resp.json()["id"]
+        raise RuntimeError(f"Failed to get default document library: {resp.status_code} - {resp.text}")
 
     # ---------- Token persistence ----------
 
