@@ -1,6 +1,5 @@
 import json
 import logging
-from asyncio.windows_events import NULL
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional, Union
 
 from API.eminfra.AgentService import AgentService
 from API.eminfra.AssetService import AssetService
@@ -22,10 +23,32 @@ from API.eminfra.ToezichterService import ToezichterService
 from API.Enums import AuthType, Environment
 from API.RequesterFactory import RequesterFactory
 
+
 class EMInfraClient:
-    def __init__(self, auth_type: AuthType, env: Environment, settings_path: Path = None, cookie: str = None):
-        self.requester = RequesterFactory.create_requester(auth_type=auth_type, env=env, settings_path=settings_path,
-                                                           cookie=cookie)
+    def __init__(
+        self,
+        auth_type: AuthType = None,
+        env: Environment = None,
+        settings_path: Path = None,
+        cookie: str = None,
+        authenticator=None,
+        **kwargs
+    ):
+        if authenticator is not None:
+            self.requester = authenticator.create_requester()
+        else:
+            # Allow passing via kwargs for flexibility
+            if auth_type is None:
+                auth_type = kwargs.get('auth')
+            if env is None:
+                env = kwargs.get('environment')
+            self.requester = RequesterFactory.create_requester(
+                auth_type=auth_type,
+                env=env,
+                settings_path=settings_path,
+                cookie=cookie,
+                **kwargs
+            )
         self.requester.first_part_url += 'eminfra/'
 
         # Sub-services
