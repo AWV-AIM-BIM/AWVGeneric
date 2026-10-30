@@ -1,5 +1,5 @@
 """AWV Application Authenticator - handles authentication for all AWV services."""
-from typing import Optional
+from typing import Optional, Any
 
 from API.auth.enums import AuthType, Environment
 
@@ -22,9 +22,9 @@ class AWVAppAuthenticator:
         self,
         env: Environment,
         auth_type: AuthType,
-        cookie: str = None,
-        settings_filename: str = None,
-        **kwargs
+        cookie: Optional[str] = None,
+        settings_filename: Optional[str] = None,
+        **kwargs: Any
     ):
         """
         Initialize authenticator.
@@ -68,38 +68,38 @@ class AWVAppAuthenticator:
             self._requester = self.create_requester()
         return self._requester
     
-    def eminfra(self, **kwargs):
+    def eminfra(self, **kwargs: Any):
         """Create EMInfra client."""
-        from API.clients.eminfra.EMInfraClient import EMInfraClient
+        from API.clients.eminfra import EMInfraClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return EMInfraClient(authenticator=self, **merged_kwargs)
     
-    def sngateway(self, **kwargs):
+    def sngateway(self, **kwargs: Any):
         """Create ServiceNow Gateway client."""
-        from API.SNGatewayClient import SNGatewayClient
+        from API.clients.sngateway import SNGatewayClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return SNGatewayClient(authenticator=self, **merged_kwargs)
     
-    def emson(self, **kwargs):
+    def emson(self, **kwargs: Any):
         """Create EMSON client."""
-        from API.EMSONClient import EMSONClient
+        from API.clients.emson import EMSONClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return EMSONClient(authenticator=self, **merged_kwargs)
     
-    def locatieservices2(self, **kwargs):
+    def locatieservices2(self, **kwargs: Any):
         """Create Locatieservices2 client."""
-        from API.Locatieservices2Client import Locatieservices2Client
+        from API.clients.locatieservices2 import Locatieservices2Client
         merged_kwargs = {**self._kwargs, **kwargs}
         return Locatieservices2Client(authenticator=self, **merged_kwargs)
     
-    def fs(self, **kwargs):
+    def fs(self, **kwargs: Any):
         """Create FS client."""
-        from API.FSClient import FSClient
+        from API.clients.fs import FSClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return FSClient(authenticator=self, **merged_kwargs)
     
-    def onedrive(self, **kwargs):
+    def onedrive(self, **kwargs: Any):
         """Create OneDrive client."""
-        from API.OneDriveClient import OneDriveClient
+        from API.clients.onedrive import OneDriveClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return OneDriveClient(authenticator=self, **merged_kwargs)

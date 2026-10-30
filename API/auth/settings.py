@@ -1,7 +1,9 @@
 """Settings file finder - looks in standard locations."""
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
+
+from API.auth.types import AWVSettings
 
 
 def find_settings_file(filename: str = "settings_AWV_applications.json") -> Optional[Path]:
@@ -42,7 +44,7 @@ def find_settings_file(filename: str = "settings_AWV_applications.json") -> Opti
     return None
 
 
-def load_settings(filename: str = "settings_AWV_applications.json") -> dict:
+def load_settings(filename: str = "settings_AWV_applications.json") -> AWVSettings:
     """Load settings from standard locations."""
     settings_path = find_settings_file(filename)
     if settings_path is None:
@@ -55,7 +57,7 @@ def load_settings(filename: str = "settings_AWV_applications.json") -> dict:
         return json.load(f)
 
 
-def resolve_settings_path(path_str: str, settings_file_path: Path = None) -> Path:
+def resolve_settings_path(path_str: str, settings_file_path: Optional[Path] = None) -> Path:
     """Resolve a path from settings relative to settings file location or cwd."""
     path = Path(path_str)
     if path.is_absolute():

@@ -6,13 +6,13 @@ A vendorable API client library for AWV services.
 
 ```python
 from API import AWVAppAuthenticator
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 auth = AWVAppAuthenticator(env=Environment.PRD, auth_type=AuthType.COOKIE)
 client = auth.eminfra()
 
 # Or instantiate clients directly
-from API import EMInfraClient
+from API.clients.eminfra import EMInfraClient
 client = EMInfraClient(authenticator=auth)
 ```
 
@@ -21,18 +21,23 @@ client = EMInfraClient(authenticator=auth)
 ```
 API/
 ├── README.md           # This file
+├── AGENTS.md           # Quick reference for AI agents
 ├── __init__.py         # Main exports (backward compatible)
 ├── auth/               # Authentication & configuration
 │   ├── authenticator.py
 │   ├── factory.py
-│   ├── requester.py
+│   ├── abstract_requester.py
 │   ├── jwt.py, cert.py, cookie.py
 │   └── settings.py
 ├── clients/            # Service clients
-│   ├── eminfra/        # EMInfra with all services
+│   ├── eminfra/        # EMInfra package with all services
+│   ├── eminfra.py      # EMInfra re-export (discoverable)
 │   ├── sngateway.py
 │   ├── emson.py
-│   └── ...
+│   ├── locatieservices2.py
+│   ├── fs.py
+│   ├── onedrive.py
+│   └── sharepoint.py
 └── samples/            # Example configuration files
     ├── settings_AWV_applications_example.json
     └── settings_sharepoint_example.json
@@ -72,6 +77,8 @@ PycharmProjects/           # One level above repo
 ```
 
 The finder searches up from the current working directory, so running from inside the repo will find `../config/`. 
+
+**For AI agents:** See [AGENTS.md](AGENTS.md) for a quick reference.
 
 See `samples/` for example configurations.
 
