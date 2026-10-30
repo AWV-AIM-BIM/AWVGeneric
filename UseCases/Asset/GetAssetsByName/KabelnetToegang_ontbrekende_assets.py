@@ -6,10 +6,10 @@ from otlmow_model.OtlmowModel.Classes.Onderdeel.HoortBij import HoortBij
 import pandas as pd
 from pathlib import Path
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import TermDTO, QueryDTO, OperatorEnum, PagingModeEnum, ExpansionsDTO, SelectionDTO, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import TermDTO, QueryDTO, OperatorEnum, PagingModeEnum, ExpansionsDTO, SelectionDTO, \
     ExpressionDTO, LogicalOpEnum
-from API.Enums import Environment, AuthType
+from API.auth.enums import Environment, AuthType
 from UseCases.utils import load_settings_path
 
 if __name__ == '__main__':

@@ -6,9 +6,9 @@ from pathlib import Path
 
 from UseCases.utils import load_settings_path
 from utils.date_helpers import format_datetime
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import BestekKoppelingStatusEnum, BestekCategorieEnum, BestekKoppeling
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import BestekKoppelingStatusEnum, BestekCategorieEnum, BestekKoppeling
+from API.auth.enums import AuthType, Environment
 
 BESTANDSNAMEN = [
     'Import AIM_MAR klaar v Prod.xlsx'

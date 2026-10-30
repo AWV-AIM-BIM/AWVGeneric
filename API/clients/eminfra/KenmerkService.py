@@ -1,6 +1,6 @@
 import logging
 
-from API.eminfra.EMInfraDomain import (AssetTypeKenmerkTypeDTO, KenmerkTypeDTO, PagingModeEnum, SelectionDTO,
+from API.clients.eminfra.EMInfraDomain import (AssetTypeKenmerkTypeDTO, KenmerkTypeDTO, PagingModeEnum, SelectionDTO,
                                        ExpressionDTO, TermDTO, QueryDTO, OperatorEnum, ResourceRefDTO,
                                        AssetTypeKenmerkTypeAddDTO, KenmerkTypeEnum, KenmerkType,
                                        AssetDTO)

@@ -3,7 +3,7 @@ import math
 
 import pandas as pd
 
-from API.eminfra.EMInfraDomain import LocatieKenmerk
+from API.clients.eminfra.EMInfraDomain import LocatieKenmerk
 import geopandas as gpd
 from shapely.wkt import loads
 from shapely.errors import ShapelyError

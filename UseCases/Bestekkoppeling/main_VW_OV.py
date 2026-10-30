@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, ExpansionsDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, ExpansionsDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, \
     OperatorEnum, LogicalOpEnum
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import  QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum
-from API.eminfra.AssetService import AssetService
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import  QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum
+from API.clients.eminfra.AssetService import AssetService
 from API.Enums import AuthType, Environment
 
 if __name__ == '__main__':

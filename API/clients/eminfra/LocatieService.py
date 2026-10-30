@@ -1,8 +1,8 @@
 import json
 import logging
 
-from API.eminfra.EMInfraDomain import LocatieKenmerk, AssetDTO
-from API.eminfra.wkt_validator import is_valid_wkt
+from API.clients.eminfra.EMInfraDomain import LocatieKenmerk, AssetDTO
+from API.clients.eminfra.wkt_validator import is_valid_wkt
 
 
 class LocatieService:

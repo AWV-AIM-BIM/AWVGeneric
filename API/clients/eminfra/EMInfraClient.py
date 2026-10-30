@@ -1,27 +1,27 @@
 from pathlib import Path
 from typing import Optional, Union
 
-from API.eminfra.AgentService import AgentService
-from API.eminfra.AssetService import AssetService
-from API.eminfra.AssettypeService import AssettypeService
-from API.eminfra.BeheerobjectService import BeheerobjectService
-from API.eminfra.BestekService import BestekService
-from API.eminfra.DocumentService import DocumentService
-from API.eminfra.EigenschapService import EigenschapService
-from API.eminfra.EventService import EventService
-from API.eminfra.FeedService import FeedService
-from API.eminfra.GeometrieService import GeometrieService
-from API.eminfra.GraphService import GraphService
-from API.eminfra.KenmerkService import KenmerkService
-from API.eminfra.LocatieService import LocatieService
-from API.eminfra.OnderdeelService import OnderdeelService
-from API.eminfra.PostitService import PostitService
-from API.eminfra.RelatieService import RelatieService
-from API.eminfra.SchadebeheerderService import SchadebeheerderService
-from API.eminfra.ToezichterService import ToezichterService
+from API.clients.eminfra.AgentService import AgentService
+from API.clients.eminfra.AssetService import AssetService
+from API.clients.eminfra.AssettypeService import AssettypeService
+from API.clients.eminfra.BeheerobjectService import BeheerobjectService
+from API.clients.eminfra.BestekService import BestekService
+from API.clients.eminfra.DocumentService import DocumentService
+from API.clients.eminfra.EigenschapService import EigenschapService
+from API.clients.eminfra.EventService import EventService
+from API.clients.eminfra.FeedService import FeedService
+from API.clients.eminfra.GeometrieService import GeometrieService
+from API.clients.eminfra.GraphService import GraphService
+from API.clients.eminfra.KenmerkService import KenmerkService
+from API.clients.eminfra.LocatieService import LocatieService
+from API.clients.eminfra.OnderdeelService import OnderdeelService
+from API.clients.eminfra.PostitService import PostitService
+from API.clients.eminfra.RelatieService import RelatieService
+from API.clients.eminfra.SchadebeheerderService import SchadebeheerderService
+from API.clients.eminfra.ToezichterService import ToezichterService
 
-from API.Enums import AuthType, Environment
-from API.RequesterFactory import RequesterFactory
+from API.auth.enums import AuthType, Environment
+from API.auth.factory import RequesterFactory
 
 
 class EMInfraClient:

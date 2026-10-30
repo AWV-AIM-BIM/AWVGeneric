@@ -1,9 +1,9 @@
 import base64
 import logging
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import LocatieKenmerk
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import LocatieKenmerk
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 from pathlib import Path
 from otlmow_model.OtlmowModel.Classes.Onderdeel.Lichtmast import Lichtmast

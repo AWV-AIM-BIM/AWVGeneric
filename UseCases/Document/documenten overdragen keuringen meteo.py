@@ -2,8 +2,8 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
 
 ASSET_PREFIX = 'https://apps.mow.vlaanderen.be/eminfra/core/api/otl/assets/'
 UUID_LENGTH = 36

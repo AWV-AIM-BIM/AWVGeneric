@@ -1,6 +1,6 @@
 from geopandas import GeoDataFrame
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 import geopandas as gpd
 from pathlib import Path
 

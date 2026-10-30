@@ -1,6 +1,6 @@
 from requests import Response
 
-from API.AbstractRequester import AbstractRequester
+from API.auth.abstract_requester import AbstractRequester
 
 
 class CookieRequester(AbstractRequester):

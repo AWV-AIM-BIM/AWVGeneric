@@ -4,7 +4,7 @@ from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-from API.eminfra.EMInfraDomain import (BestekKoppeling, BestekRef, PagingModeEnum, SelectionDTO, OperatorEnum,
+from API.clients.eminfra.EMInfraDomain import (BestekKoppeling, BestekRef, PagingModeEnum, SelectionDTO, OperatorEnum,
                                        ExpressionDTO, TermDTO, QueryDTO, BestekCategorieEnum,
                                        BestekKoppelingStatusEnum, AssetDTO)
 from utils.date_helpers import validate_dates, format_datetime

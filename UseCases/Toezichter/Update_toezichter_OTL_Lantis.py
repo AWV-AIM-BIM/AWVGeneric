@@ -1,9 +1,9 @@
 import logging
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO,
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO,
                                        OperatorEnum, LogicalOpEnum, AgentDTO)
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 from UseCases.utils import load_settings_path
 

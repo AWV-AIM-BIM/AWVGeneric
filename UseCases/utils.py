@@ -4,11 +4,11 @@ from typing import Any
 import pandas as pd
 from pathlib import Path
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO,
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO,
                                        OperatorEnum, AgentDTO, LogicalOpEnum, ExpansionsDTO, RelatieEnum,
                                        AssetRelatieDTO, DocumentDTO, DocumentCategorieEnum)
-from API.eminfra.Generic import get_kenmerktype_and_relatietype_id
+from API.clients.eminfra.Generic import get_kenmerktype_and_relatietype_id
 from collections.abc import Generator
 
 

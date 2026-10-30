@@ -2,9 +2,9 @@ import logging
 
 from more_itertools import batched
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.EMSONClient import EMSONClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.emson import EMSONClient
+from API.auth.enums import AuthType, Environment
 from UseCases.PatternCollection.Domain.AssetInfoCollector import AssetInfoCollector
 from UseCases.PatternCollection.Domain.InfoObject import directional_relations
 

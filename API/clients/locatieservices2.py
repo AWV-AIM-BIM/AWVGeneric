@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from API.Enums import AuthType, Environment
-from API.Locatieservices2Domain import WegsegmentPuntLocatie
-from API.RequesterFactory import RequesterFactory
+from API.auth.enums import AuthType, Environment
+from API.clients.locatieservices2_domain import WegsegmentPuntLocatie
+from API.auth.factory import RequesterFactory
 
 
 class Locatieservices2Client:

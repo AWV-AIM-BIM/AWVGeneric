@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from API.eminfra.EMInfraDomain import (QueryDTO, ExpressionDTO, TermDTO, OperatorEnum, LogicalOpEnum, SelectionDTO,
+from API.clients.eminfra.EMInfraDomain import (QueryDTO, ExpressionDTO, TermDTO, OperatorEnum, LogicalOpEnum, SelectionDTO,
                                        PagingModeEnum, AgentDTO, BetrokkenerelatieDTO, AssetDTO)
 
 

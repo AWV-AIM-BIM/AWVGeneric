@@ -10,8 +10,8 @@ from otlmow_model.OtlmowModel.Datatypes import DtcDocument
 from otlmow_model.OtlmowModel.Datatypes.DtcDocument import DtcDocumentWaarden
 from otlmow_model.OtlmowModel.Helpers.RelationCreator import create_relation
 
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
 from otlmow_model.OtlmowModel.Classes.Onderdeel.Laagspanningsbord import Laagspanningsbord
 
 ASSET_PREFIX = 'https://apps.mow.vlaanderen.be/eminfra/core/api/otl/assets/'

@@ -2,7 +2,7 @@ from pathlib import Path
 
 from requests import Response
 
-from API.AbstractRequester import AbstractRequester
+from API.auth.abstract_requester import AbstractRequester
 
 
 class CertRequester(AbstractRequester):

@@ -1,10 +1,10 @@
 import logging
 from collections.abc import Generator
 
-from API.eminfra.EMInfraDomain import (Eigenschap, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, QueryDTO,
+from API.clients.eminfra.EMInfraDomain import (Eigenschap, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, QueryDTO,
                                        OperatorEnum, LogicalOpEnum, EigenschapValueDTO, EigenschapValueUpdateDTO,
                                        KenmerkTypeEnum, AssetDTO, KenmerkType)
-from API.eminfra.KenmerkService import KenmerkService
+from API.clients.eminfra.KenmerkService import KenmerkService
 
 
 class EigenschapService:

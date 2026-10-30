@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from API.AbstractRequester import AbstractRequester
-from API.Enums import Environment, AuthType
+from API.auth.abstract_requester import AbstractRequester
+from API.auth.enums import Environment, AuthType
 
 
 class RequesterFactory:
@@ -38,7 +38,7 @@ class RequesterFactory:
         if auth_type == AuthType.COOKIE:
             cookie_value = cookie
             if cookie_value is None:
-                from API.settings_finder import load_settings
+                from API.auth.settings import load_settings
                 try:
                     settings = load_settings(settings_filename)
                     cookie_value = settings.get('authentication', {}).get('COOKIE', {}).get(env.name.lower(), {}).get('cookie')
@@ -46,20 +46,20 @@ class RequesterFactory:
                     pass
             if cookie_value is None:
                 raise ValueError("cookie is required for COOKIE authentication (pass as parameter or in settings)")
-            from API.CookieRequester import CookieRequester
+            from API.auth.cookie import CookieRequester
             return CookieRequester(cookie=cookie_value, first_part_url=first_part_url.replace('services.', ''))
 
-        from API.settings_finder import load_settings
+        from API.auth.settings import load_settings
         settings = load_settings(settings_filename)
         specific_settings = settings['authentication'][auth_type.name][env.name.lower()]
 
         if auth_type == AuthType.JWT:
-            from API.JWTRequester import JWTRequester
+            from API.auth.jwt import JWTRequester
             return JWTRequester(private_key_path=specific_settings['key_path'],
                                 client_id=specific_settings['client_id'],
                                 first_part_url=first_part_url)
         elif auth_type == AuthType.CERT:
-            from API.CertRequester import CertRequester
+            from API.auth.cert import CertRequester
             return CertRequester(cert_path=specific_settings['cert_path'],
                                  key_path=specific_settings['key_path'],
                                  first_part_url=first_part_url)

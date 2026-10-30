@@ -1,10 +1,10 @@
 from collections.abc import Generator
 
-from API.eminfra.EMInfraDomain import (AssetDTO, RelatieTypeDTO, RelatieEnum, AssetRelatieDTO, QueryDTO,
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, RelatieTypeDTO, RelatieEnum, AssetRelatieDTO, QueryDTO,
                                        PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum,
                                        LogicalOpEnum)
-from API.eminfra.AssetService import AssetService
-from API.eminfra.Generic import get_kenmerktype_and_relatietype_id
+from API.clients.eminfra.AssetService import AssetService
+from API.clients.eminfra.Generic import get_kenmerktype_and_relatietype_id
 
 
 class RelatieService:

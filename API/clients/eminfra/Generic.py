@@ -1,4 +1,4 @@
-from API.eminfra.EMInfraDomain import RelatieEnum
+from API.clients.eminfra.EMInfraDomain import RelatieEnum
 
 def get_kenmerktype_and_relatietype_id(relatie: RelatieEnum) -> (str, str):
     """

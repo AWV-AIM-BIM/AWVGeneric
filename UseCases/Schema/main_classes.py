@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import Environment, AuthType
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import Environment, AuthType
 
 if __name__ == '__main__':
     settings_path = Path('/home/davidlinux/Documents/AWV/resources/settings_SyncOTLDataToLegacy.json')

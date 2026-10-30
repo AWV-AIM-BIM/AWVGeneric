@@ -1,5 +1,5 @@
 """AWV API service clients."""
-from API.clients.eminfra_client import EMInfraClient
+from API.clients.eminfra import EMInfraClient
 from API.clients.sngateway import SNGatewayClient
 from API.clients.emson import EMSONClient
 from API.clients.locatieservices2 import Locatieservices2Client

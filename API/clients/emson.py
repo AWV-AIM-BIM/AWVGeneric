@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from API.eminfra.EMInfraDomain import BaseDataclass
-from API.Enums import AuthType, Environment
-from API.RequesterFactory import RequesterFactory
+from API.clients.eminfra.EMInfraDomain import BaseDataclass
+from API.auth.enums import AuthType, Environment
+from API.auth.factory import RequesterFactory
 
 
 class EMSONClient:

@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from API.Enums import AuthType, Environment
-from API.RequesterFactory import RequesterFactory
+from API.auth.enums import AuthType, Environment
+from API.auth.factory import RequesterFactory
 
 
 class SNGatewayClient:

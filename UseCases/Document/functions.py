@@ -5,11 +5,11 @@ from datetime import datetime
 import pandas as pd
 import re
 
-from API.eminfra.EMInfraDomain import (DocumentCategorieEnum, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO,
+from API.clients.eminfra.EMInfraDomain import (DocumentCategorieEnum, QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO,
                                        TermDTO, OperatorEnum, ExpansionsDTO, construct_naampad, LogicalOpEnum,
                                        ApplicationEnum, ProvincieEnum)
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import Environment
 from pathlib import Path
 from Generic.ExcelModifier import ExcelModifier
 

@@ -13,8 +13,8 @@ from random import choice
 
 from requests import Response
 
-from API.AbstractRequester import AbstractRequester
-from API.settings_finder import find_settings_file, resolve_settings_path
+from API.auth.abstract_requester import AbstractRequester
+from API.auth.settings import find_settings_file, resolve_settings_path
 
 
 class JWTRequester(AbstractRequester):

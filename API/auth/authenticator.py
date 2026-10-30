@@ -1,7 +1,7 @@
 """AWV Application Authenticator - handles authentication for all AWV services."""
 from typing import Optional
 
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 
 class AWVAppAuthenticator:
@@ -49,7 +49,7 @@ class AWVAppAuthenticator:
         Args:
             service_path: Optional service path to append to base URL
         """
-        from API.RequesterFactory import RequesterFactory
+        from API.auth.factory import RequesterFactory
         requester = RequesterFactory.create_requester(
             auth_type=self.auth_type,
             env=self.env,
@@ -70,7 +70,7 @@ class AWVAppAuthenticator:
     
     def eminfra(self, **kwargs):
         """Create EMInfra client."""
-        from API.eminfra.EMInfraClient import EMInfraClient
+        from API.clients.eminfra.EMInfraClient import EMInfraClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return EMInfraClient(authenticator=self, **merged_kwargs)
     

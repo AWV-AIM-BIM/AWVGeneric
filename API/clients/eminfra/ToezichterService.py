@@ -2,7 +2,7 @@ from collections.abc import Generator
 from typing import Optional
 
 
-from API.eminfra.EMInfraDomain import (AssetDTO, ToezichterKenmerk, IdentiteitKenmerk, ToezichtgroepDTO, QueryDTO,
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, ToezichterKenmerk, IdentiteitKenmerk, ToezichtgroepDTO, QueryDTO,
                                        SelectionDTO, PagingModeEnum, ExpressionDTO, TermDTO, OperatorEnum,
                                        LogicalOpEnum, BetrokkenerelatieDTO, ToezichtgroepTypeEnum,
                                        ToezichtKenmerkUpdateDTO)

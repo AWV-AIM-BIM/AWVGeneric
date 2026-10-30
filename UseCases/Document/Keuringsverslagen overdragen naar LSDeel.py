@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import DocumentCategorieEnum
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import DocumentCategorieEnum
 
 from UseCases.utils import load_settings_path, configure_logger, filter_asset_type
 from utils.query_dto_helpers import build_query_search_assettype

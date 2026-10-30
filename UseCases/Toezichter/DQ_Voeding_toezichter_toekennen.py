@@ -4,9 +4,9 @@ import re
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import ToezichtKenmerkUpdateDTO, ResourceRefDTO, BeheerobjectDTO, AssetDTO, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import ToezichtKenmerkUpdateDTO, ResourceRefDTO, BeheerobjectDTO, AssetDTO, \
     ToezichterKenmerk
 
 from UseCases.utils import load_settings_path, read_rsa_report, configure_logger

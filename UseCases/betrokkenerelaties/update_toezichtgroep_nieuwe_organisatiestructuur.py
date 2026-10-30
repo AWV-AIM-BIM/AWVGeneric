@@ -1,8 +1,8 @@
 from collections.abc import Generator
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, ExpressionDTO, SelectionDTO, TermDTO,
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, QueryDTO, PagingModeEnum, ExpressionDTO, SelectionDTO, TermDTO,
                                        OperatorEnum, AgentDTO, ExpansionsDTO)
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 from pathlib import Path
 from otlmow_model.OtlmowModel.Classes.ImplementatieElement.RelatieObject import RelatieObject

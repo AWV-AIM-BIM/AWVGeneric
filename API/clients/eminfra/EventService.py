@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from datetime import datetime, timedelta
 
-from API.eminfra.EMInfraDomain import EventType, IdentiteitKenmerk, EventContext, Event, QueryDTO, \
+from API.clients.eminfra.EMInfraDomain import EventType, IdentiteitKenmerk, EventContext, Event, QueryDTO, \
     SelectionDTO, PagingModeEnum, ExpressionDTO, TermDTO, OperatorEnum, LogicalOpEnum, AssetDTO
 from utils.date_helpers import format_datetime
 

@@ -1,10 +1,10 @@
 import json
 from collections.abc import Generator
-from API.eminfra.EMInfraDomain import (AssetDTO, AssetDTOToestand, QueryDTO, ExpressionDTO, TermDTO, OperatorEnum,
+from API.clients.eminfra.EMInfraDomain import (AssetDTO, AssetDTOToestand, QueryDTO, ExpressionDTO, TermDTO, OperatorEnum,
                                        LogicalOpEnum, ExpansionsDTO, SelectionDTO, PagingModeEnum, AssettypeDTO,
                                        RelatieEnum, BoomstructuurAssetTypeEnum, BeheerobjectDTO)
-from API.eminfra.Generic import get_kenmerktype_and_relatietype_id
-from API.eminfra.BeheerobjectService import BeheerobjectService
+from API.clients.eminfra.Generic import get_kenmerktype_and_relatietype_id
+from API.clients.eminfra.BeheerobjectService import BeheerobjectService
 
 
 class AssetService:

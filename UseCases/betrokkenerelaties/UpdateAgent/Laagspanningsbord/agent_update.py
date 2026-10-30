@@ -2,8 +2,8 @@ import logging
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 
 from UseCases.utils import load_settings_path, configure_logger, build_query_search_betrokkenerelaties, update_agent
 

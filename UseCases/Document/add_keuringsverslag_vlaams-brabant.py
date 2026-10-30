@@ -2,9 +2,9 @@ import logging
 from pathlib import Path
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import QueryDTO, ExpansionsDTO, PagingModeEnum, SelectionDTO, TermDTO, OperatorEnum, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import QueryDTO, ExpansionsDTO, PagingModeEnum, SelectionDTO, TermDTO, OperatorEnum, \
     ExpressionDTO, LogicalOpEnum, AssetDTO, DocumentCategorieEnum
 
 from UseCases.utils import load_settings_path, configure_logger

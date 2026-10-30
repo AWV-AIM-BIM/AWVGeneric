@@ -20,7 +20,7 @@ from dataclasses import dataclass
 import msal
 import requests
 
-from API.settings_loader import load_settings
+from API.auth.settings_loader import load_settings
 
 logging.basicConfig(
     level=logging.INFO,

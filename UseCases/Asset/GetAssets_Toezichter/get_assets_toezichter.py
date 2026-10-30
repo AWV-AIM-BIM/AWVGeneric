@@ -1,9 +1,9 @@
 import logging
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, PagingModeEnum, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, PagingModeEnum, \
     ExpansionsDTO, LocatieKenmerk
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 
 from Generic.ExcelModifier import ExcelModifier

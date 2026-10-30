@@ -5,8 +5,8 @@ import pandas as pd
 
 from UseCases.utils import load_settings_path
 from utils.date_helpers import format_datetime
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 
 ENVIRONMENT = Environment.PRD
 BESTANDSNAAM = f'export-selectielijst_20260526_clipped.xlsx'

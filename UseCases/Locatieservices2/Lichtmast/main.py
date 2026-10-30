@@ -2,9 +2,9 @@ import logging
 from pathlib import Path
 import pandas as pd
 
-from API.Locatieservices2Client import Locatieservices2Client
+from API.clients.locatieservices2 import Locatieservices2Client
 
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 from UseCases.utils import load_settings_path
 
 from pipeline import enrich_assets

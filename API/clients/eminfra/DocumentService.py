@@ -2,7 +2,7 @@ import json
 import logging
 from pathlib import Path
 from collections.abc import Generator
-from API.eminfra.EMInfraDomain import AssetDocumentDTO, AssetDTO, DocumentCategorieEnum, DocumentDTO
+from API.clients.eminfra.EMInfraDomain import AssetDocumentDTO, AssetDTO, DocumentCategorieEnum, DocumentDTO
 
 
 class DocumentService:

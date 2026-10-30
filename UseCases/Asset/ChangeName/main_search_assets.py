@@ -2,8 +2,8 @@ from itertools import batched
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 
 def map_toestand(toestand_uri: str) -> str:
     """
