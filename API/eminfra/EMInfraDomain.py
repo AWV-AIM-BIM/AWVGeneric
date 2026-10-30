@@ -355,7 +355,7 @@ class SubCategorieEnum(Enum):
 @dataclass
 class BestekKoppeling(BaseDataclass):
     bestekRef: dict | BestekRef
-    status: BestekKoppelingStatusEnum
+    status: BestekKoppelingStatusEnum | None = None
     startDatum: str | None = None
     eindDatum: str | None = None
     categorie: BestekCategorieEnum | None = None
