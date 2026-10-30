@@ -40,7 +40,38 @@ API/
 
 ## Configuration
 
-Place your `settings_AWV_applications.json` in a `config/` folder next to where you run your code, or in the current directory. The library will search automatically.
+Place your `settings_AWV_applications.json` in a `config/` folder **one level above** the repository/folder where you copied the `API/` folder to. The library will search automatically starting from the current working directory.
+
+### Example structure when vendoring
+
+```
+parent_folder/             # One level above repo
+├── config/                # Config folder - OUTSIDE the repo
+│   ├── settings_AWV_applications.json
+│   ├── settings_sharepoint.json
+│   └── private_keys/
+└── your_project/          # Your repo (run your code from here)
+    ├── API/               # Copied API library
+    │   ├── auth/
+    │   ├── clients/
+    │   ├── samples/
+    │   └── ...
+    └── your_script.py
+```
+
+### Example structure when using in this repo
+
+```
+PycharmProjects/           # One level above repo
+├── config/                # Config folder - OUTSIDE the repo
+│   ├── settings_AWV_applications.json
+│   └── private_keys/
+└── AWVGeneric/            # Repo root (run your code from here)
+    ├── API/               # Library
+    └── UseCases/
+```
+
+The finder searches up from the current working directory, so running from inside the repo will find `../config/`. 
 
 See `samples/` for example configurations.
 
