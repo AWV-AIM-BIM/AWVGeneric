@@ -1,4 +1,12 @@
-"""AWV API Client Library"""
+"""
+AWV API Client Library
+
+Quick start:
+    from API import AWVAppAuthenticator
+    from API.auth.enums import AuthType, Environment
+    auth = AWVAppAuthenticator(env=Environment.PRD, auth_type=AuthType.COOKIE)
+    client = auth.eminfra()
+"""
 from API.auth import *
 from API.clients import *
 from API.auth.authenticator import AWVAppAuthenticator

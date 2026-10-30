@@ -11,3 +11,6 @@ __all__ = [
     'EMInfraClient', 'SNGatewayClient', 'EMSONClient',
     'Locatieservices2Client', 'FSClient', 'OneDriveClient', 'SharepointClient'
 ]
+
+# Direct access to modules
+from API.clients import eminfra, sngateway, emson, locatieservices2, fs, onedrive, sharepoint
