@@ -1,52 +1,27 @@
 import os
 from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
 
 from API.eminfra.EMInfraClient import EMInfraClient
 from API.Enums import AuthType, Environment
+from API.eminfra.EMInfraDomain import BestekKoppeling, AssetDTO
 from UseCases.utils import load_settings_path
 
 if __name__ == '__main__':
-    from pathlib import Path
-
     # Some parameters to test the functions.
-    asset_uuid = ''
-    environment = Environment.TEI
-    eDelta_dossiernummer = ''
-    eDelta_besteknummer = ''
-    print(f'environment:\t\t{environment}')
-    print(f'asset_uuid:\t\t{asset_uuid}')
-    print(f'eDelta_dossiernummer:\t\t{eDelta_dossiernummer}')
-    print(f'eDelta_besteknummer:\t\t{eDelta_besteknummer}')
+    asset_uuid = '02e627c0-f8e9-4d33-9f06-57a100671d2f'
+    environment = Environment.PRD
 
-    settings_path = load_settings_path()
+
+    settings_path = Path('/home/davidlinux/Documenten/AWV/resources/settings_SyncOTLDataToLegacy.json')
     eminfra_client = EMInfraClient(env=environment, auth_type=AuthType.JWT, settings_path=settings_path)
 
-    dummyAsset = eminfra_client.assets.get_asset_by_uuid(asset_uuid=asset_uuid)
+    vorig_dossiernummer = 'WA/OND/D100/2022/2_P1'
+    vorig_bestek = eminfra_client.bestek_service.get_bestekref(eDelta_dossiernummer=vorig_dossiernummer)
+    print(vorig_bestek)
 
-    # get_bestekkoppelingen_by_asset_uuid
-    bestekkoppelingen = eminfra_client.bestek_service.get_bestekkoppeling(asset=dummyAsset)
-
-    # get_bestekref_by_eDelta_dossiernummer
-    bestekref1 = eminfra_client.bestek_service.get_bestekref(eDelta_dossiernummer=eDelta_dossiernummer)
-
-    # get_bestekref_by_eDelta_besteknummer (new)
-    bestekref2 = eminfra_client.bestek_service.get_bestekref(eDelta_besteknummer=eDelta_besteknummer)
-
-    # change_bestekkoppelingen_by_asset_uuid (new)
-    eminfra_client.bestek_service.change_bestekkoppelingen_by_uuid(asset_uuid=asset_uuid,
-                                                                   bestekkoppelingen=bestekkoppelingen)
-
-    # adjust_date_bestekkoppeling (new). Schuif de stardatum (optioneel) en einddatum (optioneel) op.
-    eminfra_client.adjust_date_bestekkoppeling(asset_uuid=asset_uuid, bestek_ref_uuid=bestekref1.uuid,
-                                               start_datetime=datetime(2022, 10, 29), end_datetime=datetime(2026, 10, 28))
-
-    # end_bestekkoppeling (new)
-    eminfra_client.end_bestekkoppeling(asset_uuid=asset_uuid, bestek_ref_uuid=bestekref1.uuid)
-
-    # add_bestekkoppeling (new)
-    eminfra_client.add_bestekkoppeling(asset_uuid=asset_uuid, eDelta_dossiernummer='INTERN-002',
-                                       start_datetime=datetime(2025, 1, 29), end_datetime=datetime(2025, 2, 1))
-
-    # update_bestekkoppeling (new)
-    eminfra_client.replace_bestekkoppeling(asset_uuid=asset_uuid, eDelta_dossiernummer_old='INTERN-002',
-                                           eDelta_dossiernummer_new='INTERN-003')
+    nieuw_besteknummer = 'WA/OND/D100/2026/3_P1'
+    nieuw_bestek = eminfra_client.bestek_service.get_bestekref(eDelta_dossiernummer=nieuw_besteknummer)
+    print(nieuw_bestek)
