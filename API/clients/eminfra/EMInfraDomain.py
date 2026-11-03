@@ -743,6 +743,7 @@ class RelatieTypeDTOList(BaseDataclass):
 
 @dataclass
 class PostitDTO(BaseDataclass):
+    bron: str
     uuid: str
     createdOn: str
     modifiedOn: str
