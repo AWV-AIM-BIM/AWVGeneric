@@ -1,0 +1,51 @@
+name: Vendoring AWV API folder
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Branch/tag/commit of AWVGeneric to copy from
+        required: false
+        default: master
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  vendor-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this (target) repo
+        uses: actions/checkout@v4
+        with:
+          path: target
+
+      - name: Checkout AWVGeneric (source)
+        uses: actions/checkout@v4
+        with:
+          repository: AWV-AIM-BIM/AWVGeneric   # change to actual source repo
+          ref: ${{ github.event.inputs.source_ref || 'master' }}
+          path: source
+          token: ${{ secrets.AWV_PAT }}           # PAT with access to source repo
+
+      - name: Copy only the API folder
+        shell: bash
+        run: |
+          rm -rf target/API
+          cp -a source/API target/API
+
+      - name: Commit and push API folder
+        shell: bash
+        run: |
+          cd target
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add API
+          if git diff --cached --quiet; then
+            echo "No changes to API folder"
+            exit 0
+          fi
+          git commit -m "chore: vendor API folder from AWVGeneric ${{ github.event.inputs.source_ref || 'master' }}"
+          git push
