@@ -17,50 +17,47 @@ class SNGatewayClient:
             self.requester = RequesterFactory.create_requester(auth_type=auth_type, env=env,
                                                                settings_path=settings_path,
                                                                cookie=cookie, **kwargs)
-        self.requester.first_part_url += 'services/'
+        self.requester.first_part_url += 'sngateway/'
 
-    def get_assets(self):
-        url = 'asset-service/rest/assets?SysparmLimit=1&SysparmOffset=0'
-        return self.requester.get(url).json()
+    def get_all_asset_filters(self) -> list[dict]:
+        url = 'rest/eminfra/asset-filter'
+        response = self.requester.get(url=url)
+        return response.json()
 
-    def get_asset_by_guid(self, guid):
-        url = f'asset-service/rest/assets/{guid}'
-        response = self.requester.get(url)
-        if response.status_code == 200:
-            return response.json()
-        elif response.status_code == 404:
-            return None
+    def add_new_asset_filter(self, uri: str, enabled: bool = True) -> None:
+        url = 'rest/eminfra/asset-filter'
+        response = self.requester.post(url=url, json={
+          "uri": uri,
+          "enabled": enabled
+        })
+        return response.json()
+
+    def modify_asset_filter(self, id: str, uri: str, enabled: bool = True) -> None:
+        url = f'rest/eminfra/asset-filter/{id}'
+        response = self.requester.put(url=url, json={
+          "uri": uri,
+          "enabled": enabled
+        })
+        return response.json()
+
+    def enable_asset_filter(self, uri: str) -> None:
+        existing_filters = self.get_all_asset_filters()
+        existing_filter = next((filter for filter in existing_filters if filter['uri'] == uri), None)
+        if existing_filter is None:
+            self.add_new_asset_filter(uri=uri, enabled=True)
         else:
-            raise RuntimeError(response.content.decode("utf-8"))
+            if existing_filter['enabled']:
+                print(f'Filter with uri {uri} is already enabled')
+                return
+            self.modify_asset_filter(id=existing_filter['id'], uri=uri, enabled=True)
 
-    def get_assets_by_id_list(self, id_list: list):
-        url = 'asset-service/rest/assets'
-        request_body = {
-            "assetIds": id_list
-        }
-        return self.requester.post(url, json=request_body).json()
-
-    def update_asset(self, guid: str, put_body: dict):
-        url = f'asset-service/rest/assets/{guid}'
-        return self.requester.put(url, json=put_body).json()
-
-    def get_asset_logs_by_guid(self, guid: str):
-        url = f'asset-service/rest/assets/{guid}/logs'
-        return self.requester.get(url).json()
-
-    def search_assets(self, query: str = None, sysparm_query: str = None, limit: int = 100,
-                       offset: int = 0):
-        if sysparm_query is not None:
-            url = f'asset-service/rest/assets?sysparm_query={sysparm_query}&sysparm_limit={limit}&sysparm_offset={offset}'
-        elif query is not None:
-            url = f'asset-service/rest/assets?sysparm_query={query}&sysparm_limit={limit}&sysparm_offset={offset}'
+    def disable_asset_filter(self, uri: str) -> None:
+        existing_filters = self.get_all_asset_filters()
+        existing_filter = next((filter for filter in existing_filters if filter['uri'] == uri), None)
+        if existing_filter is None:
+            self.add_new_asset_filter(uri=uri, enabled=False)
         else:
-            url = f'asset-service/rest/assets?sysparm_limit={limit}&sysparm_offset={offset}'
-        return self.requester.get(url).json()
-
-    def get_table(self, table_name: str, sysparm_query: str = None, limit: int = 100, offset: int = 0):
-        if sysparm_query:
-            url = f'{table_name}?sysparm_query={sysparm_query}&sysparm_limit={limit}&sysparm_offset={offset}'
-        else:
-            url = f'{table_name}?sysparm_limit={limit}&sysparm_offset={offset}'
-        return self.requester.get(url).json()
+            if not existing_filter['enabled']:
+                print(f'Filter with uri {uri} is already disabled')
+                return
+            self.modify_asset_filter(id=existing_filter['id'], uri=uri, enabled=False)

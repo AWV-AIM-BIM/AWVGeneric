@@ -1,3 +1,5 @@
+import logging
+
 from pathlib import Path
 
 from API.auth.enums import AuthType, Environment
@@ -20,7 +22,21 @@ class Locatieservices2Client:
                                                                cookie=cookie, **kwargs)
         self.requester.first_part_url += 'locatieservices2/'
 
-    def get_by_wkt(self, wkt_string: str, distance: int = 50, limit: int = 1000) -> [WegsegmentPuntLocatie]:
-        url = f'v1/locaties/wkt?WKT={wkt_string}&distance={distance}&limit={limit}'
-        json_dict = self.requester.get(url).json()
-        return [WegsegmentPuntLocatie.from_dict(wegsegment_dict) for wegsegment_dict in json_dict['features']]
+    def zoek_puntlocatie_via_xy(self, x: float, y: float, zoekafstand: int = 50) -> WegsegmentPuntLocatie:
+        response = self.requester.get(
+            url=f'rest/puntlocatie/via/xy?/zoekafstand={zoekafstand}&x={x}&y={y}')
+        if response.status_code != 200:
+            logging.error(response)
+            raise ProcessLookupError(response.content.decode("utf-8"))
+
+        return WegsegmentPuntLocatie.from_dict(response.json())
+
+    def zoek_puntlocatie_via_wegsegment(self, ident8: str, opschrift: float, afstand: float = 0.0) -> WegsegmentPuntLocatie:
+        response = self.requester.get(
+            url=f'rest/puntlocatie/op/weg/{ident8}/via/opschrift?opschrift={opschrift}&afstand={afstand}'
+        )
+        if response.status_code != 200:
+            logging.error(response)
+            raise ProcessLookupError(response.content.decode("utf-8"))
+
+        return WegsegmentPuntLocatie.from_dict(response.json())
