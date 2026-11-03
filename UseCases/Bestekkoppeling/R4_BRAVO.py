@@ -5,8 +5,8 @@ from datetime import datetime
 import pandas as pd
 from pathlib import Path
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 from UseCases.utils import load_settings_path
 
 start_datetime = datetime(2025, 1, 1)

@@ -6,8 +6,8 @@ from pandas import DataFrame
 import pyarrow as pa
 from pyarrow import json
 
-from API.Enums import AuthType, Environment
-from API.FSClient import FSClient
+from API.auth.enums import AuthType, Environment
+from API.clients.fs import FSClient
 from utils.decorators import print_timing
 
 

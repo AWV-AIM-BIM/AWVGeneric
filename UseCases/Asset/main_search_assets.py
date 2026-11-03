@@ -4,10 +4,10 @@ from utils.wkt_geometry_helpers import format_locatie_kenmerk_lgc_2_wkt
 
 from prettytable import PrettyTable
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
     LogicalOpEnum, ExpansionsDTO, construct_naampad
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 from UseCases.utils import load_settings_path, configure_logger
 
 ENVIRONMENT = Environment.PRD

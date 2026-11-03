@@ -5,11 +5,11 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from API.AbstractRequester import AbstractRequester
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.EMSONClient import EMSONClient
-from API.Enums import AuthType, Environment
-from API.RequesterFactory import RequesterFactory
+from API.auth.abstract_requester import AbstractRequester
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.emson import EMSONClient
+from API.auth.enums import AuthType, Environment
+from API.auth.factory import RequesterFactory
 
 asset_1 = {
     "@type": "https://lgc.data.wegenenverkeer.be/ns/installatie#Kast",

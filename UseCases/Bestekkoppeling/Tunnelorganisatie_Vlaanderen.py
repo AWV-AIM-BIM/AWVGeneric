@@ -8,10 +8,10 @@ from pathlib import Path
 from Generic.ExcelModifier import ExcelModifier
 from UseCases.utils import load_settings_path
 from utils.date_helpers import format_datetime
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
     BestekKoppelingStatusEnum, BestekCategorieEnum, BestekKoppeling, ApplicationEnum
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 
 def bestekcategorie_is_none(item: BestekKoppeling):

@@ -1,6 +1,6 @@
 ﻿from unittest.mock import Mock
 
-from API.AbstractRequester import AbstractRequester
+from API.auth.abstract_requester import AbstractRequester
 from UseCases.PatternCollection.Domain.AssetInfoCollector import AssetInfoCollector
 from ClientFixtures import fake_eminfra_client, fake_emson_client
 

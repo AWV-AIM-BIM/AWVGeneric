@@ -1,8 +1,8 @@
 import base64
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import AssetDTO, LocatieKenmerk
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import AssetDTO, LocatieKenmerk
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 from pathlib import Path
 from otlmow_model.OtlmowModel.Classes.Onderdeel.Netwerkelement import Netwerkelement

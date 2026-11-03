@@ -7,10 +7,10 @@ from typing import Optional
 import pandas as pd
 import geopandas as gpd
 
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 from pathlib import Path
 
-from API.Locatieservices2Client import Locatieservices2Client
+from API.clients.locatieservices2 import Locatieservices2Client
 from UseCases.utils import load_settings_path
 from utils.locatieservice_helpers import convert_ident8
 from utils.wkt_geometry_helpers import coordinates_2_wkt, get_euclidean_distance_wkt, generate_osm_link, \

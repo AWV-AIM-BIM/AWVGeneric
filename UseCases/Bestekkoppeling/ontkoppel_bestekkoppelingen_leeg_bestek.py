@@ -2,8 +2,8 @@ import pandas as pd
 
 from pathlib import Path
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 from UseCases.utils import load_settings_path
 
 if __name__ == '__main__':

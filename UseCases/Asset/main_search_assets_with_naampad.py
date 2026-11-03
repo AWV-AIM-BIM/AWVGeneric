@@ -2,10 +2,10 @@ import logging
 
 from prettytable import PrettyTable
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, OperatorEnum, \
     LogicalOpEnum, ExpansionsDTO, construct_naampad
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 
 if __name__ == '__main__':

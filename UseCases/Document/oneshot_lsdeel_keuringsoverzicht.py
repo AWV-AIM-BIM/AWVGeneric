@@ -15,9 +15,9 @@ import json
 from pathlib import Path
 from typing import Any
 
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import DocumentCategorieEnum, EigenschapValueDTO
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import DocumentCategorieEnum, EigenschapValueDTO
 from utils.query_dto_helpers import build_query_search_assettype
 
 SETTINGS_PATH = Path("/home/davidlinux/Documenten/AWV/resources/settings_SyncOTLDataToLegacy.json")

@@ -4,8 +4,8 @@ from pathlib import Path
 
 from pandas import DataFrame
 
-from API.Enums import AuthType, Environment
-from API.FSClient import FSClient
+from API.auth.enums import AuthType, Environment
+from API.clients.fs import FSClient
 from utils.decorators import print_timing
 
 

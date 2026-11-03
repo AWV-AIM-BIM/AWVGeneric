@@ -2,7 +2,7 @@ import logging
 import sys
 from pathlib import Path
 
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 from UseCases.PatternCollection.Domain.PatternVisualiser import PatternVisualiser
 from UseCases.PatternCollection.Domain.PyVisWrapper import PyVisWrapper
 
