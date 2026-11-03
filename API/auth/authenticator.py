@@ -103,3 +103,9 @@ class AWVAppAuthenticator:
         from API.clients.onedrive import OneDriveClient
         merged_kwargs = {**self._kwargs, **kwargs}
         return OneDriveClient(authenticator=self, **merged_kwargs)
+    
+    def sharepoint(self, **kwargs: Any):
+        """Create Sharepoint client."""
+        from API.clients.sharepoint import SharepointClient
+        merged_kwargs = {**self._kwargs, **kwargs}
+        return SharepointClient(authenticator=self, **merged_kwargs)

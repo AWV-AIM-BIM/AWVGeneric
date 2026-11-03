@@ -47,37 +47,32 @@ class SharepointClient:
 
     def __init__(
         self,
-        client_id: str,
-        tenant_id: str,
-        site_url: str,
+        client_id: str = None,
+        tenant_id: str = None,
+        site_url: str = None,
         client_secret: str = None,
         scopes: list = None,
         token_file: Path = None,
         use_client_credentials: bool = True,
+        settings_path: Path = None,
+        authenticator=None,
+        **kwargs,
     ):
         """
         Initialize the SharePoint client.
-
-        Args:
-            client_id: Azure AD application client ID
-            tenant_id: Azure AD tenant ID
-            site_url: SharePoint site URL (required for site operations)
-            client_secret: Azure AD application client secret (required for client credentials flow)
-            scopes: OAuth scopes required for SharePoint access
-            token_file: Path to store/load persisted token (for user-delegated auth)
-            use_client_credentials: If True, use app-only client credentials flow.
-                                   If False, use interactive user-delegated flow with token persistence.
-
-        Attributes:
-            client_id (str): Azure AD application client ID
-            tenant_id (str): Azure AD tenant ID
-            client_secret (str): Azure AD application client secret
-            site_url (str): SharePoint site URL
-            scopes (list): OAuth scopes required for SharePoint access
-            token_file (Path): Path for token persistence (user-delegated mode)
-            use_client_credentials (bool): Authentication mode flag
-            app (ConfidentialClientApplication): MSAL application instance (client credentials mode)
         """
+        # Try to load from settings if not all params provided
+        if not all([client_id, tenant_id, site_url]) or client_secret is None:
+            try:
+                from API.auth.settings import load_settings
+                settings = load_settings("settings_sharepoint.json")
+                client_id = client_id or settings.get("client_id")
+                tenant_id = tenant_id or settings.get("tenant_id")
+                site_url = site_url or settings.get("site_url")
+                client_secret = client_secret or settings.get("secret") or settings.get("client_secret")
+            except Exception:
+                pass  # Fall through to validation
+        
         if not site_url:
             raise ValueError("site_url is required for SharepointClient operations")
 
@@ -89,7 +84,9 @@ class SharepointClient:
         self.token_file = Path(token_file) if token_file else None
         self.use_client_credentials = use_client_credentials
 
-        authority = f"https://login.microsoftonline.com/{tenant_id}"
+        if not self.tenant_id:
+            raise ValueError("tenant_id is required for SharepointClient operations")
+        authority = f"https://login.microsoftonline.com/{self.tenant_id}"
 
         if use_client_credentials:
             if not client_secret:
