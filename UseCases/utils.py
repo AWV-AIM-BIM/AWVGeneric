@@ -15,12 +15,7 @@ from collections.abc import Generator
 
 
 def load_settings_path(user: str = 'Dries') -> Path:
-    if user == 'Dries':
-        return Path('C:/resources/settings_SyncOTLDataToLegacy.json')
-    elif user == 'David':
-        return Path('/home/davidlinux/Documenten/AWV/resources/settings_SyncToArangoDB.json')
-    else:
-        raise NotImplementedError(f'user: {user} is not implemented in function call load_settings()')
+    raise NotImplementedError('move settings files to a config dir on the same level as the projects.')
 
 
 def configure_logger(log_path: str = "logs.log"):
