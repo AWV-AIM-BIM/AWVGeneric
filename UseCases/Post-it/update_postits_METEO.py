@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
             logging.info(f"  postit {postit.uuid}: {postit.commentaar} met einddatum: {postit_einddatum}")
 
-            apply edit_postit() to update enddate
+            # apply edit_postit() to update enddate
             eminfra_client.postit_service.edit_postit(
                 asset_uuid=asset.uuid,
                 postit_uuid=postit.uuid,
