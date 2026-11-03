@@ -2,9 +2,9 @@ import json
 import logging
 from typing import Optional, Tuple, List
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import AssetDTO, AgentDTO, IdentiteitKenmerk, ToezichtgroepDTO, SchadebeheerderKenmerk
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import AssetDTO, AgentDTO, IdentiteitKenmerk, ToezichtgroepDTO, SchadebeheerderKenmerk
 
 from UseCases.utils import (
     load_settings_path,

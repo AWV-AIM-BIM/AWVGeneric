@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import RelatieEnum, AssetDTO, AssettypeDTO
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import RelatieEnum, AssetDTO, AssettypeDTO
+from API.auth.enums import AuthType, Environment
 
 from UseCases.utils import load_settings_path, configure_logger, create_relatie_if_missing, read_rsa_report
 

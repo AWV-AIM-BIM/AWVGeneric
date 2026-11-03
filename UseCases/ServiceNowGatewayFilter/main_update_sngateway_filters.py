@@ -1,8 +1,8 @@
 from pathlib import Path
 from prettytable import PrettyTable
 
-from API.SNGatewayClient import SNGatewayClient
-from API.Enums import AuthType, Environment
+from API.clients.sngateway import SNGatewayClient
+from API.auth.enums import AuthType, Environment
 
 
 awv_acm_cookie = '55eb0c4eef5d41debd0d639c4db7e37c'

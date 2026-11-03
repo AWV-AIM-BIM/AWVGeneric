@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import KenmerkTypeEnum, EigenschapValueUpdateDTO, EigenschapValueDTO
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import KenmerkTypeEnum, EigenschapValueUpdateDTO, EigenschapValueDTO
 
 from UseCases.utils import load_settings_path, configure_logger, vervang_door_verweven_asset
 

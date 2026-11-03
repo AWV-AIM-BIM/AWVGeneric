@@ -1,0 +1,12 @@
+{
+  "sharepoint_sync": {
+    "enabled": true,
+    "sync_after": "02:00:00",
+    "poll_after": "01:00:00",
+    "poll_deadline": "06:00:00",
+    "sharepoint_folder": "RSA/RSA_OneDrive",
+    "credentials_path": "config/settings_Sharepoint.json",
+    "local_folder": "local_mirror",
+    "token_path": "config/token_cache.json"
+  }
+}

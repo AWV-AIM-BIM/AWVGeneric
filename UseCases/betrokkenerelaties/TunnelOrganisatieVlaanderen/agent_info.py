@@ -1,5 +1,5 @@
-from API.Enums import Environment
-from API.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, OperatorEnum, TermDTO, \
+from API.auth.enums import Environment
+from API.clients.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, ExpressionDTO, OperatorEnum, TermDTO, \
     LogicalOpEnum
 
 ENVIRONMENT = Environment.PRD

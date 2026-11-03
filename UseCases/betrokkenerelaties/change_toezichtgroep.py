@@ -4,9 +4,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
-from API.eminfra.EMInfraDomain import BestekKoppeling, AssetDTO
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
+from API.clients.eminfra.EMInfraDomain import BestekKoppeling, AssetDTO
 from UseCases.utils import build_query_search_betrokkenerelaties
 
 if __name__ == '__main__':

@@ -4,10 +4,10 @@ import pandas as pd
 from pathlib import Path
 
 from UseCases.utils import load_settings_path
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, OperatorEnum, TermDTO, ExpressionDTO, \
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.clients.eminfra.EMInfraDomain import QueryDTO, PagingModeEnum, SelectionDTO, OperatorEnum, TermDTO, ExpressionDTO, \
     construct_naampad, ExpansionsDTO
-from API.Enums import AuthType, Environment
+from API.auth.enums import AuthType, Environment
 
 if __name__ == '__main__':
     logging.basicConfig(filename="logs.log", level=logging.DEBUG, format='%(levelname)s:\t%(asctime)s:\t%(message)s\t', filemode="w")

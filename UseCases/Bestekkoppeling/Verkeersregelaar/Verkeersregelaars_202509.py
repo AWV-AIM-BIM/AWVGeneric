@@ -2,10 +2,10 @@ import copy
 import datetime
 import logging
 
-from API.eminfra.EMInfraDomain import BestekCategorieEnum, BestekKoppelingStatusEnum, BestekKoppeling
+from API.clients.eminfra.EMInfraDomain import BestekCategorieEnum, BestekKoppelingStatusEnum, BestekKoppeling
 from utils.date_helpers import format_datetime
-from API.eminfra.EMInfraClient import EMInfraClient
-from API.Enums import AuthType, Environment
+from API.clients.eminfra.EMInfraClient import EMInfraClient
+from API.auth.enums import AuthType, Environment
 import pandas as pd
 from pathlib import Path
 
