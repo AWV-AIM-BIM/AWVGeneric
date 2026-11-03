@@ -25,10 +25,9 @@ jobs:
       - name: Checkout AWVGeneric (source)
         uses: actions/checkout@v4
         with:
-          repository: AWV-AIM-BIM/AWVGeneric   # change to actual source repo
+          repository: AWV-AIM-BIM/AWVGeneric
           ref: ${{ github.event.inputs.source_ref || 'master' }}
           path: source
-          token: ${{ secrets.AWV_PAT }}           # PAT with access to source repo
 
       - name: Copy only the API folder
         shell: bash
