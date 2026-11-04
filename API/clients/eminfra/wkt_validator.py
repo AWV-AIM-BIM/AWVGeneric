@@ -15,5 +15,5 @@ def is_valid_wkt(wkt_string: str) -> bool:
     try:
         geom = wkt.loads(wkt_string)
         return geom.is_valid
-    except ShapelyError, Exception:
+    except (ShapelyError, Exception):
         return False
