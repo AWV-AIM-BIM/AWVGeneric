@@ -66,25 +66,30 @@ class JWTRequester(AbstractRequester):
 
         return self.oauth_token
 
-    def modify_kwargs_for_bearer_token(self, kwargs: dict) -> dict:
-        bearer_token = self.get_oauth_token()
+    def _ensure_headers(self, kwargs: dict) -> dict:
         if "headers" not in kwargs:
             kwargs["headers"] = {}
-
-        for arg, headers in kwargs.items():
-            if arg == "headers":
-                if "accept" not in headers:
-                    headers["accept"] = ""
-                if headers["accept"] is not None:
-                    headers["accept"] = (
-                        f"{headers['accept']}, application/json" if headers["accept"] != "" else "application/json"
-                    )
-                headers["authorization"] = f"Bearer {bearer_token}"
-                if "Content-Type" not in headers or headers["Content-Type"] is None:
-                    headers["Content-Type"] = "application/vnd.awv.eminfra.v1+json"
-                kwargs["headers"] = headers
-
         return kwargs
+
+    def _apply_bearer_headers(self, headers: dict, bearer_token: str) -> dict:
+        if "accept" not in headers:
+            headers["accept"] = ""
+        if headers["accept"] is not None:
+            headers["accept"] = (
+                f"{headers['accept']}, application/json" if headers["accept"] != "" else "application/json"
+            )
+        headers["authorization"] = f"Bearer {bearer_token}"
+        if "Content-Type" not in headers or headers["Content-Type"] is None:
+            headers["Content-Type"] = "application/vnd.awv.eminfra.v1+json"
+        return headers
+
+    def modify_kwargs_for_bearer_token(self, kwargs: dict) -> dict:
+        bearer_token = self.get_oauth_token()
+        kwargs = self._ensure_headers(kwargs)
+        headers = kwargs.get("headers") or {}
+        kwargs["headers"] = self._apply_bearer_headers(headers, bearer_token)
+        return kwargs
+
 
     def generate_authentication_token(self) -> str:
         self.requested_at = datetime.datetime.now(datetime.timezone.utc)

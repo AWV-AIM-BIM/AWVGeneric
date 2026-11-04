@@ -3,19 +3,19 @@
 > GENERATED FILE — produced by `code_quality/scripts/qa_report.py`.
 > Do not edit by hand; edit the thresholds in the script instead.
 
-Generated: 2026-11-04 · commit `b4d037f`
+Generated: 2026-11-04 · commit `84cbea5`
 
 ## Thresholds (gate)
 
 | Metric | Threshold | Current | Status |
 |---|---|---|---|
 | ruff issues | ≤ 0 | 339 | 🔴 |
-| files needing `ruff format` | ≤ 0 | 6 | 🔴 |
-| mypy errors | ≤ 0 | 482 | 🔴 |
+| files needing `ruff format` | ≤ 0 | 11 | 🔴 |
+| mypy errors | ≤ 0 | 467 | 🔴 |
 | test coverage (lines, owned code) | ≥ 80.0 | 33.2 % | 🔴 |
 | test coverage (branches, owned code) | ≥ 75.0 | 3.4 % | 🔴 |
-| max CRAP score | ≤ 6.0 | 282.6 | 🔴 |
-| max cyclomatic complexity | ≤ 6 | 17 | 🔴 |
+| max CRAP score | ≤ 6.0 | 90.0 | 🔴 |
+| max cyclomatic complexity | ≤ 6 | 9 | 🔴 |
 | bandit HIGH issues | ≤ 0 | 0 | 🟢 |
 | dead code items | ≤ 0 | 0 | 🟢 |
 | pip-audit vulnerabilities | ≤ 0 | 0 | 🟢 |
@@ -23,12 +23,6 @@ Generated: 2026-11-04 · commit `b4d037f`
 | files radon cannot parse | ≤ 0 | 0 | 🟢 |
 | manual conventions | ≤ 0 | 0 | 🟢 |
 | import cycles/architecture | ≤ — | not enabled | ⚪ |
-
-## Ratchet regressions
-
-These lint counts went **up** compared to the previous cycle and block the merge:
-
-- TRY300: 6 -> 7
 
 ## Tools not available
 
@@ -50,7 +44,7 @@ The gate above measures the **hand-written** code: that is the code a refactor t
 
 ## Lead refactor target (highest CRAP)
 
-`API/clients/sharepoint.py:44` → `__init__` — CRAP **282.6** — complexity **17** — coverage **2.8 %**
+`API/clients/sharepoint.py:1543` → `_run_command` — CRAP **90.0** — complexity **9** — coverage **0.0 %**
 
 Verify with `code_quality/README.md` §7 before touching it: the behaviour must be pinned by a golden-file test first.
 
@@ -58,11 +52,11 @@ Verify with `code_quality/README.md` §7 before touching it: the behaviour must 
 
 | Score | Commits | Lines changed | Max complexity | File |
 |---:|---:|---:|---:|---|
-| 28373 | 3 | 1669 | 17 | `API/clients/sharepoint.py` |
-| 8415 | 3 | 935 | 9 | `API/clients/eminfra/EMInfraDomain.py` |
-| 3978 | 2 | 442 | 9 | `API/clients/eminfra/AssetService.py` |
-| 2555 | 2 | 365 | 7 | `API/clients/eminfra/BestekService.py` |
-| 2200 | 2 | 200 | 11 | `API/clients/eminfra/ToezichterService.py` |
+| 19575 | 5 | 2175 | 9 | `API/clients/sharepoint.py` |
+| 12564 | 4 | 1396 | 9 | `API/clients/eminfra/EMInfraDomain.py` |
+| 6165 | 3 | 685 | 9 | `API/clients/eminfra/AssetService.py` |
+| 4466 | 3 | 638 | 7 | `API/clients/eminfra/BestekService.py` |
+| 2048 | 3 | 256 | 8 | `API/clients/eminfra/DocumentService.py` |
 
 ## ruff findings per rule
 
@@ -75,12 +69,12 @@ Verify with `code_quality/README.md` §7 before touching it: the behaviour must 
 | `S101` | 20 |
 | `BLE001` | 18 |
 | `T201` | 12 |
+| `F401` | 10 |
 | `PLR0913` | 10 |
 | `PLR0917` | 10 |
-| `F401` | 9 |
 | `PTH123` | 9 |
-| `S110` | 7 |
 | `TRY300` | 7 |
+| `S110` | 6 |
 | `F403` | 2 |
 | `E712` | 1 |
 
@@ -88,13 +82,13 @@ Verify with `code_quality/README.md` §7 before touching it: the behaviour must 
 
 | Date | Coverage % | Branch % | Ruff | MyPy | Max CRAP | Max complexity | Result |
 |---|---:|---:|---:|---:|---:|---:|---|
-| 2026-11-04 | 33.2 | 3.4 | 0 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 0 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 0 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 0 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 0 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 474 | 573 | 306.0 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 338 | 479 | 284.9 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 338 | 479 | 284.9 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 338 | 479 | 284.9 | 17 | red |
-| 2026-11-04 | 33.2 | 3.4 | 339 | 482 | 282.6 | 17 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 481 | 280.5 | 17 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 481 | 156.0 | 12 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 482 | 142.5 | 12 | red |
+| 2026-11-04 | 33.2 | 3.4 | 340 | 463 | 140.0 | 12 | red |
+| 2026-11-04 | 33.2 | 3.4 | 340 | 463 | 132.0 | 11 | red |
+| 2026-11-04 | 33.2 | 3.4 | 340 | 460 | 112.9 | 11 | red |
+| 2026-11-04 | 33.2 | 3.4 | 340 | 460 | 101.2 | 10 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 463 | 90.0 | 9 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 465 | 90.0 | 9 | red |
+| 2026-11-04 | 33.2 | 3.4 | 339 | 467 | 90.0 | 9 | red |

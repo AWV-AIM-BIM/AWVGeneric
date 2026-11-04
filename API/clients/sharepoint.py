@@ -429,11 +429,21 @@ class SharepointClient:
 
     # ---------- Retry & Error Handling ----------
 
+    def _is_http_retryable(self, resp) -> bool:
+        try:
+            status = resp.status_code
+            if status in {408, 429} or 500 <= status < 600:
+                return True
+            text = resp.text.lower()
+            if any(kw in text for kw in ("rate limit", "quota", "throttle", "too many requests")):
+                return True
+        except Exception:
+            pass
+        return False
+
     def _is_retryable_library_error(self, exc: Exception) -> bool:
         """
         Classify an exception as transient/retryable.
-
-        Retryable: timeouts, connection errors, HTTP 408/429/5xx, rate-limit/quota keywords.
         """
         import requests.exceptions as req_exc
 
@@ -442,24 +452,15 @@ class SharepointClient:
 
         if isinstance(exc, req_exc.HTTPError):
             resp = getattr(exc, "response", None)
-            if resp is not None:
-                status = resp.status_code
-                if status in {408, 429} or 500 <= status < 600:
-                    return True
-                # Check for rate-limit/quota keywords in response
-                try:
-                    text = resp.text.lower()
-                    if any(kw in text for kw in ("rate limit", "quota", "throttle", "too many requests")):
-                        return True
-                except Exception:
-                    pass
+            if resp is not None and self._is_http_retryable(resp):
+                return True
 
-        # Check exception message for rate-limit keywords
         msg = str(exc).lower()
         if any(kw in msg for kw in ("rate limit", "quota", "throttle", "too many requests")):
             return True
 
         return False
+
 
     def _retry_on_library_error(self, func, *args, **kwargs):
         """
@@ -543,6 +544,23 @@ class SharepointClient:
 
         self._retry_on_library_error(_do_download)
 
+    def _should_skip_remote_item(self, name: str, is_root: bool, apply_root_filter: bool) -> bool:
+        if not name:
+            return True
+        if self._is_temporary_workbook(name):
+            logging.debug(f"Skipping temporary workbook: {name}")
+            return True
+        if not self._is_safe_name(name):
+            logging.debug(f"Skipping unsafe name: {name}")
+            return True
+        if is_root and apply_root_filter and not self._is_expected_root_folder_name(name):
+            logging.debug(f"Skipping unexpected root folder: {name}")
+            return True
+        if self._should_skip(name):
+            logging.debug(f"Skipping control folder: {name}")
+            return True
+        return False
+
     def _download_tree(
         self,
         parent_id: str,
@@ -553,55 +571,26 @@ class SharepointClient:
     ) -> None:
         """
         Recursively download a folder tree and mirror all files into a local directory.
-
-        Args:
-            parent_id: Remote parent folder/item ID (or 'root')
-            local_folder: Local directory to mirror into
-            document_library_id: Document library ID. If not provided, uses the default.
-            is_root: Whether this is the root call (applies root-level filters if apply_root_filter=True)
-            apply_root_filter: If True, apply the expected root folder name filter (for structured sync)
         """
         if document_library_id is None:
             document_library_id = self._get_default_document_library_id()
 
         for item in self._list_children(parent_id, document_library_id):
             name = item.get("name", "")
-            if not name:
-                continue
-
-            # Skip temporary/lock workbooks
-            if self._is_temporary_workbook(name):
-                logging.debug(f"Skipping temporary workbook: {name}")
-                continue
-
-            # Skip unsafe names
-            if not self._is_safe_name(name):
-                logging.debug(f"Skipping unsafe name: {name}")
-                continue
-
-            # At root level, apply expected folder name filter only if requested
-            if is_root and apply_root_filter and not self._is_expected_root_folder_name(name):
-                logging.debug(f"Skipping unexpected root folder: {name}")
-                continue
-
-            # Skip control folders
-            if self._should_skip(name):
-                logging.debug(f"Skipping control folder: {name}")
+            if self._should_skip_remote_item(name, is_root, apply_root_filter):
                 continue
 
             local_item_path = local_folder / name
 
             if "folder" in item:
-                # Create the directory for this folder (even if empty)
                 local_item_path.mkdir(parents=True, exist_ok=True)
-                # Recurse into subfolder
                 self._download_tree(
                     item["id"], local_item_path, document_library_id, is_root=False, apply_root_filter=apply_root_filter
                 )
             elif "file" in item:
-                # Download file
                 logging.info(f"Downloading: {local_item_path}")
                 self._download_file(item["id"], local_item_path, document_library_id)
+
 
     def sync_library_to_local(
         self,

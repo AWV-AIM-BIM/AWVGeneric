@@ -1,7 +1,7 @@
 {
   "date": "2026-11-04",
   "repo": "awvgeneric",
-  "commit": "b4d037f",
+  "commit": "84cbea5",
   "thresholds": {
     "ruff_issues": 0,
     "ruff_format_files": 0,
@@ -20,12 +20,12 @@
   },
   "metrics": {
     "ruff_issues": 339,
-    "ruff_format_files": 6,
-    "mypy_errors": 482,
+    "ruff_format_files": 11,
+    "mypy_errors": 467,
     "coverage_percent": 33.2,
     "coverage_branch_percent": 3.4,
-    "max_crap": 282.6,
-    "max_complexity": 17,
+    "max_crap": 90.0,
+    "max_complexity": 9,
     "bandit_high": 0,
     "dead_code": 0,
     "pip_audit_vulns": 0,
@@ -40,279 +40,279 @@
   "all_gates_met": false,
   "lead_target": {
     "file": "API/clients/sharepoint.py",
-    "name": "__init__",
-    "block_type": "method",
-    "complexity": 17,
-    "coverage": 2.8,
-    "crap": 282.6,
-    "lineno": 44
+    "name": "_run_command",
+    "block_type": "function",
+    "complexity": 9,
+    "coverage": 0.0,
+    "crap": 90.0,
+    "lineno": 1543
   },
   "hotspots": [
     {
       "file": "API/clients/sharepoint.py",
-      "commits": 3,
-      "lines_changed": 1669,
-      "max_complexity": 17,
-      "score": 28373
+      "commits": 5,
+      "lines_changed": 2175,
+      "max_complexity": 9,
+      "score": 19575
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
-      "commits": 3,
-      "lines_changed": 935,
+      "commits": 4,
+      "lines_changed": 1396,
       "max_complexity": 9,
-      "score": 8415
+      "score": 12564
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
-      "commits": 2,
-      "lines_changed": 442,
+      "commits": 3,
+      "lines_changed": 685,
       "max_complexity": 9,
-      "score": 3978
+      "score": 6165
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
-      "commits": 2,
-      "lines_changed": 365,
+      "commits": 3,
+      "lines_changed": 638,
       "max_complexity": 7,
-      "score": 2555
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "commits": 2,
-      "lines_changed": 200,
-      "max_complexity": 11,
-      "score": 2200
-    },
-    {
-      "file": "API/clients/onedrive.py",
-      "commits": 1,
-      "lines_changed": 241,
-      "max_complexity": 7,
-      "score": 1687
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "commits": 2,
-      "lines_changed": 140,
-      "max_complexity": 12,
-      "score": 1680
-    },
-    {
-      "file": "API/clients/eminfra/PostitService.py",
-      "commits": 2,
-      "lines_changed": 170,
-      "max_complexity": 9,
-      "score": 1530
-    },
-    {
-      "file": "API/clients/emson.py",
-      "commits": 6,
-      "lines_changed": 246,
-      "max_complexity": 6,
-      "score": 1476
+      "score": 4466
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
-      "commits": 2,
-      "lines_changed": 164,
-      "max_complexity": 8,
-      "score": 1312
-    },
-    {
-      "file": "API/auth/jwt.py",
       "commits": 3,
-      "lines_changed": 139,
-      "max_complexity": 9,
-      "score": 1251
+      "lines_changed": 256,
+      "max_complexity": 8,
+      "score": 2048
     },
     {
-      "file": "API/auth/abstract_requester.py",
-      "commits": 1,
-      "lines_changed": 175,
-      "max_complexity": 6,
-      "score": 1050
+      "file": "API/clients/eminfra/EventService.py",
+      "commits": 3,
+      "lines_changed": 272,
+      "max_complexity": 7,
+      "score": 1904
     },
     {
-      "file": "API/clients/eminfra/RelatieService.py",
+      "file": "API/clients/onedrive.py",
       "commits": 2,
-      "lines_changed": 166,
+      "lines_changed": 264,
+      "max_complexity": 7,
+      "score": 1848
+    },
+    {
+      "file": "API/clients/emson.py",
+      "commits": 7,
+      "lines_changed": 292,
       "max_complexity": 6,
-      "score": 996
+      "score": 1752
+    },
+    {
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "commits": 3,
+      "lines_changed": 346,
+      "max_complexity": 5,
+      "score": 1730
     },
     {
       "file": "API/clients/eminfra/BeheerobjectService.py",
-      "commits": 2,
-      "lines_changed": 162,
+      "commits": 3,
+      "lines_changed": 285,
       "max_complexity": 6,
-      "score": 972
+      "score": 1710
     },
     {
-      "file": "API/auth/factory.py",
-      "commits": 2,
-      "lines_changed": 81,
-      "max_complexity": 10,
-      "score": 810
+      "file": "API/clients/eminfra/PostitService.py",
+      "commits": 3,
+      "lines_changed": 224,
+      "max_complexity": 7,
+      "score": 1568
     },
     {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "commits": 2,
-      "lines_changed": 135,
+      "file": "API/clients/eminfra/RelatieService.py",
+      "commits": 3,
+      "lines_changed": 260,
       "max_complexity": 6,
-      "score": 810
+      "score": 1560
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "commits": 4,
+      "lines_changed": 226,
+      "max_complexity": 6,
+      "score": 1356
     },
     {
       "file": "API/clients/eminfra/EigenschapService.py",
+      "commits": 4,
+      "lines_changed": 259,
+      "max_complexity": 5,
+      "score": 1295
+    },
+    {
+      "file": "API/clients/eminfra/KenmerkService.py",
+      "commits": 3,
+      "lines_changed": 196,
+      "max_complexity": 6,
+      "score": 1176
+    },
+    {
+      "file": "API/auth/abstract_requester.py",
+      "commits": 2,
+      "lines_changed": 182,
+      "max_complexity": 6,
+      "score": 1092
+    },
+    {
+      "file": "API/auth/factory.py",
+      "commits": 3,
+      "lines_changed": 132,
+      "max_complexity": 8,
+      "score": 1056
+    },
+    {
+      "file": "API/clients/sngateway.py",
+      "commits": 4,
+      "lines_changed": 210,
+      "max_complexity": 5,
+      "score": 1050
+    },
+    {
+      "file": "API/clients/eminfra/AgentService.py",
+      "commits": 3,
+      "lines_changed": 158,
+      "max_complexity": 6,
+      "score": 948
+    },
+    {
+      "file": "API/clients/eminfra/LocatieService.py",
       "commits": 3,
       "lines_changed": 161,
       "max_complexity": 5,
       "score": 805
     },
     {
-      "file": "API/clients/sngateway.py",
-      "commits": 3,
-      "lines_changed": 157,
-      "max_complexity": 5,
-      "score": 785
-    },
-    {
       "file": "API/auth/settings.py",
-      "commits": 2,
-      "lines_changed": 80,
-      "max_complexity": 8,
-      "score": 640
-    },
-    {
-      "file": "API/clients/eminfra/LocatieService.py",
-      "commits": 2,
-      "lines_changed": 126,
-      "max_complexity": 5,
-      "score": 630
-    },
-    {
-      "file": "API/clients/eminfra/AgentService.py",
-      "commits": 2,
-      "lines_changed": 93,
-      "max_complexity": 6,
-      "score": 558
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraClient.py",
       "commits": 3,
-      "lines_changed": 119,
-      "max_complexity": 4,
-      "score": 476
-    },
-    {
-      "file": "API/clients/eminfra/GeometrieService.py",
-      "commits": 2,
-      "lines_changed": 150,
-      "max_complexity": 3,
-      "score": 450
-    },
-    {
-      "file": "API/clients/fs.py",
-      "commits": 3,
-      "lines_changed": 87,
-      "max_complexity": 5,
-      "score": 435
-    },
-    {
-      "file": "API/clients/eminfra/paging.py",
-      "commits": 1,
-      "lines_changed": 53,
+      "lines_changed": 97,
       "max_complexity": 8,
-      "score": 424
+      "score": 776
     },
     {
       "file": "API/auth/cert.py",
-      "commits": 2,
-      "lines_changed": 60,
+      "commits": 3,
+      "lines_changed": 94,
       "max_complexity": 7,
-      "score": 420
+      "score": 658
     },
     {
-      "file": "API/auth/authenticator.py",
+      "file": "API/clients/fs.py",
       "commits": 4,
-      "lines_changed": 149,
-      "max_complexity": 2,
-      "score": 298
+      "lines_changed": 129,
+      "max_complexity": 5,
+      "score": 645
     },
     {
-      "file": "API/clients/locatieservices2_domain.py",
+      "file": "API/clients/eminfra/GeometrieService.py",
+      "commits": 3,
+      "lines_changed": 204,
+      "max_complexity": 3,
+      "score": 612
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraClient.py",
+      "commits": 4,
+      "lines_changed": 140,
+      "max_complexity": 4,
+      "score": 560
+    },
+    {
+      "file": "API/clients/eminfra/paging.py",
       "commits": 2,
-      "lines_changed": 267,
-      "max_complexity": 1,
-      "score": 267
+      "lines_changed": 57,
+      "max_complexity": 8,
+      "score": 456
     },
     {
       "file": "API/clients/eminfra/AssettypeService.py",
-      "commits": 3,
-      "lines_changed": 85,
+      "commits": 4,
+      "lines_changed": 128,
       "max_complexity": 3,
-      "score": 255
+      "score": 384
     },
     {
-      "file": "API/clients/eminfra/GraphService.py",
-      "commits": 2,
-      "lines_changed": 78,
-      "max_complexity": 3,
-      "score": 234
+      "file": "API/auth/authenticator.py",
+      "commits": 5,
+      "lines_changed": 190,
+      "max_complexity": 2,
+      "score": 380
     },
     {
       "file": "API/clients/locatieservices2.py",
-      "commits": 3,
-      "lines_changed": 56,
+      "commits": 4,
+      "lines_changed": 88,
       "max_complexity": 4,
-      "score": 224
+      "score": 352
     },
     {
       "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "commits": 2,
-      "lines_changed": 61,
+      "commits": 3,
+      "lines_changed": 102,
       "max_complexity": 3,
-      "score": 183
+      "score": 306
+    },
+    {
+      "file": "API/clients/eminfra/GraphService.py",
+      "commits": 3,
+      "lines_changed": 93,
+      "max_complexity": 3,
+      "score": 279
+    },
+    {
+      "file": "API/clients/locatieservices2_domain.py",
+      "commits": 3,
+      "lines_changed": 279,
+      "max_complexity": 1,
+      "score": 279
     },
     {
       "file": "API/clients/eminfra/Generic.py",
-      "commits": 2,
-      "lines_changed": 114,
+      "commits": 3,
+      "lines_changed": 187,
       "max_complexity": 1,
-      "score": 114
+      "score": 187
     },
     {
       "file": "API/auth/cookie.py",
-      "commits": 2,
-      "lines_changed": 42,
+      "commits": 3,
+      "lines_changed": 68,
       "max_complexity": 2,
-      "score": 84
+      "score": 136
     },
     {
       "file": "API/clients/eminfra/wkt_validator.py",
-      "commits": 1,
-      "lines_changed": 19,
+      "commits": 2,
+      "lines_changed": 23,
       "max_complexity": 4,
-      "score": 76
+      "score": 92
     },
     {
       "file": "API/auth/settings_loader.py",
-      "commits": 2,
-      "lines_changed": 45,
+      "commits": 3,
+      "lines_changed": 50,
       "max_complexity": 1,
-      "score": 45
+      "score": 50
     },
     {
       "file": "API/clients/eminfra/OnderdeelService.py",
-      "commits": 1,
-      "lines_changed": 18,
+      "commits": 2,
+      "lines_changed": 25,
       "max_complexity": 2,
-      "score": 36
+      "score": 50
     },
     {
       "file": "API/clients/eminfra/FeedService.py",
-      "commits": 2,
-      "lines_changed": 24,
+      "commits": 3,
+      "lines_changed": 26,
       "max_complexity": 1,
-      "score": 24
+      "score": 26
     },
     {
       "file": "API/AbstractRequester.py",
@@ -428,43 +428,43 @@
     },
     {
       "file": "API/__init__.py",
-      "commits": 3,
-      "lines_changed": 32,
+      "commits": 4,
+      "lines_changed": 52,
       "max_complexity": 0,
       "score": 0
     },
     {
       "file": "API/auth/__init__.py",
-      "commits": 1,
-      "lines_changed": 16,
+      "commits": 2,
+      "lines_changed": 32,
       "max_complexity": 0,
       "score": 0
     },
     {
       "file": "API/auth/enums.py",
-      "commits": 1,
-      "lines_changed": 14,
+      "commits": 2,
+      "lines_changed": 28,
       "max_complexity": 0,
       "score": 0
     },
     {
       "file": "API/auth/types.py",
-      "commits": 1,
-      "lines_changed": 26,
+      "commits": 2,
+      "lines_changed": 35,
       "max_complexity": 0,
       "score": 0
     },
     {
       "file": "API/clients/__init__.py",
-      "commits": 3,
-      "lines_changed": 18,
+      "commits": 4,
+      "lines_changed": 28,
       "max_complexity": 0,
       "score": 0
     },
     {
       "file": "API/clients/eminfra.py",
-      "commits": 1,
-      "lines_changed": 4,
+      "commits": 2,
+      "lines_changed": 7,
       "max_complexity": 0,
       "score": 0
     },
@@ -820,114 +820,33 @@
     "S101": 20,
     "BLE001": 18,
     "T201": 12,
+    "F401": 10,
     "PLR0913": 10,
     "PLR0917": 10,
-    "F401": 9,
     "PTH123": 9,
-    "S110": 7,
     "TRY300": 7,
+    "S110": 6,
     "F403": 2,
     "E712": 1
   },
   "crap": [
     {
       "file": "API/clients/sharepoint.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 17,
-      "coverage": 2.8,
-      "crap": 282.6,
-      "lineno": 44
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "validate_local_mirror",
-      "block_type": "method",
-      "complexity": 17,
-      "coverage": 2.9,
-      "crap": 281.2,
-      "lineno": 990
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_main",
+      "name": "_run_command",
       "block_type": "function",
-      "complexity": 12,
-      "coverage": 0.0,
-      "crap": 156.0,
-      "lineno": 1506
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "name": "search_events_by_uuid_generator",
-      "block_type": "method",
-      "complexity": 12,
-      "coverage": 3.2,
-      "crap": 142.5,
-      "lineno": 64
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_download_tree",
-      "block_type": "method",
-      "complexity": 12,
-      "coverage": 3.4,
-      "crap": 141.6,
-      "lineno": 537
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "search_identiteit",
-      "block_type": "method",
-      "complexity": 11,
-      "coverage": 0.0,
-      "crap": 132.0,
-      "lineno": 132
-    },
-    {
-      "file": "API/auth/factory.py",
-      "name": "create_requester",
-      "block_type": "method",
-      "complexity": 10,
-      "coverage": 3.0,
-      "crap": 101.2,
-      "lineno": 16
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "modify_kwargs_for_bearer_token",
-      "block_type": "method",
       "complexity": 9,
       "coverage": 0.0,
       "crap": 90.0,
-      "lineno": 69
-    },
-    {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "search_postits_generator",
-      "block_type": "method",
-      "complexity": 9,
-      "coverage": 0.0,
-      "crap": 90.0,
-      "lineno": 21
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_retryable_library_error",
-      "block_type": "method",
-      "complexity": 11,
-      "coverage": 14.3,
-      "crap": 87.2,
-      "lineno": 423
+      "lineno": 1543
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_sync_local_dir_to_library",
       "block_type": "method",
       "complexity": 9,
-      "coverage": 3.4,
-      "crap": 81.9,
-      "lineno": 813
+      "coverage": 3.2,
+      "crap": 82.4,
+      "lineno": 811
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -936,16 +855,25 @@
       "complexity": 9,
       "coverage": 3.6,
       "crap": 81.6,
-      "lineno": 902
+      "lineno": 900
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_get_or_create_folder",
       "block_type": "method",
       "complexity": 9,
-      "coverage": 4.5,
-      "crap": 79.4,
-      "lineno": 221
+      "coverage": 5.0,
+      "crap": 78.4,
+      "lineno": 230
+    },
+    {
+      "file": "API/auth/factory.py",
+      "name": "_resolve_cookie",
+      "block_type": "method",
+      "complexity": 8,
+      "coverage": 0.0,
+      "crap": 72.0,
+      "lineno": 23
     },
     {
       "file": "API/auth/settings.py",
@@ -966,6 +894,15 @@
       "lineno": 9
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "list_root_items",
+      "block_type": "method",
+      "complexity": 8,
+      "coverage": 0.0,
+      "crap": 72.0,
+      "lineno": 178
+    },
+    {
       "file": "API/clients/eminfra/AssetService.py",
       "name": "search_parent_asset_by_uuid",
       "block_type": "method",
@@ -979,27 +916,18 @@
       "name": "_upload_or_update_file_once",
       "block_type": "method",
       "complexity": 8,
-      "coverage": 3.2,
-      "crap": 66.0,
-      "lineno": 678
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "list_root_items",
-      "block_type": "method",
-      "complexity": 8,
-      "coverage": 5.6,
-      "crap": 61.9,
-      "lineno": 169
+      "coverage": 3.4,
+      "crap": 65.6,
+      "lineno": 676
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_discover_expected_buckets",
       "block_type": "method",
       "complexity": 8,
-      "coverage": 5.9,
-      "crap": 61.4,
-      "lineno": 955
+      "coverage": 5.6,
+      "crap": 61.9,
+      "lineno": 953
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
@@ -1011,31 +939,76 @@
       "lineno": 95
     },
     {
+      "file": "API/clients/eminfra/EventService.py",
+      "name": "search_events_by_uuid_generator",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 128
+    },
+    {
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "_build_postit_query",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 21
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_retryable_library_error",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 444
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_ensure_bucket_folders",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 1012
+    },
+    {
       "file": "API/clients/sharepoint.py",
       "name": "wait_for_download",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 6.2,
-      "crap": 47.4,
-      "lineno": 1393
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 1381
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "wait_for_upload",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 6.7,
-      "crap": 46.8,
-      "lineno": 1424
+      "coverage": 0.0,
+      "crap": 56.0,
+      "lineno": 1412
+    },
+    {
+      "file": "API/clients/eminfra/EventService.py",
+      "name": "_build_event_search_expressions",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 3.3,
+      "crap": 51.3,
+      "lineno": 64
     },
     {
       "file": "API/clients/eminfra/PostitService.py",
       "name": "edit_postit",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 7.7,
-      "crap": 45.5,
-      "lineno": 102
+      "coverage": 4.2,
+      "crap": 50.1,
+      "lineno": 96
     },
     {
       "file": "API/auth/cert.py",
@@ -1054,6 +1027,24 @@
       "coverage": 0.0,
       "crap": 42.0,
       "lineno": 101
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "_apply_bearer_headers",
+      "block_type": "method",
+      "complexity": 6,
+      "coverage": 0.0,
+      "crap": 42.0,
+      "lineno": 74
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_download_tree",
+      "block_type": "method",
+      "complexity": 6,
+      "coverage": 0.0,
+      "crap": 42.0,
+      "lineno": 564
     },
     {
       "file": "API/clients/eminfra/AgentService.py",
@@ -1080,7 +1071,7 @@
       "complexity": 6,
       "coverage": 6.2,
       "crap": 35.7,
-      "lineno": 316
+      "lineno": 325
     },
     {
       "file": "API/clients/onedrive.py",
@@ -1090,6 +1081,15 @@
       "coverage": 16.7,
       "crap": 35.4,
       "lineno": 158
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_safe_name",
+      "block_type": "method",
+      "complexity": 8,
+      "coverage": 25.0,
+      "crap": 35.0,
+      "lineno": 406
     },
     {
       "file": "API/clients/eminfra/BeheerobjectService.py",
@@ -1110,6 +1110,24 @@
       "lineno": 109
     },
     {
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "_build_filter_expressions",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 165
+    },
+    {
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "search_identiteit",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 185
+    },
+    {
       "file": "API/clients/fs.py",
       "name": "download_layer_to_records",
       "block_type": "method",
@@ -1125,7 +1143,25 @@
       "complexity": 5,
       "coverage": 0.0,
       "crap": 30.0,
-      "lineno": 794
+      "lineno": 792
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_ensure_overzicht",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 988
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_has_overzicht_workbook",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 1000
     },
     {
       "file": "API/clients/sngateway.py",
@@ -1135,15 +1171,6 @@
       "coverage": 0.0,
       "crap": 30.0,
       "lineno": 44
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_safe_name",
-      "block_type": "method",
-      "complexity": 8,
-      "coverage": 33.3,
-      "crap": 27.0,
-      "lineno": 397
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -1156,30 +1183,39 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "sync_local_to_library",
+      "name": "__init__",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 6.7,
-      "crap": 25.3,
-      "lineno": 863
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_retry_on_library_error",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 7.1,
-      "crap": 25.0,
-      "lineno": 455
+      "coverage": 5.0,
+      "crap": 26.4,
+      "lineno": 88
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_load_credentials",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 7.1,
-      "crap": 25.0,
-      "lineno": 1198
+      "coverage": 6.2,
+      "crap": 25.6,
+      "lineno": 1186
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_retry_on_library_error",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 6.7,
+      "crap": 25.3,
+      "lineno": 465
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "sync_local_to_library",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 6.7,
+      "crap": 25.3,
+      "lineno": 861
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -1206,7 +1242,7 @@
       "complexity": 5,
       "coverage": 7.7,
       "crap": 24.7,
-      "lineno": 597
+      "lineno": 595
     },
     {
       "file": "API/clients/eminfra/RelatieService.py",
@@ -1224,7 +1260,7 @@
       "complexity": 5,
       "coverage": 8.3,
       "crap": 24.3,
-      "lineno": 482
+      "lineno": 492
     },
     {
       "file": "API/clients/eminfra/ToezichterService.py",
@@ -1234,6 +1270,15 @@
       "coverage": 9.1,
       "crap": 23.8,
       "lineno": 99
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_or_create_folder_path",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 11.1,
+      "crap": 22.6,
+      "lineno": 282
     },
     {
       "file": "API/clients/sngateway.py",
@@ -1272,15 +1317,6 @@
       "lineno": 37
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_or_create_folder_path",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 14.3,
-      "crap": 20.7,
-      "lineno": 273
-    },
-    {
       "file": "API/auth/settings.py",
       "name": "resolve_settings_path",
       "block_type": "function",
@@ -1297,6 +1333,42 @@
       "coverage": 0.0,
       "crap": 20.0,
       "lineno": 344
+    },
+    {
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "search_postits_generator",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 37
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "prune_daily_run_logs",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 1074
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "login_only",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 1114
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "upload_file",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 1294
     },
     {
       "file": "API/clients/eminfra/RelatieService.py",
@@ -1335,15 +1407,6 @@
       "lineno": 12
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "login_only",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 7.1,
-      "crap": 16.8,
-      "lineno": 1126
-    },
-    {
       "file": "API/clients/eminfra/AssetService.py",
       "name": "search_child_assets_by_uuid_generator",
       "block_type": "method",
@@ -1351,6 +1414,15 @@
       "coverage": 33.3,
       "crap": 16.7,
       "lineno": 214
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_http_retryable",
+      "block_type": "method",
+      "complexity": 6,
+      "coverage": 33.3,
+      "crap": 16.7,
+      "lineno": 432
     },
     {
       "file": "API/clients/eminfra/EMInfraClient.py",
@@ -1404,7 +1476,7 @@
       "complexity": 4,
       "coverage": 10.0,
       "crap": 15.7,
-      "lineno": 197
+      "lineno": 206
     },
     {
       "file": "API/clients/eminfra/EigenschapService.py",
@@ -1423,15 +1495,6 @@
       "coverage": 12.5,
       "crap": 14.7,
       "lineno": 5
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "upload_file",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 12.5,
-      "crap": 14.7,
-      "lineno": 1306
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -1479,13 +1542,13 @@
       "lineno": 10
     },
     {
-      "file": "API/auth/jwt.py",
-      "name": "modify_kwargs_for_files",
+      "file": "API/auth/factory.py",
+      "name": "_create_token_requester",
       "block_type": "method",
       "complexity": 3,
       "coverage": 0.0,
       "crap": 12.0,
-      "lineno": 132
+      "lineno": 48
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -1506,6 +1569,15 @@
       "lineno": 158
     },
     {
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "_build_name_search_expressions",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 132
+    },
+    {
       "file": "API/clients/emson.py",
       "name": "get_assetrelaties_by_filter",
       "block_type": "method",
@@ -1516,21 +1588,48 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_is_temporary_workbook",
+      "name": "_init_msal_app",
       "block_type": "method",
       "complexity": 3,
       "coverage": 0.0,
       "crap": 12.0,
-      "lineno": 383
+      "lineno": 65
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "prune_daily_run_logs",
+      "name": "_parse_site_urls",
       "block_type": "method",
-      "complexity": 4,
-      "coverage": 21.4,
-      "crap": 11.8,
-      "lineno": 1086
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 79
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_should_skip_local_item",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 767
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "validate_local_mirror",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 1026
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_create_client_for_args",
+      "block_type": "function",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 1525
     },
     {
       "file": "API/clients/sngateway.py",
@@ -1555,9 +1654,9 @@
       "name": "upload_after_run",
       "block_type": "function",
       "complexity": 3,
-      "coverage": 5.0,
-      "crap": 10.7,
-      "lineno": 1454
+      "coverage": 6.7,
+      "crap": 10.3,
+      "lineno": 1442
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -1576,15 +1675,6 @@
       "coverage": 10.0,
       "crap": 9.6,
       "lineno": 30
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "list_document_libraries",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 10.0,
-      "crap": 9.6,
-      "lineno": 149
     },
     {
       "file": "API/auth/cert.py",
@@ -1614,6 +1704,15 @@
       "lineno": 32
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "list_document_libraries",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 11.1,
+      "crap": 9.3,
+      "lineno": 158
+    },
+    {
       "file": "API/clients/eminfra/EMInfraDomain.py",
       "name": "_asdict_inner",
       "block_type": "function",
@@ -1633,12 +1732,21 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_find_child_by_name",
+      "name": "_load_settings_fallback",
+      "block_type": "method",
+      "complexity": 9,
+      "coverage": 100.0,
+      "crap": 9.0,
+      "lineno": 44
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_build_service",
       "block_type": "method",
       "complexity": 3,
       "coverage": 12.5,
       "crap": 9.0,
-      "lineno": 359
+      "lineno": 1244
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -1704,6 +1812,15 @@
       "lineno": 23
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "_should_skip_remote_item",
+      "block_type": "method",
+      "complexity": 8,
+      "coverage": 100.0,
+      "crap": 8.0,
+      "lineno": 547
+    },
+    {
       "file": "API/clients/eminfra/RelatieService.py",
       "name": "search_assets_via_relatie",
       "block_type": "method",
@@ -1732,12 +1849,12 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_build_service",
+      "name": "_find_child_by_name",
       "block_type": "method",
       "complexity": 3,
       "coverage": 25.0,
       "crap": 6.8,
-      "lineno": 1256
+      "lineno": 368
     },
     {
       "file": "API/auth/abstract_requester.py",
@@ -1801,6 +1918,15 @@
       "coverage": 0.0,
       "crap": 6.0,
       "lineno": 22
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "_ensure_headers",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 69
     },
     {
       "file": "API/auth/settings.py",
@@ -1893,15 +2019,6 @@
       "lineno": 83
     },
     {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "remove_postit",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 0.0,
-      "crap": 6.0,
-      "lineno": 153
-    },
-    {
       "file": "API/clients/locatieservices2.py",
       "name": "zoek_puntlocatie_via_wegsegment",
       "block_type": "method",
@@ -1912,21 +2029,21 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_get_default_document_library_id",
+      "name": "_ensure_logs_folder",
       "block_type": "method",
       "complexity": 2,
       "coverage": 0.0,
       "crap": 6.0,
-      "lineno": 304
+      "lineno": 1006
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_sync_local_file_to_remote",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 50.0,
+      "name": "_main",
+      "block_type": "function",
+      "complexity": 2,
+      "coverage": 0.0,
       "crap": 6.0,
-      "lineno": 773
+      "lineno": 1572
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -1935,7 +2052,7 @@
       "complexity": 3,
       "coverage": 33.3,
       "crap": 5.7,
-      "lineno": 163
+      "lineno": 172
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -1944,16 +2061,25 @@
       "complexity": 2,
       "coverage": 5.3,
       "crap": 5.4,
-      "lineno": 640
+      "lineno": 638
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_download_file",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 7.1,
-      "crap": 5.2,
-      "lineno": 502
+      "coverage": 6.7,
+      "crap": 5.3,
+      "lineno": 512
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_site_id",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 8.3,
+      "crap": 5.1,
+      "lineno": 141
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -1971,25 +2097,25 @@
       "complexity": 2,
       "coverage": 10.0,
       "crap": 4.9,
-      "lineno": 107
+      "lineno": 112
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "_refresh_token",
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "add_postit",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 11.1,
-      "crap": 4.8,
-      "lineno": 1229
+      "coverage": 10.0,
+      "crap": 4.9,
+      "lineno": 72
     },
     {
       "file": "API/auth/jwt.py",
       "name": "generate_authentication_token",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 12.5,
-      "crap": 4.7,
-      "lineno": 89
+      "coverage": 11.1,
+      "crap": 4.8,
+      "lineno": 94
     },
     {
       "file": "API/clients/eminfra/RelatieService.py",
@@ -2001,22 +2127,31 @@
       "lineno": 31
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "_refresh_token",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 12.5,
+      "crap": 4.7,
+      "lineno": 1217
+    },
+    {
       "file": "API/clients/eminfra/PostitService.py",
       "name": "get_postit",
       "block_type": "method",
       "complexity": 2,
       "coverage": 14.3,
       "crap": 4.5,
-      "lineno": 60
+      "lineno": 54
     },
     {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "add_postit",
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_default_document_library_id",
       "block_type": "method",
       "complexity": 2,
       "coverage": 14.3,
       "crap": 4.5,
-      "lineno": 78
+      "lineno": 313
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2091,15 +2226,6 @@
       "lineno": 137
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_site_id",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 132
-    },
-    {
       "file": "API/clients/eminfra/GeometrieService.py",
       "name": "update_geometrie_by_uuid",
       "block_type": "method",
@@ -2172,6 +2298,15 @@
       "lineno": 8
     },
     {
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "remove_postit",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 147
+    },
+    {
       "file": "API/clients/onedrive.py",
       "name": "login_interactive",
       "block_type": "method",
@@ -2179,6 +2314,24 @@
       "coverage": 20.0,
       "crap": 4.0,
       "lineno": 102
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_expected_root_folder_name",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 420
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_sync_local_file_to_remote",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 100.0,
+      "crap": 4.0,
+      "lineno": 771
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2244,24 +2397,6 @@
       "lineno": 32
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "get_access_token",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 118
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_expected_root_folder_name",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 411
-    },
-    {
       "file": "API/clients/eminfra/BeheerobjectService.py",
       "name": "wijzig_boomstructuur_by_uuid",
       "block_type": "method",
@@ -2269,6 +2404,15 @@
       "coverage": 28.6,
       "crap": 3.5,
       "lineno": 92
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "modify_kwargs_for_bearer_token",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 33.3,
+      "crap": 3.2,
+      "lineno": 86
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -2316,6 +2460,15 @@
       "lineno": 161
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_temporary_workbook",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 100.0,
+      "crap": 3.0,
+      "lineno": 392
+    },
+    {
       "file": "API/clients/eminfra/AssettypeService.py",
       "name": "get_all_assettypes_generator",
       "block_type": "method",
@@ -2352,6 +2505,15 @@
       "lineno": 50
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "get_access_token",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 50.0,
+      "crap": 2.5,
+      "lineno": 127
+    },
+    {
       "file": "API/auth/authenticator.py",
       "name": "onedrive",
       "block_type": "method",
@@ -2359,6 +2521,24 @@
       "coverage": 0.0,
       "crap": 2.0,
       "lineno": 108
+    },
+    {
+      "file": "API/auth/factory.py",
+      "name": "_get_first_part_url",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "lineno": 16
+    },
+    {
+      "file": "API/auth/factory.py",
+      "name": "_create_cookie_requester",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 42
     },
     {
       "file": "API/auth/settings_loader.py",
@@ -2596,12 +2776,30 @@
     },
     {
       "file": "API/clients/sharepoint.py",
+      "name": "_save_token",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 1106
+    },
+    {
+      "file": "API/clients/sharepoint.py",
       "name": "__init__",
       "block_type": "method",
       "complexity": 1,
       "coverage": 0.0,
       "crap": 2.0,
-      "lineno": 1390
+      "lineno": 1291
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 1378
     },
     {
       "file": "API/clients/sngateway.py",
@@ -2622,6 +2820,15 @@
       "lineno": 39
     },
     {
+      "file": "API/clients/sharepoint.py",
+      "name": "_build_arg_parser",
+      "block_type": "function",
+      "complexity": 1,
+      "coverage": 5.3,
+      "crap": 1.9,
+      "lineno": 1494
+    },
+    {
       "file": "API/clients/eminfra/AssetService.py",
       "name": "create_asset_and_relatie",
       "block_type": "method",
@@ -2629,15 +2836,6 @@
       "coverage": 9.1,
       "crap": 1.8,
       "lineno": 361
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "write_daily_run_log",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 9.1,
-      "crap": 1.8,
-      "lineno": 1057
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -2656,6 +2854,15 @@
       "coverage": 11.1,
       "crap": 1.7,
       "lineno": 143
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "write_daily_run_log",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 10.0,
+      "crap": 1.7,
+      "lineno": 1045
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -2776,12 +2983,21 @@
     },
     {
       "file": "API/clients/sharepoint.py",
+      "name": "_upload_or_update_file",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 25.0,
+      "crap": 1.4,
+      "lineno": 746
+    },
+    {
+      "file": "API/clients/sharepoint.py",
       "name": "report_bucket_name",
       "block_type": "function",
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 1337
+      "lineno": 1325
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -2790,7 +3006,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 1355
+      "lineno": 1343
     },
     {
       "file": "API/auth/cert.py",
@@ -2953,15 +3169,6 @@
       "coverage": 33.3,
       "crap": 1.3,
       "lineno": 13
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_headers",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 125
     },
     {
       "file": "API/clients/sngateway.py",
@@ -3145,21 +3352,12 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_upload_or_update_file",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 748
-    },
-    {
-      "file": "API/clients/sharepoint.py",
       "name": "first_login",
       "block_type": "method",
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 1175
+      "lineno": 1163
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -3406,12 +3604,12 @@
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_should_skip",
+      "name": "_get_headers",
       "block_type": "method",
       "complexity": 1,
       "coverage": 100.0,
       "crap": 1.0,
-      "lineno": 391
+      "lineno": 134
     }
   ],
   "god_classes_detail": {

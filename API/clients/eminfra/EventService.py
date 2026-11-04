@@ -61,6 +61,70 @@ class EventService:
             if query_dto.from_ >= dto_list_total:
                 break
 
+    def _build_event_search_expressions(
+        self,
+        asset_uuid: str | None,
+        created_after: datetime | None,
+        created_before: datetime | None,
+        created_by: IdentiteitKenmerk | None,
+        event_type: EventType | None,
+        event_context: EventContext | None,
+    ) -> list[ExpressionDTO]:
+        expressions: list[ExpressionDTO] = []
+
+        if asset_uuid:
+            expressions.append(
+                ExpressionDTO(
+                    terms=[TermDTO(property="objectId", operator=OperatorEnum.EQ, value=f"{asset_uuid}")],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        if created_after:
+            expressions.append(
+                ExpressionDTO(
+                    terms=[
+                        TermDTO(property="createdOn", operator=OperatorEnum.GTE, value=format_datetime(created_after))
+                    ],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        if created_before:
+            created_before_copy = created_before + timedelta(days=1)
+            expressions.append(
+                ExpressionDTO(
+                    terms=[TermDTO(property="createdOn", operator=OperatorEnum.LT, value=format_datetime(created_before_copy))],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        if created_by:
+            expressions.append(
+                ExpressionDTO(
+                    terms=[TermDTO(property="createdBy", operator=OperatorEnum.EQ, value=created_by.uuid)],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        if event_type:
+            expressions.append(
+                ExpressionDTO(
+                    terms=[TermDTO(property="type", operator=OperatorEnum.EQ, value=event_type.name)],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        if event_context:
+            expressions.append(
+                ExpressionDTO(
+                    terms=[TermDTO(property="contextId", operator=OperatorEnum.EQ, value=event_context.uuid)],
+                    logicalOp=LogicalOpEnum.AND,
+                )
+            )
+
+        return expressions
+
     def search_events_by_uuid_generator(
         self,
         asset_uuid: str,
@@ -76,15 +140,6 @@ class EventService:
          and not the hours.
         Additional postprocessing filtering outside the function is required to narrow down the events to
          a more restricted time range.
-
-        :param asset_uuid: Asset uuid
-        :type asset_uuid: str
-        :param created_after: date after which the asset was edited
-        :param created_before: date before the asset was edited
-        :param created_by: person who created the asset
-        :param event_type: type of event
-        :param event_context: context of the event
-        :return: A generator yielding Event objects.
         """
         if all(p is None for p in (asset_uuid, created_after, created_before, created_by, event_type, event_context)):
             raise ValueError("At least one parameter must be provided.")
@@ -93,52 +148,12 @@ class EventService:
             size=100, from_=0, pagingMode=PagingModeEnum.OFFSET, selection=SelectionDTO(expressions=[])
         )
 
-        if asset_uuid:
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="objectId", operator=OperatorEnum.EQ, value=f"{asset_uuid}")],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        if created_after:
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="createdOn", operator=OperatorEnum.GTE, value=format_datetime(created_after))],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        if created_before:
-            # workaround: add 1 day and set the operator to strictly lower than.
-            created_before += timedelta(days=1)
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="createdOn", operator=OperatorEnum.LT, value=format_datetime(created_before))],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        if created_by:
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="createdBy", operator=OperatorEnum.EQ, value=created_by.uuid)],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        if event_type:
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="type", operator=OperatorEnum.EQ, value=event_type.name)],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        if event_context:
-            expression = ExpressionDTO(
-                terms=[TermDTO(property="contextId", operator=OperatorEnum.EQ, value=event_context.uuid)],
-                logicalOp=LogicalOpEnum.AND,
-            )
-            query_dto.selection.expressions.append(expression)
-
-        # Set logical operator to None for the first term of the expression
-        query_dto.selection.expressions[0].logicalOp = None
+        expressions = self._build_event_search_expressions(
+            asset_uuid, created_after, created_before, created_by, event_type, event_context
+        )
+        query_dto.selection.expressions = expressions
+        if query_dto.selection.expressions:
+            query_dto.selection.expressions[0].logicalOp = None
 
         url = "core/api/events/search"
         while True:
@@ -149,36 +164,4 @@ class EventService:
             if query_dto.from_ >= dto_list_total:
                 break
 
-    def search_events_generator(
-        self,
-        asset: AssetDTO = None,
-        created_after: datetime | None = None,
-        created_before: datetime | None = None,
-        created_by: IdentiteitKenmerk = None,
-        event_type: EventType = None,
-        event_context: EventContext = None,
-    ) -> Generator[Event]:
-        """
-        Search the history of em-infra, called events
-        Parameters created_before and created_after have type datetime, but the API only takes into account the datum,
-         and not the hours.
-        Additional postprocessing filtering outside the function is required to narrow down the events to
-         a more restricted time range.
 
-        :param asset: Asset
-        :type asset: AssetDTO
-        :param created_after: date after which the asset was edited
-        :param created_before: date before the asset was edited
-        :param created_by: person who created the asset
-        :param event_type: type of event
-        :param event_context: context of the event
-        :return: A generator yielding Event objects.
-        """
-        return self.search_events_by_uuid_generator(
-            asset_uuid=asset.uuid,
-            created_after=created_after,
-            created_before=created_before,
-            created_by=created_by,
-            event_type=event_type,
-            event_context=event_context,
-        )
