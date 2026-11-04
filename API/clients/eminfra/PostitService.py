@@ -18,36 +18,29 @@ class PostitService:
     def __init__(self, requester):
         self.requester = requester
 
+    def _build_postit_query(
+        self,
+        start_datum: datetime | None,
+        eind_datum: datetime | None,
+    ) -> QueryDTO:
+        query_dto = QueryDTO(size=5, from_=0, pagingMode=PagingModeEnum.OFFSET, selection=SelectionDTO(expressions=[]))
+        if start_datum:
+            add_expression(query_dto, "startDatum", OperatorEnum.GTE, start_datum)
+        if eind_datum:
+            add_expression(query_dto, "eindDatum", OperatorEnum.LTE, eind_datum)
+        if start_datum and eind_datum and query_dto.selection.expressions:
+            query_dto.selection.expressions[-1].logicalOp = LogicalOpEnum.AND
+        if query_dto.size is None:
+            query_dto.size = 100
+        return query_dto
+
     def search_postits_generator(
         self, asset_uuid: str, start_datum: datetime | None = None, eind_datum: datetime | None = None
     ) -> Generator[PostitDTO] | None:
         """
         Search postits of an asset.
-        If the optional parameters startDatum or eindDatum are missing, return all postits.
-
-        :param asset_uuid: asset uuid
-        :type asset_uuid: str
-        :param start_datum: start date of the postit, default None
-        :type start_datum: datetime
-        :param eind_datum: eind date of the postit, default None
-        :type eind_datum: datetime
-        :return: Generator[PostitDTO] or None
         """
-        # intiate empty expression
-        query_dto = QueryDTO(size=5, from_=0, pagingMode=PagingModeEnum.OFFSET, selection=SelectionDTO(expressions=[]))
-
-        if start_datum:
-            add_expression(query_dto, "startDatum", OperatorEnum.GTE, start_datum)
-
-        if eind_datum:
-            add_expression(query_dto, "eindDatum", OperatorEnum.LTE, eind_datum)
-
-        # If both dates are present, add logical AND
-        if start_datum and eind_datum:
-            query_dto.selection.expressions[-1].logicalOp = LogicalOpEnum.AND
-
-        if query_dto.size is None:
-            query_dto.size = 100
+        query_dto = self._build_postit_query(start_datum, eind_datum)
         url = f"core/api/assets/{asset_uuid}/postits/search"
         while True:
             json_dict = self.requester.post(url, data=query_dto.json()).json()
@@ -56,6 +49,7 @@ class PostitService:
             query_dto.from_ = json_dict["from"] + query_dto.size
             if query_dto.from_ >= dto_list_total:
                 break
+
 
     def get_postit(self, asset_uuid: str, postit_uuid: str) -> PostitDTO | None:
         """
