@@ -24,3 +24,15 @@ def test_authenticator_create_requester_cookie():
     requester = auth.create_requester()
     assert requester is not None
     assert hasattr(requester, "cookie")
+
+
+def test_authenticator_eminfra_creates_client_direct():
+    from API.clients.eminfra.EMInfraClient import EMInfraClient
+    from API.auth.authenticator import AWVAppAuthenticator
+    from API.auth.enums import AuthType, Environment
+
+    auth = AWVAppAuthenticator(env=Environment.PRD, auth_type=AuthType.COOKIE, cookie="abc123")
+    client = EMInfraClient(authenticator=auth)
+    assert client is not None
+    assert hasattr(client, "requester")
+    assert hasattr(client, "asset_service")
