@@ -2,8 +2,14 @@ import logging
 from datetime import datetime
 from collections.abc import Generator
 
-from API.clients.eminfra.EMInfraDomain import (PostitDTO, QueryDTO, PagingModeEnum, SelectionDTO, OperatorEnum,
-                                       LogicalOpEnum)
+from API.clients.eminfra.EMInfraDomain import (
+    PostitDTO,
+    QueryDTO,
+    PagingModeEnum,
+    SelectionDTO,
+    OperatorEnum,
+    LogicalOpEnum,
+)
 from utils.date_helpers import validate_dates, format_datetime
 from utils.query_dto_helpers import add_expression
 
@@ -12,8 +18,9 @@ class PostitService:
     def __init__(self, requester):
         self.requester = requester
 
-    def search_postits_generator(self, asset_uuid: str, start_datum: datetime = None,
-                       eind_datum: datetime = None) -> Generator[PostitDTO] | None:
+    def search_postits_generator(
+        self, asset_uuid: str, start_datum: datetime | None = None, eind_datum: datetime | None = None
+    ) -> Generator[PostitDTO] | None:
         """
         Search postits of an asset.
         If the optional parameters startDatum or eindDatum are missing, return all postits.
@@ -27,20 +34,13 @@ class PostitService:
         :return: Generator[PostitDTO] or None
         """
         # intiate empty expression
-        query_dto = QueryDTO(
-            size=5,
-            from_=0,
-            pagingMode=PagingModeEnum.OFFSET,
-            selection=SelectionDTO(
-                expressions=[]
-            )
-        )
+        query_dto = QueryDTO(size=5, from_=0, pagingMode=PagingModeEnum.OFFSET, selection=SelectionDTO(expressions=[]))
 
         if start_datum:
-            add_expression(query_dto, 'startDatum', OperatorEnum.GTE, start_datum)
+            add_expression(query_dto, "startDatum", OperatorEnum.GTE, start_datum)
 
         if eind_datum:
-            add_expression(query_dto, 'eindDatum', OperatorEnum.LTE, eind_datum)
+            add_expression(query_dto, "eindDatum", OperatorEnum.LTE, eind_datum)
 
         # If both dates are present, add logical AND
         if start_datum and eind_datum:
@@ -51,9 +51,9 @@ class PostitService:
         url = f"core/api/assets/{asset_uuid}/postits/search"
         while True:
             json_dict = self.requester.post(url, data=query_dto.json()).json()
-            yield from [PostitDTO.from_dict(item) for item in json_dict['data']]
-            dto_list_total = json_dict['totalCount']
-            query_dto.from_ = json_dict['from'] + query_dto.size
+            yield from [PostitDTO.from_dict(item) for item in json_dict["data"]]
+            dto_list_total = json_dict["totalCount"]
+            query_dto.from_ = json_dict["from"] + query_dto.size
             if query_dto.from_ >= dto_list_total:
                 break
 
@@ -90,11 +90,7 @@ class PostitService:
         startDatum_str = format_datetime(start_datum)
         eindDatum_str = format_datetime(eind_datum)
 
-        json_body = {
-            "commentaar": commentaar,
-            "startDatum": startDatum_str,
-            "eindDatum": eindDatum_str
-        }
+        json_body = {"commentaar": commentaar, "startDatum": startDatum_str, "eindDatum": eindDatum_str}
 
         url = f"core/api/assets/{asset_uuid}/postits"
         response = self.requester.post(url, json=json_body)
@@ -103,8 +99,14 @@ class PostitService:
             raise ProcessLookupError(response.content.decode("utf-8"))
         return response.json()
 
-    def edit_postit(self, asset_uuid: str, postit_uuid: str, commentaar: str = None, start_datum: datetime = None,
-                    eind_datum: datetime = None) -> dict:
+    def edit_postit(
+        self,
+        asset_uuid: str,
+        postit_uuid: str,
+        commentaar: str | None = None,
+        start_datum: datetime | None = None,
+        eind_datum: datetime | None = None,
+    ) -> dict:
         """
         Edit postit of an asset.
         Although mandatory in the API Call, the parameters commentaar, startDatum and eindDatum are optional.
@@ -156,9 +158,7 @@ class PostitService:
         :param postit_uuid: postit_uuid
         :return: dict
         """
-        json_body = {
-            "uuids": [f"{postit_uuid}"]
-        }
+        json_body = {"uuids": [f"{postit_uuid}"]}
 
         url = f"core/api/assets/{asset_uuid}/postits/ops/remove"
         response = self.requester.put(url, json=json_body)

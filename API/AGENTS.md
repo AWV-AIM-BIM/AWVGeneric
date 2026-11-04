@@ -16,6 +16,7 @@ client = auth.eminfra()
 
 # Alternative: Direct instantiation
 from API.clients.eminfra import EMInfraClient
+
 client = EMInfraClient(authenticator=auth)
 ```
 

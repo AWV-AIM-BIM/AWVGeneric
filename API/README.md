@@ -9,10 +9,12 @@ from API import AWVAppAuthenticator
 from API.auth.enums import AuthType, Environment
 
 auth = AWVAppAuthenticator(env=Environment.PRD, auth_type=AuthType.COOKIE)
+
 client = auth.eminfra()
 
 # Or instantiate clients directly
 from API.clients.eminfra import EMInfraClient
+
 client = EMInfraClient(authenticator=auth)
 ```
 

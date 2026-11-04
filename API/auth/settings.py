@@ -1,7 +1,8 @@
 """Settings file finder - looks in standard locations."""
+
 import json
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional
 
 from API.auth.types import AWVSettings
 
@@ -16,14 +17,14 @@ def find_settings_file(filename: str = "settings_AWV_applications.json") -> Opti
     5. API/ folder (for examples)
     """
     cwd = Path.cwd()
-    
+
     # Try the requested filename first, then common alternatives
     filenames_to_try = [filename]
     if filename != "settings.json":
         filenames_to_try.append("settings.json")
     if filename != "settings_AWV_applications.json":
         filenames_to_try.append("settings_AWV_applications.json")
-    
+
     for fname in filenames_to_try:
         candidates = [
             cwd / "config" / fname,
@@ -31,16 +32,16 @@ def find_settings_file(filename: str = "settings_AWV_applications.json") -> Opti
             Path(__file__).parent / fname,
             Path(__file__).parent / "config" / fname,
         ]
-        
+
         # Search up from cwd
         for parent in [cwd] + list(cwd.parents)[:5]:
             candidates.append(parent / "config" / fname)
             candidates.append(parent / fname)
-        
+
         for path in candidates:
             if path.exists() and path.is_file():
                 return path
-    
+
     return None
 
 
@@ -62,13 +63,13 @@ def resolve_settings_path(path_str: str, settings_file_path: Optional[Path] = No
     path = Path(path_str)
     if path.is_absolute():
         return path
-    
+
     if settings_file_path is not None:
         # Try relative to settings file first
         resolved = (settings_file_path.parent / path).resolve()
         if resolved.exists():
             return resolved
-    
+
     # Fall back to cwd
     resolved = (Path.cwd() / path).resolve()
     return resolved

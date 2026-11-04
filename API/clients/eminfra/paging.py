@@ -1,5 +1,5 @@
 from collections.abc import Generator
-from typing import Optional, Type, TypeVar
+from typing import Optional, TypeVar
 
 from API.clients.eminfra.EMInfraDomain import BaseDataclass
 
@@ -12,7 +12,7 @@ def offset_page_generator_get(
     resource: str,
     page_size: int,
     start_from: Optional[int] = None,
-    dto_type: Optional[Type[T]] = None,
+    dto_type: Optional[type[T]] = None,
     include_paging_mode: bool = True,
 ) -> Generator[tuple[Optional[int], list], None, None]:
     """Generic offset paging generator for AWV GET endpoints.

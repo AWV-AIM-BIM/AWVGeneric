@@ -1,13 +1,23 @@
 from collections.abc import Generator
-from API.clients.eminfra.EMInfraDomain import (QueryDTO, ExpressionDTO, TermDTO, OperatorEnum, LogicalOpEnum, SelectionDTO,
-                                       PagingModeEnum, AgentDTO, BetrokkenerelatieDTO, AssetDTO)
+from API.clients.eminfra.EMInfraDomain import (
+    QueryDTO,
+    ExpressionDTO,
+    TermDTO,
+    OperatorEnum,
+    LogicalOpEnum,
+    SelectionDTO,
+    PagingModeEnum,
+    AgentDTO,
+    BetrokkenerelatieDTO,
+    AssetDTO,
+)
 
 
 class AgentService:
     def __init__(self, requester):
         self.requester = requester
 
-    def search_agent(self, naam: str, ovocode: str = None, actief: bool = True) -> Generator[AgentDTO]:
+    def search_agent(self, naam: str, ovocode: str | None = None, actief: bool = True) -> Generator[AgentDTO]:
         """
 
         :param naam: agent name
@@ -25,27 +35,29 @@ class AgentService:
             pagingMode=PagingModeEnum.OFFSET,
             expansions={"fields": ["contactInfo"]},
             selection=SelectionDTO(
-                expressions=[
-                    ExpressionDTO(terms=[TermDTO(property='naam', operator=OperatorEnum.EQ, value=naam)])
-                ]
-            )
+                expressions=[ExpressionDTO(terms=[TermDTO(property="naam", operator=OperatorEnum.EQ, value=naam)])]
+            ),
         )
         if ovocode:
             query_dto.selection.expressions.append(
-                ExpressionDTO(terms=[TermDTO(property='ovoCode', operator=OperatorEnum.EQ, value=ovocode)]
-                              , logicalOp=LogicalOpEnum.AND)
+                ExpressionDTO(
+                    terms=[TermDTO(property="ovoCode", operator=OperatorEnum.EQ, value=ovocode)],
+                    logicalOp=LogicalOpEnum.AND,
+                )
             )
         if actief is not None:
             query_dto.selection.expressions.append(
-                ExpressionDTO(terms=[TermDTO(property='actief', operator=OperatorEnum.EQ, value=actief)]
-                              , logicalOp=LogicalOpEnum.AND)
+                ExpressionDTO(
+                    terms=[TermDTO(property="actief", operator=OperatorEnum.EQ, value=actief)],
+                    logicalOp=LogicalOpEnum.AND,
+                )
             )
         url = "core/api/agents/search"
         while True:
             json_dict = self.requester.post(url, data=query_dto.json()).json()
-            yield from [AgentDTO.from_dict(item) for item in json_dict['data']]
-            dto_list_total = json_dict['totalCount']
-            query_dto.from_ = json_dict['from'] + query_dto.size
+            yield from [AgentDTO.from_dict(item) for item in json_dict["data"]]
+            dto_list_total = json_dict["totalCount"]
+            query_dto.from_ = json_dict["from"] + query_dto.size
             if query_dto.from_ >= dto_list_total:
                 break
 
@@ -56,29 +68,20 @@ class AgentService:
         url = "core/api/betrokkenerelaties/search"
         while True:
             json_dict = self.requester.post(url, data=query_dto.json()).json()
-            yield from [BetrokkenerelatieDTO.from_dict(item) for item in json_dict['data']]
-            dto_list_total = json_dict['totalCount']
-            query_dto.from_ = json_dict['from'] + query_dto.size
+            yield from [BetrokkenerelatieDTO.from_dict(item) for item in json_dict["data"]]
+            dto_list_total = json_dict["totalCount"]
+            query_dto.from_ = json_dict["from"] + query_dto.size
             if query_dto.from_ >= dto_list_total:
                 break
 
     def add_betrokkenerelatie(self, asset: AssetDTO, agent_uuid: str, rol: str) -> dict:
         json_body = {
-            "bron": {
-                "uuid": f"{asset.uuid}",
-                "_type": f"{asset._type}"
-            },
-            "doel": {
-                "uuid": f"{agent_uuid}",
-                "_type": 'agent'
-            },
-            "geldigheid": {
-                "van": None,
-                "tot": None
-            },
-            "rol": f"{rol}"
+            "bron": {"uuid": f"{asset.uuid}", "_type": f"{asset._type}"},
+            "doel": {"uuid": f"{agent_uuid}", "_type": "agent"},
+            "geldigheid": {"van": None, "tot": None},
+            "rol": f"{rol}",
         }
-        response = self.requester.post(url='core/api/betrokkenerelaties', json=json_body)
+        response = self.requester.post(url="core/api/betrokkenerelaties", json=json_body)
         if response.status_code != 202:
             raise ProcessLookupError(response.content.decode("utf-8"))
         return response.json()

@@ -11,11 +11,11 @@ class WegsegmentPuntLocatie:
 
     @classmethod
     def from_dict(cls, data: dict):
-        properties = data.get('properties', {})
+        properties = data.get("properties", {})
         return cls(
-            wegsegment_id=properties.get('wegsegment_id', ''),
-            puntlocatie_id=properties.get('puntlocatie_id', ''),
-            afstand=properties.get('afstand', 0),
-            geometrie=data.get('geometry', {}),
-            eigenschappen=properties
+            wegsegment_id=properties.get("wegsegment_id", ""),
+            puntlocatie_id=properties.get("puntlocatie_id", ""),
+            afstand=properties.get("afstand", 0),
+            geometrie=data.get("geometry", {}),
+            eigenschappen=properties,
         )

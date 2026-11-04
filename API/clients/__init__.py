@@ -1,4 +1,5 @@
 """AWV API service clients."""
+
 from API.clients.eminfra import EMInfraClient
 from API.clients.sngateway import SNGatewayClient
 from API.clients.emson import EMSONClient
@@ -8,8 +9,13 @@ from API.clients.onedrive import OneDriveClient
 from API.clients.sharepoint import SharepointClient
 
 __all__ = [
-    'EMInfraClient', 'SNGatewayClient', 'EMSONClient',
-    'Locatieservices2Client', 'FSClient', 'OneDriveClient', 'SharepointClient'
+    "EMInfraClient",
+    "SNGatewayClient",
+    "EMSONClient",
+    "Locatieservices2Client",
+    "FSClient",
+    "OneDriveClient",
+    "SharepointClient",
 ]
 
 # Direct access to modules

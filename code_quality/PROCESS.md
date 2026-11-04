@@ -362,10 +362,10 @@ def test_create_relation_is_unchanged():
     """Golden file: the created relation must stay exactly the same."""
     relation = create_relation(
         relation_type=HeeftBetrokkene,
-        source_uuid='0f7e6b4c-1b2a-4c3d-8e9f-0a1b2c3d4e5f',
-        source_typeURI='https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Gracht',
-        target_uuid='1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-        target_typeURI='https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Kade',
+        source_uuid="0f7e6b4c-1b2a-4c3d-8e9f-0a1b2c3d4e5f",
+        source_typeURI="https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Gracht",
+        target_uuid="1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+        target_typeURI="https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Kade",
     )
     assert relation.to_dict() == GOLDEN_RELATION
 ```

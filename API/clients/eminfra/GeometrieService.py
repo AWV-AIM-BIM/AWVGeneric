@@ -1,14 +1,20 @@
 import json
 import logging
 
-from API.clients.eminfra.EMInfraDomain import GeometrieKenmerk, GeometryNiveau, GeometryBron, GeometryNauwkeurigheid, AssetDTO
+from API.clients.eminfra.EMInfraDomain import (
+    GeometrieKenmerk,
+    GeometryNiveau,
+    GeometryBron,
+    GeometryNauwkeurigheid,
+    AssetDTO,
+)
 from API.clients.eminfra.wkt_validator import is_valid_wkt
 
 
 class GeometrieService:
     def __init__(self, requester):
         self.requester = requester
-        self.GEOMETRIE_UUID = 'aabe29e0-9303-45f1-839e-159d70ec2859'
+        self.GEOMETRIE_UUID = "aabe29e0-9303-45f1-839e-159d70ec2859"
 
     def get_geometrie_by_uuid(self, asset_uuid: str) -> GeometrieKenmerk:
         """
@@ -19,8 +25,7 @@ class GeometrieService:
         :return: GeometrieKenmerk
         :rtype:
         """
-        response = self.requester.get(
-            url=f'core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}')
+        response = self.requester.get(url=f"core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}")
         if response.status_code != 200:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
@@ -49,7 +54,8 @@ class GeometrieService:
         :rtype:
         """
         response = self.requester.delete(
-            url=f'core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}/logs/{log_id}')
+            url=f"core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}/logs/{log_id}"
+        )
         if response.status_code != 202:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
@@ -67,9 +73,14 @@ class GeometrieService:
         """
         return self.delete_geometrie_by_uuid(asset_uuid=asset.uuid, log_id=log_id)
 
-    def add_geometrie_by_uuid(self, asset_uuid: str, wkt_geometry: str, geometry_log: GeometryNiveau = GeometryNiveau.MIN_1
-                      , geometry_bron: GeometryBron = GeometryBron.MANUEEL
-                      , geometry_nauwkeurigheid: GeometryNauwkeurigheid = GeometryNauwkeurigheid._50) -> None:
+    def add_geometrie_by_uuid(
+        self,
+        asset_uuid: str,
+        wkt_geometry: str,
+        geometry_log: GeometryNiveau = GeometryNiveau.MIN_1,
+        geometry_bron: GeometryBron = GeometryBron.MANUEEL,
+        geometry_nauwkeurigheid: GeometryNauwkeurigheid = GeometryNauwkeurigheid._50,
+    ) -> None:
         """
         :param asset_uuid: Asset uuid
         :type asset_uuid: str
@@ -81,24 +92,28 @@ class GeometrieService:
         :return: None
         """
         if not is_valid_wkt(wkt_string=wkt_geometry):
-            raise ValueError(f'WKT Geometry is invalid: {wkt_geometry}.')
+            raise ValueError(f"WKT Geometry is invalid: {wkt_geometry}.")
         json_body = {
             "wkt": f"{wkt_geometry}",
             "niveau": f"{geometry_log.value}",
             "nauwkeurigheid": f"{geometry_nauwkeurigheid.value}",
-            "bron": f"{geometry_bron.value}"
+            "bron": f"{geometry_bron.value}",
         }
         response = self.requester.post(
-            url=f'core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}/logs'
-            , data=json.dumps(json_body)
+            url=f"core/api/assets/{asset_uuid}/kenmerken/{self.GEOMETRIE_UUID}/logs", data=json.dumps(json_body)
         )
         if response.status_code != 202:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
 
-    def add_geometrie(self, asset: AssetDTO, wkt_geometry: str, geometry_log: GeometryNiveau = GeometryNiveau.MIN_1
-                      , geometry_bron: GeometryBron = GeometryBron.MANUEEL
-                      , geometry_nauwkeurigheid: GeometryNauwkeurigheid = GeometryNauwkeurigheid._50) -> None:
+    def add_geometrie(
+        self,
+        asset: AssetDTO,
+        wkt_geometry: str,
+        geometry_log: GeometryNiveau = GeometryNiveau.MIN_1,
+        geometry_bron: GeometryBron = GeometryBron.MANUEEL,
+        geometry_nauwkeurigheid: GeometryNauwkeurigheid = GeometryNauwkeurigheid._50,
+    ) -> None:
         """
         :param asset:
         :type asset: AssetDTO
@@ -109,8 +124,13 @@ class GeometrieService:
         :param geometry_nauwkeurigheid: default waarde "<50 cm"
         :return: None
         """
-        return self.add_geometrie_by_uuid(asset_uuid=asset.uuid, wkt_geometry=wkt_geometry, geometry_log=geometry_log,
-                                          geometry_bron=geometry_bron, geometry_nauwkeurigheid=geometry_nauwkeurigheid)
+        return self.add_geometrie_by_uuid(
+            asset_uuid=asset.uuid,
+            wkt_geometry=wkt_geometry,
+            geometry_log=geometry_log,
+            geometry_bron=geometry_bron,
+            geometry_nauwkeurigheid=geometry_nauwkeurigheid,
+        )
 
     def update_geometrie_by_uuid(self, asset_uuid: str, wkt_geometry: str) -> None:
         """

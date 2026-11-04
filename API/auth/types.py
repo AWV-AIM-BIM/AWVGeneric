@@ -1,5 +1,6 @@
 """TypedDict definitions for settings (optional typing only)."""
-from typing import TypedDict, Dict
+
+from typing import TypedDict
 
 
 class JWTSettings(TypedDict, total=False):
@@ -17,9 +18,9 @@ class CookieSettings(TypedDict, total=False):
 
 
 class AuthSettings(TypedDict, total=False):
-    JWT: Dict[str, JWTSettings]
-    CERT: Dict[str, CertSettings]
-    COOKIE: Dict[str, CookieSettings]
+    JWT: dict[str, JWTSettings]
+    CERT: dict[str, CertSettings]
+    COOKIE: dict[str, CookieSettings]
 
 
 class AWVSettings(TypedDict, total=False):

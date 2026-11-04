@@ -1,6 +1,13 @@
 from collections.abc import Generator
-from API.clients.eminfra.EMInfraDomain import (AssettypeDTO, QueryDTO, PagingModeEnum, SelectionDTO, TermDTO,
-                                       ExpressionDTO, OperatorEnum)
+from API.clients.eminfra.EMInfraDomain import (
+    AssettypeDTO,
+    QueryDTO,
+    PagingModeEnum,
+    SelectionDTO,
+    TermDTO,
+    ExpressionDTO,
+    OperatorEnum,
+)
 
 
 class AssettypeService:
@@ -33,23 +40,27 @@ class AssettypeService:
             from_=0,
             pagingMode=PagingModeEnum.OFFSET,
             selection=SelectionDTO(
-                expressions=[ExpressionDTO(
-                    terms=[
-                        TermDTO(property='uri', operator=OperatorEnum.EQ, value=uri)
-                    ])
-                ])
+                expressions=[ExpressionDTO(terms=[TermDTO(property="uri", operator=OperatorEnum.EQ, value=uri)])]
+            ),
         )
         url = "core/api/assettypes/search"
         json_dict = self.requester.post(url, data=query_dto.json()).json()
-        assettypes = [AssettypeDTO.from_dict(item) for item in json_dict['data']]
+        assettypes = [AssettypeDTO.from_dict(item) for item in json_dict["data"]]
         if len(assettypes) != 1:
             raise ValueError(f'Exactly one Assettype should be returned when searching for uri: "{uri}" Check URI.')
         return assettypes[0]
 
     def get_all_assettypes_generator(self, size: int = 100) -> Generator[AssettypeDTO]:
         from API.clients.eminfra.paging import offset_page_generator_get
+
         for _, data_list in offset_page_generator_get(
-            self.requester, "core", "assettypes", size, None, AssettypeDTO, include_paging_mode=False,
+            self.requester,
+            "core",
+            "assettypes",
+            size,
+            None,
+            AssettypeDTO,
+            include_paging_mode=False,
         ):
             yield from data_list
 
@@ -57,9 +68,15 @@ class AssettypeService:
         return list(self.get_all_assettypes_generator(size=size))
 
     def get_all_legacy_assettypes_generator(self, size: int = 100) -> Generator[AssettypeDTO]:
-        yield from [assettype_dto for assettype_dto in self.get_all_assettypes_generator(size)
-                    if assettype_dto.korteUri.startswith('lgc:')]
+        yield from [
+            assettype_dto
+            for assettype_dto in self.get_all_assettypes_generator(size)
+            if assettype_dto.korteUri.startswith("lgc:")
+        ]
 
     def get_all_otl_assettypes_generator(self, size: int = 100) -> Generator[AssettypeDTO]:
-        yield from [assettype_dto for assettype_dto in self.get_all_assettypes_generator(size)
-                    if ':' not in assettype_dto.korteUri]
+        yield from [
+            assettype_dto
+            for assettype_dto in self.get_all_assettypes_generator(size)
+            if ":" not in assettype_dto.korteUri
+        ]

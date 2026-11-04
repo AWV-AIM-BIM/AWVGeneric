@@ -6,14 +6,16 @@ from json import dumps
 from typing import Optional
 
 _asdict_inner_actual = dataclasses._asdict_inner
+
+
 def _asdict_inner(obj, dict_factory):
 
     # if override exists, intercept and return that instead
     if dataclasses._is_dataclass_instance(obj):
-        if getattr(obj, '__dict_factory_override__', None):
+        if getattr(obj, "__dict_factory_override__", None):
             user_dict = obj.__dict_factory_override__()
 
-            for k, v in user_dict.items(): # in case of further nesting
+            for k, v in user_dict.items():  # in case of further nesting
                 if isinstance(v, list) and len(v) > 0 and dataclasses._is_dataclass_instance(v[0]):
                     user_dict[k] = [_asdict_inner(vv, dict_factory) for vv in v]
                 if dataclasses._is_dataclass_instance(v):
@@ -22,100 +24,109 @@ def _asdict_inner(obj, dict_factory):
 
     # otherwise do original behavior
     return _asdict_inner_actual(obj, dict_factory)
+
+
 dataclasses._asdict_inner = _asdict_inner
 asdict = dataclasses.asdict
 
 
 class OperatorEnum(Enum):
-    EQ = 'EQ'
-    CONTAINS = 'CONTAINS'
-    GT = 'GT'
-    GTE = 'GTE'
-    LT = 'LT'
-    LTE = 'LTE'
-    IN = 'IN'
-    STARTS_WITH = 'STARTS_WITH'
-    INTERSECTS = 'INTERSECTS'
-
+    EQ = "EQ"
+    CONTAINS = "CONTAINS"
+    GT = "GT"
+    GTE = "GTE"
+    LT = "LT"
+    LTE = "LTE"
+    IN = "IN"
+    STARTS_WITH = "STARTS_WITH"
+    INTERSECTS = "INTERSECTS"
 
 
 class LogicalOpEnum(Enum):
-    AND = 'AND'
-    OR = 'OR'
+    AND = "AND"
+    OR = "OR"
+
 
 class GeometryNiveau(Enum):
-    MIN_1 = 'MIN_1'
-    NUL = 'NUL'
-    PLUS_1 = 'PLUS_1'
+    MIN_1 = "MIN_1"
+    NUL = "NUL"
+    PLUS_1 = "PLUS_1"
+
 
 class GeometryBron(Enum):
-    MANUEEL = 'MANUEEL'
-    MEETTOESTEL = 'MEETTOESTEL'
-    OVERERVING = 'OVERERVING'
+    MANUEEL = "MANUEEL"
+    MEETTOESTEL = "MEETTOESTEL"
+    OVERERVING = "OVERERVING"
+
 
 class GeometryNauwkeurigheid(Enum):
-    _5 = '_5'
-    _10 = '_10'
-    _20 = '_20'
-    _30 = '_30'
-    _50 = '_50'
-    _100 = '_100'
-    _200 = '_200'
+    _5 = "_5"
+    _10 = "_10"
+    _20 = "_20"
+    _30 = "_30"
+    _50 = "_50"
+    _100 = "_100"
+    _200 = "_200"
+
 
 class KenmerkTypeEnum(Enum):
-    HEEFTBIJLAGEBRON = 'HeeftBijlageBron'
-    HEEFTTOEGANGSPROCEDUREBRON = 'HeeftToegangsprocedureBron'
-    HEEFTAANVULLENDEGEOMETRIEBRON = 'HeeftAanvullendeGeometrieBron'
-    HEEFTBIJHORENDEASSETS = 'HeeftBijhorendeAssets'
-    GEOMETRIE = 'Geometrie'
-    AGENTS = 'Agents'
-    SLUITAANOPDOEL = 'SluitAanOpDoel'
-    SLUITAANOPBRON = 'SluitAanOpBron'
-    LIGTOPDOEL = 'LigtOpDoel'
-    LIGTOPBRON = 'LigtOpBron'
-    EIGENSCHAPPEN = 'Eigenschappen'
-    HOORTBIJ = 'HoortBij'
-    BESTEK = 'Bestek'
-    LOCATIE = 'Locatie'
-    BEVESTIGD_AAN = 'Bevestigd aan'
-    GEEFT_BEVESTIGING_AAN = 'Geeft bevestiging aan'
-    GEVOED_DOOR = 'Gevoed door'
-    GEEFT_VOEDING_AAN = 'Geeft voeding aan'
-    AANGESTUURD_DOOR = 'Aangestuurd door'
-    GEEFT_STURING_AAN = 'Geeft sturing aan'
-    ELEKTRISCH_AANSLUITPUNT = 'Elektrisch aansluitpunt'
-    VTC = 'VTC'
-    VPLAN = 'Vplan'
+    HEEFTBIJLAGEBRON = "HeeftBijlageBron"
+    HEEFTTOEGANGSPROCEDUREBRON = "HeeftToegangsprocedureBron"
+    HEEFTAANVULLENDEGEOMETRIEBRON = "HeeftAanvullendeGeometrieBron"
+    HEEFTBIJHORENDEASSETS = "HeeftBijhorendeAssets"
+    GEOMETRIE = "Geometrie"
+    AGENTS = "Agents"
+    SLUITAANOPDOEL = "SluitAanOpDoel"
+    SLUITAANOPBRON = "SluitAanOpBron"
+    LIGTOPDOEL = "LigtOpDoel"
+    LIGTOPBRON = "LigtOpBron"
+    EIGENSCHAPPEN = "Eigenschappen"
+    HOORTBIJ = "HoortBij"
+    BESTEK = "Bestek"
+    LOCATIE = "Locatie"
+    BEVESTIGD_AAN = "Bevestigd aan"
+    GEEFT_BEVESTIGING_AAN = "Geeft bevestiging aan"
+    GEVOED_DOOR = "Gevoed door"
+    GEEFT_VOEDING_AAN = "Geeft voeding aan"
+    AANGESTUURD_DOOR = "Aangestuurd door"
+    GEEFT_STURING_AAN = "Geeft sturing aan"
+    ELEKTRISCH_AANSLUITPUNT = "Elektrisch aansluitpunt"
+    VTC = "VTC"
+    VPLAN = "Vplan"
 
-RESERVED_WORD_LIST = ('from_', '_next')
+
+RESERVED_WORD_LIST = ("from_", "_next")
+
 
 class RelatieEnum(Enum):
     """
     An enumeration of relatie types with their corresponding values.
     """
-    BEVESTIGING = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Bevestiging'
-    BEZOEKT = 'https://bz.data.wegenenverkeer.be/ns/onderdeel#Bezoekt'
-    GEEFTBEVESTIGINGAAN = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#GeeftBevestigingAan'
-    GEMIGREERDNAAR = 'https://lgc.data.wegenenverkeer.be/ns/onderdeel#GemigreerdNaar'
-    HEEFTAANVULLENDEGEOMETRIE = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftAanvullendeGeometrie'
-    HEEFTBEHEER = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBeheer'
-    HEEFTBEHEERACTIE = 'https://bz.data.wegenenverkeer.be/ns/onderdeel#HeeftBeheeractie'
-    HEEFTBIJHORENDEASSETS = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBijhorendeAssets'
-    HEEFTBIJLAGE = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBijlage'
-    HEEFTNETWERKTOEGANG = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftNetwerktoegang'
-    HEEFTNETWERKPROTECTIE = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftNetwerkProtectie'
-    HEEFTTOEGANGSPROCEDURE = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftToegangsprocedure'
-    HOORTBIJ = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HoortBij'
-    ISADMONDERDEELVAN = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsAdmOnderdeelVan'
-    ISNETWERKECC = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsNetwerkECC'
-    ISSWGEHOSTOP = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsSWGehostOp'
-    ISSWONDERDEELVAN = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsSWOnderdeelVan'
-    LIGTOP = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#LigtOp'
-    OMHULT = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Omhult'
-    SLUITAANOP = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#SluitAanOp'
-    STURING = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Sturing'
-    VOEDT = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Voedt'
-    VOEDTAANGESTUURD = 'https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#VoedtAangestuurd'
+
+    BEVESTIGING = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Bevestiging"
+    BEZOEKT = "https://bz.data.wegenenverkeer.be/ns/onderdeel#Bezoekt"
+    GEEFTBEVESTIGINGAAN = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#GeeftBevestigingAan"
+    GEMIGREERDNAAR = "https://lgc.data.wegenenverkeer.be/ns/onderdeel#GemigreerdNaar"
+    HEEFTAANVULLENDEGEOMETRIE = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftAanvullendeGeometrie"
+    HEEFTBEHEER = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBeheer"
+    HEEFTBEHEERACTIE = "https://bz.data.wegenenverkeer.be/ns/onderdeel#HeeftBeheeractie"
+    HEEFTBIJHORENDEASSETS = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBijhorendeAssets"
+    HEEFTBIJLAGE = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftBijlage"
+    HEEFTNETWERKTOEGANG = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftNetwerktoegang"
+    HEEFTNETWERKPROTECTIE = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftNetwerkProtectie"
+    HEEFTTOEGANGSPROCEDURE = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HeeftToegangsprocedure"
+    HOORTBIJ = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#HoortBij"
+    ISADMONDERDEELVAN = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsAdmOnderdeelVan"
+    ISNETWERKECC = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsNetwerkECC"
+    ISSWGEHOSTOP = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsSWGehostOp"
+    ISSWONDERDEELVAN = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#IsSWOnderdeelVan"
+    LIGTOP = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#LigtOp"
+    OMHULT = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Omhult"
+    SLUITAANOP = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#SluitAanOp"
+    STURING = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Sturing"
+    VOEDT = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#Voedt"
+    VOEDTAANGESTUURD = "https://wegenenverkeer.data.vlaanderen.be/ns/onderdeel#VoedtAangestuurd"
+
 
 @dataclass
 class BaseDataclass:
@@ -143,7 +154,7 @@ class BaseDataclass:
     def from_dict(cls, dict_: dict):
         for k in list(dict_.keys()):
             if k in RESERVED_WORD_LIST:
-                dict_[f'{k}_'] = dict_[k]
+                dict_[f"{k}_"] = dict_[k]
                 del dict_[k]
         return cls(**dict_)
 
@@ -164,7 +175,6 @@ class BaseDataclass:
             attr = getattr(self, field_tuple[0])
             if attr is not None and isinstance(attr, list) and len(attr) > 0 and isinstance(attr[0], dict):
                 setattr(self, field_tuple[0], [field_tuple[1].from_dict(a) for a in attr])
-
 
     def __str__(self):
         return json.dumps(self.asdict(), indent=4, sort_keys=True)
@@ -204,7 +214,7 @@ class ResourceRefDTO(BaseDataclass):
     links: Optional[list[Link]] = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -235,7 +245,7 @@ class AssettypeDTO(BaseDataclass):
     data: dict | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -243,7 +253,7 @@ class AssettypeDTOList(DTOList):
     data: list[AssettypeDTO]
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('data', AssettypeDTO)})
+        self._fix_nested_list_classes({("data", AssettypeDTO)})
 
 
 @dataclass
@@ -261,7 +271,7 @@ class ExpressionDTO(BaseDataclass):
     logicalOp: LogicalOpEnum | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('terms', TermDTO)})
+        self._fix_nested_list_classes({("terms", TermDTO)})
 
 
 @dataclass
@@ -270,7 +280,7 @@ class SelectionDTO(BaseDataclass):
     settings: dict | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('expressions', ExpressionDTO)})
+        self._fix_nested_list_classes({("expressions", ExpressionDTO)})
 
 
 @dataclass
@@ -279,28 +289,30 @@ class ExpansionsDTO(BaseDataclass):
 
 
 class PagingModeEnum(Enum):
-    OFFSET = 'OFFSET'
-    CURSOR = 'CURSOR'
+    OFFSET = "OFFSET"
+    CURSOR = "CURSOR"
 
 
 class DirectionEnum(Enum):
-    ASC = 'ASC'
-    DESC = 'DESC'
+    ASC = "ASC"
+    DESC = "DESC"
+
 
 class ApplicationEnum(Enum):
-    EM_INFRA = 'eminfra'
-    ELISA_INFRA = 'elisainfra'
+    EM_INFRA = "eminfra"
+    ELISA_INFRA = "elisainfra"
 
 
 class BestekKoppelingStatusEnum(Enum):
-    ACTIEF = 'ACTIEF'
-    INACTIEF = 'INACTIEF'
-    TOEKOMSTIG = 'TOEKOMSTIG'
+    ACTIEF = "ACTIEF"
+    INACTIEF = "INACTIEF"
+    TOEKOMSTIG = "TOEKOMSTIG"
 
 
 class BoomstructuurAssetTypeEnum(Enum):
-    ASSET = 'asset'
-    BEHEEROBJECT = 'beheerobject'
+    ASSET = "asset"
+    BEHEEROBJECT = "beheerobject"
+
 
 @dataclass
 class QueryDTO(BaseDataclass):
@@ -317,9 +329,8 @@ class QueryDTO(BaseDataclass):
     def __post_init__(self):
         if self.settings is None:
             self.settings = {}
-        self._fix_enums({('pagingMode', PagingModeEnum)})
-        self._fix_nested_classes({('selection', SelectionDTO), ('expansions', ExpansionsDTO)})
-
+        self._fix_enums({("pagingMode", PagingModeEnum)})
+        self._fix_nested_classes({("selection", SelectionDTO), ("expansions", ExpansionsDTO)})
 
 
 @dataclass
@@ -339,18 +350,18 @@ class BestekRef(BaseDataclass):
     lot: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 class BestekCategorieEnum(Enum):
-    WERKBESTEK = 'WERKBESTEK'
-    AANLEVERBESTEK = 'AANLEVERBESTEK'
+    WERKBESTEK = "WERKBESTEK"
+    AANLEVERBESTEK = "AANLEVERBESTEK"
 
 
 class SubCategorieEnum(Enum):
-    ONDERHOUD = 'ONDERHOUD'
-    INVESTERING = 'INVESTERING'
-    ONDERHOUD_EN_INVESTERING = 'ONDERHOUD_EN_INVESTERING'
+    ONDERHOUD = "ONDERHOUD"
+    INVESTERING = "INVESTERING"
+    ONDERHOUD_EN_INVESTERING = "ONDERHOUD_EN_INVESTERING"
 
 
 @dataclass
@@ -364,13 +375,21 @@ class BestekKoppeling(BaseDataclass):
     bron: str | None = None
 
     def __post_init__(self):
-        self._fix_enums({('categorie', BestekCategorieEnum), ('subcategorie', SubCategorieEnum), ('status', BestekKoppelingStatusEnum)})
-        self._fix_nested_classes({('bestekRef', BestekRef)})
+        self._fix_enums(
+            {
+                ("categorie", BestekCategorieEnum),
+                ("subcategorie", SubCategorieEnum),
+                ("status", BestekKoppelingStatusEnum),
+            }
+        )
+        self._fix_nested_classes({("bestekRef", BestekRef)})
+
 
 @dataclass
 class EventType(BaseDataclass):
     description: str
     name: str
+
 
 @dataclass
 class EventContext(BaseDataclass):
@@ -379,7 +398,8 @@ class EventContext(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_classes({('links', Link)})
+        self._fix_nested_classes({("links", Link)})
+
 
 @dataclass
 class Event(BaseDataclass):
@@ -391,7 +411,8 @@ class Event(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_classes({('type', EventType), ('links', Link)})
+        self._fix_nested_classes({("type", EventType), ("links", Link)})
+
 
 @dataclass
 class LocatieKenmerk(BaseDataclass):
@@ -404,7 +425,8 @@ class LocatieKenmerk(BaseDataclass):
     relatie: dict | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class ElektrischAansluitpuntKenmerk(BaseDataclass):
@@ -414,8 +436,7 @@ class ElektrischAansluitpuntKenmerk(BaseDataclass):
     elektriciteitsAansluitingRef: dict | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link)})
-
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -430,7 +451,7 @@ class GeometryLog(BaseDataclass):
     gaVersie: str | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -441,7 +462,8 @@ class GeometrieKenmerk(BaseDataclass):
     logs: list[GeometryLog] | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link), ('logs', GeometryLog)})
+        self._fix_nested_list_classes({("links", Link), ("logs", GeometryLog)})
+
 
 @dataclass
 class ToezichterKenmerk(BaseDataclass):
@@ -452,8 +474,9 @@ class ToezichterKenmerk(BaseDataclass):
     toezichtGroep: ResourceRefDTO | None = None
 
     def __post_init__(self):
-         self._fix_nested_classes({('toezichter', ResourceRefDTO), ('toezichtGroep', ResourceRefDTO)})
-         self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_classes({("toezichter", ResourceRefDTO), ("toezichtGroep", ResourceRefDTO)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class ToezichtKenmerkUpdateDTO(BaseDataclass):
@@ -461,7 +484,8 @@ class ToezichtKenmerkUpdateDTO(BaseDataclass):
     toezichtGroep: ResourceRefDTO | None
 
     def __post_init__(self):
-         self._fix_nested_classes({('toezichter', ResourceRefDTO), ('toezichtGroep', ResourceRefDTO)})
+        self._fix_nested_classes({("toezichter", ResourceRefDTO), ("toezichtGroep", ResourceRefDTO)})
+
 
 @dataclass
 class SchadebeheerderKenmerk(BaseDataclass):
@@ -480,7 +504,8 @@ class SchadebeheerderKenmerk(BaseDataclass):
     links: list[Link] | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class IdentiteitKenmerk(BaseDataclass):
@@ -501,7 +526,8 @@ class IdentiteitKenmerk(BaseDataclass):
     links: list[Link] | None = None
 
     def __post_init__(self):
-         self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class Generator(BaseDataclass):
@@ -524,8 +550,8 @@ class EntryObject(BaseDataclass):
     links: list[Link] | None = None
 
     def __post_init__(self):
-        self._fix_nested_classes({('content', EntryObjectContent)})
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_classes({("content", EntryObjectContent)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -539,25 +565,27 @@ class FeedPage(BaseDataclass):
     entries: list[EntryObject] | None = None
 
     def __post_init__(self):
-        self._fix_nested_classes({('generator', Generator)})
-        self._fix_nested_list_classes({('links', Link), ('entries', EntryObject)})
+        self._fix_nested_classes({("generator", Generator)})
+        self._fix_nested_list_classes({("links", Link), ("entries", EntryObject)})
+
 
 class AssetDTOToestand(Enum):
-    IN_ONTWERP = 'IN_ONTWERP'
-    GEPLAND = 'GEPLAND'
-    GEANNULEERD = 'GEANNULEERD'
-    IN_OPBOUW = 'IN_OPBOUW'
-    IN_GEBRUIK = 'IN_GEBRUIK'
-    VERWIJDERD = 'VERWIJDERD'
-    OVERGEDRAGEN = 'OVERGEDRAGEN'
-    UIT_GEBRUIK = 'UIT_GEBRUIK'
+    IN_ONTWERP = "IN_ONTWERP"
+    GEPLAND = "GEPLAND"
+    GEANNULEERD = "GEANNULEERD"
+    IN_OPBOUW = "IN_OPBOUW"
+    IN_GEBRUIK = "IN_GEBRUIK"
+    VERWIJDERD = "VERWIJDERD"
+    OVERGEDRAGEN = "OVERGEDRAGEN"
+    UIT_GEBRUIK = "UIT_GEBRUIK"
+
 
 class ObjectType(Enum):
-    INSTALLATIE = 'INSTALLATIE'
-    ONDERDEEL = 'ONDERDEEL'
-    BEHEEROBJECT = 'BEHEEROBJECT'
-    EIGENSCHAP = 'EIGENSCHAP'
-    KENMERKTYPE = 'KENMERKTYPE'
+    INSTALLATIE = "INSTALLATIE"
+    ONDERDEEL = "ONDERDEEL"
+    BEHEEROBJECT = "BEHEEROBJECT"
+    EIGENSCHAP = "EIGENSCHAP"
+    KENMERKTYPE = "KENMERKTYPE"
 
 
 @dataclass
@@ -577,7 +605,7 @@ class InfraObjectDTO(BaseDataclass):
     type: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -593,15 +621,16 @@ class AssetDTO(BaseDataclass):
     naam: str | None = None
     commentaar: str | None = None
     type: AssettypeDTO | None = None
-    kenmerken: list[dict] | None = None # TODO
-    authorizationMetadata: list[dict] | None = None # TODO
+    kenmerken: list[dict] | None = None  # TODO
+    authorizationMetadata: list[dict] | None = None  # TODO
     children: list[dict] | None = None
 
     def __post_init__(self):
-        self._fix_nested_classes({('type', AssettypeDTO)})
-        self._fix_nested_classes({('parent', InfraObjectDTO)})
-        self._fix_enums({('toestand', AssetDTOToestand)})
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_classes({("type", AssettypeDTO)})
+        self._fix_nested_classes({("parent", InfraObjectDTO)})
+        self._fix_enums({("toestand", AssetDTOToestand)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class BeheerobjectDTO(BaseDataclass):
@@ -615,7 +644,8 @@ class BeheerobjectDTO(BaseDataclass):
     type: dict | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class BeheerobjectTypeDTO(BaseDataclass):
@@ -629,51 +659,55 @@ class BeheerobjectTypeDTO(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 class DocumentCategorieEnum(Enum):
-    AANGEBODEN_SERVICES = 'AANGEBODEN_SERVICES'
-    ANDER = 'ANDER'
-    ASBUILT_DOSSIER = 'ASBUILT_DOSSIER'
-    BEREKENINGSNOTA = 'BEREKENINGSNOTA'
-    BRIEF = 'BRIEF'
-    CONFIGBESTAND = 'CONFIGBESTAND'
-    CONSTRUCTIE_EN_MONTAGEPLAN = 'CONSTRUCTIE_EN_MONTAGEPLAN'
-    CONTROLEMETING_EBS = 'CONTROLEMETING_EBS'
-    DIMCONFIGURATIE = 'DIMCONFIGURATIE'
-    ELEKTRISCH_SCHEMA = 'ELEKTRISCH_SCHEMA'
-    FACTUUR = 'FACTUUR'
-    FOTO = 'FOTO'
-    HANDLEIDING = 'HANDLEIDING'
-    INTERVENTIEVERSLAG = 'INTERVENTIEVERSLAG'
-    KABELAANSLUITSCHEMA = 'KABELAANSLUITSCHEMA'
-    KEURINGSVERSLAG = 'KEURINGSVERSLAG'
-    LICHTSTUDIE = 'LICHTSTUDIE'
-    LUSSENMEETRAPPORT = 'LUSSENMEETRAPPORT'
-    MEETRAPPORT = 'MEETRAPPORT'
-    M_PLAN = 'M_PLAN'
-    OFFERTE = 'OFFERTE'
-    OPROEPDOCUMENT = 'OPROEPDOCUMENT'
-    PV_INGEBREKESTELLING = 'PV_INGEBREKESTELLING'
-    PV_OPLEVERING = 'PV_OPLEVERING'
-    PV_SCHADEVERWEKKER = 'PV_SCHADEVERWEKKER'
-    RISICOANALYSE = 'RISICOANALYSE'
-    SOFTWARE_DEPENDENCIES = 'SOFTWARE_DEPENDENCIES'
-    TECHNISCHE_FICHE = 'TECHNISCHE_FICHE'
-    TRACO_ATTEST = 'TRACO_ATTEST'
-    V_PLAN = 'V_PLAN'
+    AANGEBODEN_SERVICES = "AANGEBODEN_SERVICES"
+    ANDER = "ANDER"
+    ASBUILT_DOSSIER = "ASBUILT_DOSSIER"
+    BEREKENINGSNOTA = "BEREKENINGSNOTA"
+    BRIEF = "BRIEF"
+    CONFIGBESTAND = "CONFIGBESTAND"
+    CONSTRUCTIE_EN_MONTAGEPLAN = "CONSTRUCTIE_EN_MONTAGEPLAN"
+    CONTROLEMETING_EBS = "CONTROLEMETING_EBS"
+    DIMCONFIGURATIE = "DIMCONFIGURATIE"
+    ELEKTRISCH_SCHEMA = "ELEKTRISCH_SCHEMA"
+    FACTUUR = "FACTUUR"
+    FOTO = "FOTO"
+    HANDLEIDING = "HANDLEIDING"
+    INTERVENTIEVERSLAG = "INTERVENTIEVERSLAG"
+    KABELAANSLUITSCHEMA = "KABELAANSLUITSCHEMA"
+    KEURINGSVERSLAG = "KEURINGSVERSLAG"
+    LICHTSTUDIE = "LICHTSTUDIE"
+    LUSSENMEETRAPPORT = "LUSSENMEETRAPPORT"
+    MEETRAPPORT = "MEETRAPPORT"
+    M_PLAN = "M_PLAN"
+    OFFERTE = "OFFERTE"
+    OPROEPDOCUMENT = "OPROEPDOCUMENT"
+    PV_INGEBREKESTELLING = "PV_INGEBREKESTELLING"
+    PV_OPLEVERING = "PV_OPLEVERING"
+    PV_SCHADEVERWEKKER = "PV_SCHADEVERWEKKER"
+    RISICOANALYSE = "RISICOANALYSE"
+    SOFTWARE_DEPENDENCIES = "SOFTWARE_DEPENDENCIES"
+    TECHNISCHE_FICHE = "TECHNISCHE_FICHE"
+    TRACO_ATTEST = "TRACO_ATTEST"
+    V_PLAN = "V_PLAN"
+
 
 class ProvincieEnum(Enum):
-    ANTWERPEN = 'antwerpen'
-    WEST_VLAANDEREN = 'west-vlaanderen'
-    OOST_VLAANDEREN = 'oost-vlaanderen'
-    VLAAMS_BRABANT = 'vlaams-brabant'
-    LIMBURG = 'limburg'
-    BRUSSEL = 'brussel'
+    ANTWERPEN = "antwerpen"
+    WEST_VLAANDEREN = "west-vlaanderen"
+    OOST_VLAANDEREN = "oost-vlaanderen"
+    VLAAMS_BRABANT = "vlaams-brabant"
+    LIMBURG = "limburg"
+    BRUSSEL = "brussel"
+
 
 class ToezichtgroepTypeEnum(Enum):
-    INTERN = 'INTERN'
-    EXTERN = 'EXTERN'
+    INTERN = "INTERN"
+    EXTERN = "EXTERN"
+
 
 @dataclass
 class ResourceRefDTO(BaseDataclass):
@@ -681,7 +715,7 @@ class ResourceRefDTO(BaseDataclass):
     links: Optional[list[Link]] = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -698,9 +732,10 @@ class AssetDocumentDTO(BaseDataclass):
         return hash(self.uuid)
 
     def __post_init__(self):
-        self._fix_enums({('categorie', DocumentCategorieEnum)})
-        self._fix_nested_list_classes({('links', Link)})
-        self._fix_nested_list_classes({('document', ResourceRefDTO)})
+        self._fix_enums({("categorie", DocumentCategorieEnum)})
+        self._fix_nested_list_classes({("links", Link)})
+        self._fix_nested_list_classes({("document", ResourceRefDTO)})
+
 
 @dataclass
 class DocumentDTO(BaseDataclass):
@@ -713,8 +748,9 @@ class DocumentDTO(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
-        
+        self._fix_nested_list_classes({("links", Link)})
+
+
 @dataclass
 class RelatieTypeDTO(BaseDataclass):
     _type: str
@@ -730,7 +766,8 @@ class RelatieTypeDTO(BaseDataclass):
     commentaar: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class RelatieTypeDTOList(BaseDataclass):
@@ -738,8 +775,9 @@ class RelatieTypeDTOList(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
-        self._fix_nested_classes({('relatieType', RelatieTypeDTO)})
+        self._fix_nested_list_classes({("links", Link)})
+        self._fix_nested_classes({("relatieType", RelatieTypeDTO)})
+
 
 @dataclass
 class PostitDTO(BaseDataclass):
@@ -753,7 +791,7 @@ class PostitDTO(BaseDataclass):
     commentaar: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -769,7 +807,7 @@ class AgentDTO(BaseDataclass):
     ovoCode: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -779,13 +817,13 @@ class BetrokkenerelatieDTO(BaseDataclass):
     modifiedOn: str
     bron: AssetDTO
     doel: AgentDTO
-    rol: str # TODO enum
+    rol: str  # TODO enum
     links: [Link]
     geldigheid: dict | None = None
 
     def __post_init__(self):
-        self._fix_nested_classes({('bron', AssetDTO), ('doel', AgentDTO)})
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_classes({("bron", AssetDTO), ("doel", AgentDTO)})
+        self._fix_nested_list_classes({("links", Link)})
 
 
 @dataclass
@@ -801,7 +839,8 @@ class KenmerkTypeDTO(BaseDataclass):
     links: [Link]
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class KenmerkType(BaseDataclass):
@@ -811,11 +850,12 @@ class KenmerkType(BaseDataclass):
     types: dict | None = None
     bestekRef: dict | None = None
     bestekKoppelingen: dict | None = None
-    toezichter: dict | None =  None
+    toezichter: dict | None = None
     toezichtGroep: dict | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class ToezichtgroepDTO(BaseDataclass):
@@ -831,7 +871,8 @@ class ToezichtgroepDTO(BaseDataclass):
     modifiedOn: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class Eigenschap(BaseDataclass):
@@ -851,7 +892,8 @@ class Eigenschap(BaseDataclass):
     kardinaliteitMax: int | None = None
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
 
 @dataclass
 class EigenschapValueDTO(BaseDataclass):
@@ -864,7 +906,8 @@ class EigenschapValueDTO(BaseDataclass):
     alias: str | None = None
 
     def __post_init__(self):
-        self._fix_nested_classes({('eigenschap', Eigenschap), ('kenmerkType', KenmerkTypeDTO)})
+        self._fix_nested_classes({("eigenschap", Eigenschap), ("kenmerkType", KenmerkTypeDTO)})
+
 
 @dataclass
 class EigenschapValueUpdateDTO(BaseDataclass):
@@ -872,14 +915,15 @@ class EigenschapValueUpdateDTO(BaseDataclass):
     eigenschap: Eigenschap
 
     def __post_init__(self):
-        self._fix_nested_classes({('eigenschap', Eigenschap)})
+        self._fix_nested_classes({("eigenschap", Eigenschap)})
+
 
 @dataclass
 class AssetTypeKenmerkTypeAddDTO(BaseDataclass):
     kenmerkType: ResourceRefDTO
 
     def __post_init__(self):
-        self._fix_nested_classes({('kenmerkType', KenmerkTypeDTO)})
+        self._fix_nested_classes({("kenmerkType", KenmerkTypeDTO)})
 
 
 @dataclass
@@ -889,7 +933,7 @@ class AssetTypeKenmerkTypeDTO(BaseDataclass):
     standard: bool
 
     def __post_init__(self):
-        self._fix_nested_classes({('kenmerkType', KenmerkTypeDTO)})
+        self._fix_nested_classes({("kenmerkType", KenmerkTypeDTO)})
 
 
 def construct_naampad(asset: AssetDTO) -> str:
@@ -898,11 +942,11 @@ def construct_naampad(asset: AssetDTO) -> str:
     while parent is not None:
         # parent is dictionary (Beheerobject)
         if isinstance(parent, dict):
-            naampad = parent.get("naam") + '/' + naampad
+            naampad = parent.get("naam") + "/" + naampad
             parent = parent.get("parent")
 
         else:
-            naampad = f'{parent.naam}/{naampad}'
+            naampad = f"{parent.naam}/{naampad}"
             parent = parent.parent
     return naampad
 
@@ -919,13 +963,16 @@ class AssetRelatieDTO(BaseDataclass):
     relatieType: RelatieTypeDTO
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('links', Link)})
+        self._fix_nested_list_classes({("links", Link)})
+
+
 @dataclass
 class GraphLinks(BaseDataclass):
     bronUuid: str
     doelUuid: str
     relatieTypeUuid: str
     relatieUuid: str
+
 
 @dataclass
 class Graph(BaseDataclass):
@@ -934,4 +981,4 @@ class Graph(BaseDataclass):
     limitExceeded: bool
 
     def __post_init__(self):
-        self._fix_nested_list_classes({('nodes', AssetDTO), ('links', GraphLinks)})
+        self._fix_nested_list_classes({("nodes", AssetDTO), ("links", GraphLinks)})

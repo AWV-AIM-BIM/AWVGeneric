@@ -23,11 +23,7 @@ import requests
 from API.auth.settings_loader import load_settings
 
 # Configure logging for the module
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 
 class OneDriveClient:
@@ -56,7 +52,7 @@ class OneDriveClient:
         client_id: str,
         token_file: Path,
         authority: str = "https://login.microsoftonline.com/consumers",
-        scopes: list = None,
+        scopes: list | None = None,
     ):
         """
         Initialize the OneDrive client.
@@ -123,9 +119,7 @@ class OneDriveClient:
         expires_at = token_data.get("expires_at", 0)
         if time.time() > expires_at - 60:
             logging.info("Token verlopen of bijna verlopen, verversen...")
-            refreshed = self.app.acquire_token_by_refresh_token(
-                token_data.get("refresh_token"), self.scopes
-            )
+            refreshed = self.app.acquire_token_by_refresh_token(token_data.get("refresh_token"), self.scopes)
             if "access_token" in refreshed:
                 refreshed["expires_at"] = time.time() + refreshed.get("expires_in", 3600)
                 self._save_token(refreshed)
@@ -149,12 +143,10 @@ class OneDriveClient:
 
         if resp.status_code == 200:
             items = resp.json().get("value", [])
-            print("📂 Bestanden in OneDrive-root:")
             for item in items:
                 soort = "Map" if "folder" in item else "Bestand"
-                print(f"- {item['name']} ({soort})")
         else:
-            print(f"Fout {resp.status_code}: {resp.text}")
+            pass
 
     def list_folder_files(self):
         """List files/folders in a specific directory of the user's OneDrive."""
@@ -193,17 +185,14 @@ class OneDriveClient:
         else:
             logging.error(f"Fout bij downloaden: {download_resp.status_code} - {download_resp.text}")
 
-    def upload_file(self, local_path: Path, onedrive_path: str = None):
+    def upload_file(self, local_path: Path, onedrive_path: str | None = None):
         """
         Uploadt een bestand naar OneDrive.
         :param local_path: Lokaal pad naar bestand
         :param onedrive_path: Pad + bestandsnaam in OneDrive (default = root + bestandsnaam)
         """
         access_token = self.get_access_token()
-        headers = {
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type": "application/octet-stream"
-        }
+        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/octet-stream"}
 
         local_path = Path(local_path)
         if not local_path.exists():

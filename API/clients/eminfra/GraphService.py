@@ -33,7 +33,9 @@ class GraphService:
             "a6747802-7679-473f-b2bd-db2cfd1b88d7",
         ]
 
-    def get_graph_by_uuid(self, asset_uuid: str, depth: int = 1, relatietypes: list = None, actief: bool = True) -> Graph:
+    def get_graph_by_uuid(
+        self, asset_uuid: str, depth: int = 1, relatietypes: list | None = None, actief: bool = True
+    ) -> Graph:
         """
         Generate the graph, starting from an asset, searching a certain depth and for some relatieTypes
 
@@ -52,18 +54,15 @@ class GraphService:
             "expandDepth": depth,
             "relatieTypesToReturn": relatietypes,
             "relatieTypesToExpand": relatietypes,
-            "actiefFilter": actief
+            "actiefFilter": actief,
         }
-        uri = 'core/api/assets/graph'
-        response = self.requester.post(
-            url=uri
-            , data=json.dumps(request_body)
-        )
+        uri = "core/api/assets/graph"
+        response = self.requester.post(url=uri, data=json.dumps(request_body))
         if response.status_code != 201:
             raise ProcessLookupError(response.content.decode("utf-8"))
         return Graph.from_dict(response.json())
 
-    def get_graph(self, asset: AssetDTO, depth: int = 1, relatietypes: list = None, actief: bool = True) -> Graph:
+    def get_graph(self, asset: AssetDTO, depth: int = 1, relatietypes: list | None = None, actief: bool = True) -> Graph:
         """
         Generate the graph, starting from an asset, searching a certain depth and for some relatieTypes
 

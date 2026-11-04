@@ -1,7 +1,7 @@
 {
   "date": "2026-11-04",
   "repo": "awvgeneric",
-  "commit": "cd1e5fd",
+  "commit": "b4d037f",
   "thresholds": {
     "ruff_issues": 0,
     "ruff_format_files": 0,
@@ -19,15 +19,15 @@
     "import_architecture_violations": 0
   },
   "metrics": {
-    "ruff_issues": 0,
-    "ruff_format_files": -1,
-    "mypy_errors": 528,
+    "ruff_issues": 339,
+    "ruff_format_files": 6,
+    "mypy_errors": 482,
     "coverage_percent": 33.2,
     "coverage_branch_percent": 3.4,
-    "max_crap": 286.3,
+    "max_crap": 282.6,
     "max_complexity": 17,
     "bandit_high": 0,
-    "dead_code": 1,
+    "dead_code": 0,
     "pip_audit_vulns": 0,
     "god_classes": 4,
     "unparsable_files": 0,
@@ -35,22 +35,17 @@
     "import_architecture_violations": 0,
     "import_architecture_status": "not enabled"
   },
-  "enforced_gates": [
-    "bandit",
-    "dead-code"
-  ],
-  "failed_gates": [
-    "dead-code"
-  ],
+  "enforced_gates": [],
+  "failed_gates": [],
   "all_gates_met": false,
   "lead_target": {
     "file": "API/clients/sharepoint.py",
-    "name": "_sync_local_dir_to_library",
+    "name": "__init__",
     "block_type": "method",
     "complexity": 17,
-    "coverage": 2.3,
-    "crap": 286.3,
-    "lineno": 773
+    "coverage": 2.8,
+    "crap": 282.6,
+    "lineno": 44
   },
   "hotspots": [
     {
@@ -817,25 +812,32 @@
       "score": 0
     }
   ],
-  "ruff_per_rule": {},
+  "ruff_per_rule": {
+    "PLR2004": 74,
+    "LOG015": 70,
+    "TRY003": 54,
+    "G004": 36,
+    "S101": 20,
+    "BLE001": 18,
+    "T201": 12,
+    "PLR0913": 10,
+    "PLR0917": 10,
+    "F401": 9,
+    "PTH123": 9,
+    "S110": 7,
+    "TRY300": 7,
+    "F403": 2,
+    "E712": 1
+  },
   "crap": [
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_sync_local_dir_to_library",
-      "block_type": "method",
-      "complexity": 17,
-      "coverage": 2.3,
-      "crap": 286.3,
-      "lineno": 773
-    },
     {
       "file": "API/clients/sharepoint.py",
       "name": "__init__",
       "block_type": "method",
       "complexity": 17,
-      "coverage": 2.6,
-      "crap": 283.8,
-      "lineno": 48
+      "coverage": 2.8,
+      "crap": 282.6,
+      "lineno": 44
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -844,52 +846,43 @@
       "complexity": 17,
       "coverage": 2.9,
       "crap": 281.2,
-      "lineno": 976
+      "lineno": 990
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_main",
       "block_type": "function",
-      "complexity": 15,
-      "coverage": 2.1,
-      "crap": 225.9,
-      "lineno": 1494
+      "complexity": 12,
+      "coverage": 0.0,
+      "crap": 156.0,
+      "lineno": 1506
     },
     {
       "file": "API/clients/eminfra/EventService.py",
       "name": "search_events_by_uuid_generator",
       "block_type": "method",
       "complexity": 12,
-      "coverage": 3.1,
-      "crap": 142.9,
-      "lineno": 42
+      "coverage": 3.2,
+      "crap": 142.5,
+      "lineno": 64
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_download_tree",
       "block_type": "method",
       "complexity": 12,
-      "coverage": 3.8,
-      "crap": 140.0,
-      "lineno": 547
+      "coverage": 3.4,
+      "crap": 141.6,
+      "lineno": 537
     },
     {
       "file": "API/clients/eminfra/ToezichterService.py",
       "name": "search_identiteit",
       "block_type": "method",
       "complexity": 11,
-      "coverage": 4.0,
-      "crap": 118.1,
-      "lineno": 127
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_retryable_library_error",
-      "block_type": "method",
-      "complexity": 11,
-      "coverage": 5.0,
-      "crap": 114.7,
-      "lineno": 436
+      "coverage": 0.0,
+      "crap": 132.0,
+      "lineno": 132
     },
     {
       "file": "API/auth/factory.py",
@@ -901,49 +894,67 @@
       "lineno": 16
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "upload_folder_to_library",
+      "file": "API/auth/jwt.py",
+      "name": "modify_kwargs_for_bearer_token",
       "block_type": "method",
       "complexity": 9,
-      "coverage": 3.6,
-      "crap": 81.6,
-      "lineno": 888
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_parent_asset_by_uuid",
-      "block_type": "method",
-      "complexity": 9,
-      "coverage": 4.0,
-      "crap": 80.7,
-      "lineno": 228
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_or_create_folder",
-      "block_type": "method",
-      "complexity": 9,
-      "coverage": 4.8,
-      "crap": 79.0,
-      "lineno": 231
+      "coverage": 0.0,
+      "crap": 90.0,
+      "lineno": 69
     },
     {
       "file": "API/clients/eminfra/PostitService.py",
       "name": "search_postits_generator",
       "block_type": "method",
       "complexity": 9,
-      "coverage": 5.6,
-      "crap": 77.2,
-      "lineno": 15
+      "coverage": 0.0,
+      "crap": 90.0,
+      "lineno": 21
     },
     {
-      "file": "API/auth/jwt.py",
-      "name": "modify_kwargs_for_bearer_token",
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_retryable_library_error",
+      "block_type": "method",
+      "complexity": 11,
+      "coverage": 14.3,
+      "crap": 87.2,
+      "lineno": 423
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_sync_local_dir_to_library",
       "block_type": "method",
       "complexity": 9,
-      "coverage": 6.7,
-      "crap": 74.9,
-      "lineno": 67
+      "coverage": 3.4,
+      "crap": 81.9,
+      "lineno": 813
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "upload_folder_to_library",
+      "block_type": "method",
+      "complexity": 9,
+      "coverage": 3.6,
+      "crap": 81.6,
+      "lineno": 902
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_or_create_folder",
+      "block_type": "method",
+      "complexity": 9,
+      "coverage": 4.5,
+      "crap": 79.4,
+      "lineno": 221
+    },
+    {
+      "file": "API/auth/settings.py",
+      "name": "find_settings_file",
+      "block_type": "function",
+      "complexity": 8,
+      "coverage": 0.0,
+      "crap": 72.0,
+      "lineno": 10
     },
     {
       "file": "API/clients/eminfra/paging.py",
@@ -955,40 +966,40 @@
       "lineno": 9
     },
     {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "search_parent_asset_by_uuid",
+      "block_type": "method",
+      "complexity": 9,
+      "coverage": 10.5,
+      "crap": 67.0,
+      "lineno": 261
+    },
+    {
       "file": "API/clients/sharepoint.py",
       "name": "_upload_or_update_file_once",
       "block_type": "method",
       "complexity": 8,
-      "coverage": 3.4,
-      "crap": 65.6,
-      "lineno": 686
+      "coverage": 3.2,
+      "crap": 66.0,
+      "lineno": 678
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "list_root_items",
       "block_type": "method",
       "complexity": 8,
-      "coverage": 4.5,
-      "crap": 63.7,
-      "lineno": 175
+      "coverage": 5.6,
+      "crap": 61.9,
+      "lineno": 169
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_discover_expected_buckets",
       "block_type": "method",
       "complexity": 8,
-      "coverage": 5.3,
-      "crap": 62.4,
-      "lineno": 941
-    },
-    {
-      "file": "API/auth/settings.py",
-      "name": "find_settings_file",
-      "block_type": "function",
-      "complexity": 8,
-      "coverage": 6.2,
-      "crap": 60.7,
-      "lineno": 9
+      "coverage": 5.9,
+      "crap": 61.4,
+      "lineno": 955
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
@@ -997,196 +1008,151 @@
       "complexity": 8,
       "coverage": 8.3,
       "crap": 57.3,
-      "lineno": 89
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_safe_name",
-      "block_type": "method",
-      "complexity": 8,
-      "coverage": 12.5,
-      "crap": 50.9,
-      "lineno": 411
-    },
-    {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "edit_postit",
-      "block_type": "method",
-      "complexity": 7,
-      "coverage": 4.5,
-      "crap": 49.6,
-      "lineno": 106
-    },
-    {
-      "file": "API/clients/onedrive.py",
-      "name": "download_file_by_name",
-      "block_type": "method",
-      "complexity": 7,
-      "coverage": 4.5,
-      "crap": 49.6,
-      "lineno": 166
+      "lineno": 95
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "wait_for_download",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 5.9,
-      "crap": 47.9,
-      "lineno": 1380
+      "coverage": 6.2,
+      "crap": 47.4,
+      "lineno": 1393
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "wait_for_upload",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 5.9,
-      "crap": 47.9,
-      "lineno": 1411
+      "coverage": 6.7,
+      "crap": 46.8,
+      "lineno": 1424
     },
     {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "add_bestekkoppeling_by_uuid",
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "edit_postit",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 7.1,
-      "crap": 46.2,
-      "lineno": 219
+      "coverage": 7.7,
+      "crap": 45.5,
+      "lineno": 102
     },
     {
       "file": "API/auth/cert.py",
       "name": "modify_kwargs_for_bearer_token",
       "block_type": "method",
       "complexity": 7,
-      "coverage": 8.3,
-      "crap": 44.7,
+      "coverage": 10.0,
+      "crap": 42.7,
       "lineno": 42
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "adjust_date_bestekkoppeling_by_uuid",
-      "block_type": "method",
-      "complexity": 7,
-      "coverage": 9.1,
-      "crap": 43.8,
-      "lineno": 131
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_list_children",
-      "block_type": "method",
-      "complexity": 6,
-      "coverage": 5.9,
-      "crap": 36.0,
-      "lineno": 326
     },
     {
       "file": "API/auth/abstract_requester.py",
       "name": "_request_with_retries",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 6.2,
-      "crap": 35.7,
-      "lineno": 100
-    },
-    {
-      "file": "API/clients/emson.py",
-      "name": "get_resource_by_cursor",
-      "block_type": "method",
-      "complexity": 6,
-      "coverage": 6.7,
-      "crap": 35.3,
-      "lineno": 51
+      "coverage": 0.0,
+      "crap": 42.0,
+      "lineno": 101
     },
     {
       "file": "API/clients/eminfra/AgentService.py",
       "name": "search_agent",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 7.1,
-      "crap": 34.8,
-      "lineno": 10
+      "coverage": 4.2,
+      "crap": 37.7,
+      "lineno": 20
     },
     {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "_update_asset",
+      "file": "API/clients/emson.py",
+      "name": "get_resource_by_cursor",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 7.1,
-      "crap": 34.8,
-      "lineno": 27
+      "coverage": 5.6,
+      "crap": 36.3,
+      "lineno": 56
     },
     {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_child_assets_by_uuid_generator",
+      "file": "API/clients/sharepoint.py",
+      "name": "_list_children",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 7.1,
-      "crap": 34.8,
-      "lineno": 184
+      "coverage": 6.2,
+      "crap": 35.7,
+      "lineno": 316
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "download_file_by_name",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 16.7,
+      "crap": 35.4,
+      "lineno": 158
     },
     {
       "file": "API/clients/eminfra/BeheerobjectService.py",
       "name": "search_beheerobjecten_generator",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 7.1,
-      "crap": 34.8,
-      "lineno": 15
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "create_beheerobject",
-      "block_type": "method",
-      "complexity": 6,
-      "coverage": 7.7,
-      "crap": 34.3,
-      "lineno": 51
-    },
-    {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "search_assetrelatie_otl",
-      "block_type": "method",
-      "complexity": 6,
-      "coverage": 7.7,
-      "crap": 34.3,
-      "lineno": 96
+      "coverage": 9.1,
+      "crap": 33.0,
+      "lineno": 26
     },
     {
       "file": "API/clients/eminfra/KenmerkService.py",
       "name": "get_kenmerken_by_uuid",
       "block_type": "method",
       "complexity": 6,
-      "coverage": 10.0,
-      "crap": 32.2,
-      "lineno": 96
+      "coverage": 11.1,
+      "crap": 31.3,
+      "lineno": 109
+    },
+    {
+      "file": "API/clients/fs.py",
+      "name": "download_layer_to_records",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 47
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_delete_remote_only_items",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 794
+    },
+    {
+      "file": "API/clients/sngateway.py",
+      "name": "enable_asset_filter",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 0.0,
+      "crap": 30.0,
+      "lineno": 44
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_safe_name",
+      "block_type": "method",
+      "complexity": 8,
+      "coverage": 33.3,
+      "crap": 27.0,
+      "lineno": 397
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
-      "name": "get_objects_from_oslo_search_endpoint_gen",
+      "name": "_update_asset",
       "block_type": "method",
-      "complexity": 5,
-      "coverage": 5.9,
-      "crap": 25.8,
-      "lineno": 400
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_load_credentials",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 6.2,
-      "crap": 25.6,
-      "lineno": 1186
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_retry_on_library_error",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 6.7,
-      "crap": 25.3,
-      "lineno": 468
+      "complexity": 6,
+      "coverage": 16.7,
+      "crap": 26.8,
+      "lineno": 40
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -1195,61 +1161,61 @@
       "complexity": 5,
       "coverage": 6.7,
       "crap": 25.3,
-      "lineno": 849
+      "lineno": 863
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_retry_on_library_error",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 7.1,
+      "crap": 25.0,
+      "lineno": 455
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_load_credentials",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 7.1,
+      "crap": 25.0,
+      "lineno": 1198
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "add_bestekkoppeling_by_uuid",
+      "block_type": "method",
+      "complexity": 7,
+      "coverage": 28.6,
+      "crap": 24.9,
+      "lineno": 251
     },
     {
       "file": "API/auth/abstract_requester.py",
       "name": "_get_error_details_from_response",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 7.1,
-      "crap": 25.0,
-      "lineno": 148
-    },
-    {
-      "file": "API/clients/fs.py",
-      "name": "download_layer_to_records",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 7.1,
-      "crap": 25.0,
-      "lineno": 43
+      "coverage": 7.7,
+      "crap": 24.7,
+      "lineno": 147
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "sync_library_to_local",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 7.1,
-      "crap": 25.0,
-      "lineno": 605
+      "coverage": 7.7,
+      "crap": 24.7,
+      "lineno": 597
     },
     {
-      "file": "API/clients/eminfra/AgentService.py",
-      "name": "search_betrokkenerelaties",
+      "file": "API/clients/eminfra/RelatieService.py",
+      "name": "search_assetrelatie_otl",
       "block_type": "method",
-      "complexity": 5,
-      "coverage": 8.3,
-      "crap": 24.3,
-      "lineno": 52
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "_search_assets_helper_generator",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 8.3,
-      "crap": 24.3,
-      "lineno": 133
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "search_toezichtgroep_lgc",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 8.3,
-      "crap": 24.3,
-      "lineno": 97
+      "complexity": 6,
+      "coverage": 20.0,
+      "crap": 24.4,
+      "lineno": 108
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -1258,88 +1224,106 @@
       "complexity": 5,
       "coverage": 8.3,
       "crap": 24.3,
-      "lineno": 493
+      "lineno": 482
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_or_create_folder_path",
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "search_toezichtgroep_lgc",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 10.0,
-      "crap": 23.2,
-      "lineno": 283
-    },
-    {
-      "file": "API/clients/sngateway.py",
-      "name": "enable_asset_filter",
-      "block_type": "method",
-      "complexity": 5,
-      "coverage": 11.1,
-      "crap": 22.6,
-      "lineno": 43
+      "coverage": 9.1,
+      "crap": 23.8,
+      "lineno": 99
     },
     {
       "file": "API/clients/sngateway.py",
       "name": "disable_asset_filter",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 11.1,
-      "crap": 22.6,
+      "coverage": 12.5,
+      "crap": 21.7,
       "lineno": 54
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
-      "name": "end_bestekkoppeling_by_uuid",
+      "name": "adjust_date_bestekkoppeling_by_uuid",
       "block_type": "method",
-      "complexity": 5,
-      "coverage": 12.5,
-      "crap": 21.7,
-      "lineno": 177
+      "complexity": 7,
+      "coverage": 33.3,
+      "crap": 21.5,
+      "lineno": 163
+    },
+    {
+      "file": "API/clients/eminfra/BeheerobjectService.py",
+      "name": "create_beheerobject",
+      "block_type": "method",
+      "complexity": 6,
+      "coverage": 25.0,
+      "crap": 21.2,
+      "lineno": 72
     },
     {
       "file": "API/clients/eminfra/LocatieService.py",
       "name": "update_locatie_by_uuid",
       "block_type": "method",
       "complexity": 5,
-      "coverage": 12.5,
-      "crap": 21.7,
-      "lineno": 38
+      "coverage": 14.3,
+      "crap": 20.7,
+      "lineno": 37
     },
     {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "get_eigenschapwaarden",
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_or_create_folder_path",
       "block_type": "method",
       "complexity": 5,
       "coverage": 14.3,
       "crap": 20.7,
-      "lineno": 131
+      "lineno": 273
     },
     {
-      "file": "API/clients/eminfra/EMInfraClient.py",
-      "name": "__init__",
+      "file": "API/auth/settings.py",
+      "name": "resolve_settings_path",
+      "block_type": "function",
+      "complexity": 4,
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 61
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "replace_bestekkoppeling_by_uuid",
       "block_type": "method",
       "complexity": 4,
-      "coverage": 3.7,
-      "crap": 18.3,
-      "lineno": 28
+      "coverage": 0.0,
+      "crap": 20.0,
+      "lineno": 344
+    },
+    {
+      "file": "API/clients/eminfra/RelatieService.py",
+      "name": "search_assetrelaties",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 4.8,
+      "crap": 17.8,
+      "lineno": 69
     },
     {
       "file": "API/clients/onedrive.py",
       "name": "get_access_token",
       "block_type": "method",
       "complexity": 4,
-      "coverage": 5.3,
-      "crap": 17.6,
-      "lineno": 115
+      "coverage": 5.6,
+      "crap": 17.5,
+      "lineno": 111
     },
     {
       "file": "API/clients/onedrive.py",
       "name": "upload_file",
       "block_type": "method",
       "complexity": 4,
-      "coverage": 6.2,
-      "crap": 17.2,
-      "lineno": 196
+      "coverage": 6.7,
+      "crap": 17.0,
+      "lineno": 188
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
@@ -1351,67 +1335,40 @@
       "lineno": 12
     },
     {
-      "file": "API/clients/fs.py",
-      "name": "download_layer",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 7.1,
-      "crap": 16.8,
-      "lineno": 25
-    },
-    {
       "file": "API/clients/sharepoint.py",
       "name": "login_only",
       "block_type": "method",
       "complexity": 4,
       "coverage": 7.1,
       "crap": 16.8,
-      "lineno": 1112
+      "lineno": 1126
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
-      "name": "create_asset_by_uuid",
+      "name": "search_child_assets_by_uuid_generator",
       "block_type": "method",
-      "complexity": 4,
-      "coverage": 8.3,
-      "crap": 16.3,
-      "lineno": 341
+      "complexity": 6,
+      "coverage": 33.3,
+      "crap": 16.7,
+      "lineno": 214
     },
     {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "get_eigenschappen",
+      "file": "API/clients/eminfra/EMInfraClient.py",
+      "name": "__init__",
       "block_type": "method",
       "complexity": 4,
-      "coverage": 8.3,
-      "crap": 16.3,
-      "lineno": 100
+      "coverage": 8.7,
+      "crap": 16.2,
+      "lineno": 27
     },
     {
-      "file": "API/clients/onedrive.py",
-      "name": "list_root_files",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 8.3,
-      "crap": 16.3,
-      "lineno": 143
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "prune_daily_run_logs",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 8.3,
-      "crap": 16.3,
-      "lineno": 1072
-    },
-    {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "search_assetrelaties",
+      "file": "API/clients/eminfra/EventService.py",
+      "name": "search_eventcontexts_generator",
       "block_type": "method",
       "complexity": 4,
       "coverage": 9.1,
       "crap": 16.0,
-      "lineno": 66
+      "lineno": 30
     },
     {
       "file": "API/clients/eminfra/ToezichterService.py",
@@ -1420,124 +1377,43 @@
       "complexity": 4,
       "coverage": 9.1,
       "crap": 16.0,
-      "lineno": 26
+      "lineno": 36
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "get_document_library_by_name",
+      "file": "API/clients/fs.py",
+      "name": "download_layer",
       "block_type": "method",
       "complexity": 4,
       "coverage": 9.1,
       "crap": 16.0,
-      "lineno": 207
-    },
-    {
-      "file": "API/auth/settings.py",
-      "name": "resolve_settings_path",
-      "block_type": "function",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 60
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "_get_bestekref_by_eDelta_dossiernummer",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 63
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "_get_bestekref_by_eDelta_besteknummer",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 82
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "replace_bestekkoppeling_by_uuid",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 290
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "search_eigenschappen",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 22
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "name": "search_eventcontexts_generator",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 10.0,
-      "crap": 15.7,
-      "lineno": 18
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "update_eigenschap_by_uuid",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 11.1,
-      "crap": 15.2,
-      "lineno": 53
+      "lineno": 31
     },
     {
       "file": "API/clients/eminfra/ToezichterService.py",
       "name": "add_toezichter",
       "block_type": "method",
       "complexity": 4,
-      "coverage": 11.1,
-      "crap": 15.2,
-      "lineno": 55
+      "coverage": 10.0,
+      "crap": 15.7,
+      "lineno": 64
     },
     {
-      "file": "API/clients/emson.py",
-      "name": "__init__",
+      "file": "API/clients/sharepoint.py",
+      "name": "get_document_library_by_name",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 10.0,
+      "crap": 15.7,
+      "lineno": 197
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "search_eigenschappen",
       "block_type": "method",
       "complexity": 4,
       "coverage": 11.1,
       "crap": 15.2,
-      "lineno": 34
-    },
-    {
-      "file": "API/clients/fs.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 11.1,
-      "crap": 15.2,
-      "lineno": 11
-    },
-    {
-      "file": "API/clients/locatieservices2.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 11.1,
-      "crap": 15.2,
-      "lineno": 11
-    },
-    {
-      "file": "API/clients/sngateway.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 11.1,
-      "crap": 15.2,
-      "lineno": 8
+      "lineno": 40
     },
     {
       "file": "API/clients/eminfra/wkt_validator.py",
@@ -1555,34 +1431,160 @@
       "complexity": 4,
       "coverage": 12.5,
       "crap": 14.7,
-      "lineno": 1293
+      "lineno": 1306
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "_get_bestekref_by_eDelta_dossiernummer",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 13.3,
+      "crap": 14.4,
+      "lineno": 75
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "get_eigenschappen",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 14.3,
+      "crap": 14.1,
+      "lineno": 121
+    },
+    {
+      "file": "API/clients/locatieservices2.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 14.3,
+      "crap": 14.1,
+      "lineno": 11
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "list_root_files",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 14.3,
+      "crap": 14.1,
+      "lineno": 137
+    },
+    {
+      "file": "API/clients/fs.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 20.0,
+      "crap": 12.2,
+      "lineno": 10
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "modify_kwargs_for_files",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 132
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "change_bestekkoppelingen_by_uuid",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 133
+    },
+    {
+      "file": "API/clients/eminfra/RelatieService.py",
+      "name": "zoek_verweven_asset",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 158
+    },
+    {
+      "file": "API/clients/emson.py",
+      "name": "get_assetrelaties_by_filter",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 123
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_is_temporary_workbook",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 0.0,
+      "crap": 12.0,
+      "lineno": 383
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "prune_daily_run_logs",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 21.4,
+      "crap": 11.8,
+      "lineno": 1086
+    },
+    {
+      "file": "API/clients/sngateway.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 21.4,
+      "crap": 11.8,
+      "lineno": 8
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "update_eigenschap_by_uuid",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 23.1,
+      "crap": 11.3,
+      "lineno": 74
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "upload_after_run",
       "block_type": "function",
       "complexity": 3,
-      "coverage": 6.2,
-      "crap": 10.4,
-      "lineno": 1443
+      "coverage": 5.0,
+      "crap": 10.7,
+      "lineno": 1454
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "_get_bestekref_by_eDelta_besteknummer",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 28.6,
+      "crap": 9.8,
+      "lineno": 105
+    },
+    {
+      "file": "API/clients/eminfra/AssettypeService.py",
+      "name": "search_assettype",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 10.0,
+      "crap": 9.6,
+      "lineno": 30
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "list_document_libraries",
       "block_type": "method",
       "complexity": 3,
-      "coverage": 9.1,
-      "crap": 9.8,
-      "lineno": 152
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "construct_naampad",
-      "block_type": "function",
-      "complexity": 3,
       "coverage": 10.0,
       "crap": 9.6,
-      "lineno": 895
+      "lineno": 149
     },
     {
       "file": "API/auth/cert.py",
@@ -1594,22 +1596,31 @@
       "lineno": 9
     },
     {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "get_bestekref",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 11.1,
+      "crap": 9.3,
+      "lineno": 55
+    },
+    {
+      "file": "API/clients/emson.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 30.8,
+      "crap": 9.3,
+      "lineno": 32
+    },
+    {
       "file": "API/clients/eminfra/EMInfraDomain.py",
       "name": "_asdict_inner",
       "block_type": "function",
       "complexity": 9,
-      "coverage": 90.9,
-      "crap": 9.1,
-      "lineno": 9
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "search_assettype",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 12.5,
+      "coverage": 91.7,
       "crap": 9.0,
-      "lineno": 23
+      "lineno": 11
     },
     {
       "file": "API/clients/eminfra/GeometrieService.py",
@@ -1618,52 +1629,34 @@
       "complexity": 3,
       "coverage": 12.5,
       "crap": 9.0,
-      "lineno": 70
+      "lineno": 76
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_find_child_by_name",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 12.5,
+      "crap": 9.0,
+      "lineno": 359
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "create_asset_by_uuid",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 33.3,
+      "crap": 8.7,
+      "lineno": 381
     },
     {
       "file": "API/clients/eminfra/GraphService.py",
       "name": "get_graph_by_uuid",
       "block_type": "method",
       "complexity": 3,
-      "coverage": 12.5,
-      "crap": 9.0,
+      "coverage": 14.3,
+      "crap": 8.7,
       "lineno": 36
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "search_eigenschapwaarden",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 14.3,
-      "crap": 8.7,
-      "lineno": 122
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "get_kenmerktype_by_naam",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 14.3,
-      "crap": 8.7,
-      "lineno": 41
-    },
-    {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "search_assets_via_relatie",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 14.3,
-      "crap": 8.7,
-      "lineno": 110
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_build_service",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 14.3,
-      "crap": 8.7,
-      "lineno": 1247
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
@@ -1672,43 +1665,34 @@
       "complexity": 3,
       "coverage": 16.7,
       "crap": 8.2,
-      "lineno": 18
+      "lineno": 28
+    },
+    {
+      "file": "API/clients/eminfra/AgentService.py",
+      "name": "search_betrokkenerelaties",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 50.0,
+      "crap": 8.1,
+      "lineno": 64
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "_search_assets_helper_generator",
+      "block_type": "method",
+      "complexity": 5,
+      "coverage": 50.0,
+      "crap": 8.1,
+      "lineno": 162
     },
     {
       "file": "API/clients/eminfra/BestekService.py",
-      "name": "get_bestekref",
+      "name": "end_bestekkoppeling_by_uuid",
       "block_type": "method",
-      "complexity": 3,
-      "coverage": 16.7,
-      "crap": 8.2,
-      "lineno": 44
-    },
-    {
-      "file": "API/clients/eminfra/GeometrieService.py",
-      "name": "update_geometrie_by_uuid",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 16.7,
-      "crap": 8.2,
-      "lineno": 115
-    },
-    {
-      "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "name": "get_schadebeheerder_by_name",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 16.7,
-      "crap": 8.2,
-      "lineno": 20
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "list_library_items",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 16.7,
-      "crap": 8.2,
-      "lineno": 167
+      "complexity": 5,
+      "coverage": 50.0,
+      "crap": 8.1,
+      "lineno": 210
     },
     {
       "file": "API/clients/emson.py",
@@ -1720,85 +1704,256 @@
       "lineno": 23
     },
     {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "change_bestekkoppelingen_by_uuid",
+      "file": "API/clients/eminfra/RelatieService.py",
+      "name": "search_assets_via_relatie",
       "block_type": "method",
       "complexity": 3,
       "coverage": 20.0,
       "crap": 7.6,
-      "lineno": 102
+      "lineno": 122
     },
     {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "zoek_verweven_asset",
+      "file": "API/clients/eminfra/SchadebeheerderService.py",
+      "name": "get_schadebeheerder_by_name",
       "block_type": "method",
       "complexity": 3,
       "coverage": 20.0,
       "crap": 7.6,
-      "lineno": 146
+      "lineno": 28
+    },
+    {
+      "file": "API/clients/eminfra/KenmerkService.py",
+      "name": "get_kenmerktype_by_naam",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 22.2,
+      "crap": 7.2,
+      "lineno": 52
     },
     {
       "file": "API/clients/sharepoint.py",
-      "name": "_find_child_by_name",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 20.0,
-      "crap": 7.6,
-      "lineno": 369
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "_fix_nested_list_classes",
-      "block_type": "method",
-      "complexity": 7,
-      "coverage": 100.0,
-      "crap": 7.0,
-      "lineno": 162
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "modify_kwargs_for_files",
+      "name": "_build_service",
       "block_type": "method",
       "complexity": 3,
       "coverage": 25.0,
       "crap": 6.8,
-      "lineno": 129
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_delete_library_item_recursive",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 5.0,
-      "crap": 5.4,
-      "lineno": 648
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_download_file",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 6.7,
-      "crap": 5.3,
-      "lineno": 512
+      "lineno": 1256
     },
     {
       "file": "API/auth/abstract_requester.py",
       "name": "__init__",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 7.7,
-      "crap": 5.1,
-      "lineno": 28
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 29
     },
     {
-      "file": "API/auth/jwt.py",
+      "file": "API/auth/abstract_requester.py",
+      "name": "get",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 71
+    },
+    {
+      "file": "API/auth/abstract_requester.py",
+      "name": "post",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 77
+    },
+    {
+      "file": "API/auth/abstract_requester.py",
+      "name": "put",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 83
+    },
+    {
+      "file": "API/auth/abstract_requester.py",
+      "name": "patch",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 89
+    },
+    {
+      "file": "API/auth/abstract_requester.py",
+      "name": "delete",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 95
+    },
+    {
+      "file": "API/auth/authenticator.py",
       "name": "__init__",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 9.1,
-      "crap": 5.0,
-      "lineno": 21
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 22
+    },
+    {
+      "file": "API/auth/settings.py",
+      "name": "load_settings",
+      "block_type": "function",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 48
+    },
+    {
+      "file": "API/clients/eminfra/AgentService.py",
+      "name": "remove_betrokkenerelatie",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 89
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "search_asset_by_name_generator",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 190
+    },
+    {
+      "file": "API/clients/eminfra/BeheerobjectService.py",
+      "name": "get_beheerobjecttypes",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 67
+    },
+    {
+      "file": "API/clients/eminfra/BeheerobjectService.py",
+      "name": "update_beheerobject_status",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 136
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "_fix_nested_classes",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 50.0,
+      "crap": 6.0,
+      "lineno": 167
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "get_all_eigenschappen_as_text_generator",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 26
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "list_eigenschap",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 116
+    },
+    {
+      "file": "API/clients/eminfra/KenmerkService.py",
+      "name": "put",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 32
+    },
+    {
+      "file": "API/clients/eminfra/LocatieService.py",
+      "name": "_update_locatie_via_wkt",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 83
+    },
+    {
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "remove_postit",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 153
+    },
+    {
+      "file": "API/clients/locatieservices2.py",
+      "name": "zoek_puntlocatie_via_wegsegment",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 40
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_default_document_library_id",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 0.0,
+      "crap": 6.0,
+      "lineno": 304
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_sync_local_file_to_remote",
+      "block_type": "method",
+      "complexity": 4,
+      "coverage": 50.0,
+      "crap": 6.0,
+      "lineno": 773
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "list_library_items",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 33.3,
+      "crap": 5.7,
+      "lineno": 163
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_delete_library_item_recursive",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 5.3,
+      "crap": 5.4,
+      "lineno": 640
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_download_file",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 7.1,
+      "crap": 5.2,
+      "lineno": 502
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -1807,16 +1962,7 @@
       "complexity": 5,
       "coverage": 100.0,
       "crap": 5.0,
-      "lineno": 122
-    },
-    {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "add_postit",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 9.1,
-      "crap": 5.0,
-      "lineno": 78
+      "lineno": 133
     },
     {
       "file": "API/auth/jwt.py",
@@ -1825,25 +1971,16 @@
       "complexity": 2,
       "coverage": 10.0,
       "crap": 4.9,
-      "lineno": 106
+      "lineno": 107
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_refresh_token",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 10.0,
-      "crap": 4.9,
-      "lineno": 1217
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_site_id",
-      "block_type": "method",
-      "complexity": 2,
       "coverage": 11.1,
       "crap": 4.8,
-      "lineno": 135
+      "lineno": 1229
     },
     {
       "file": "API/auth/jwt.py",
@@ -1855,94 +1992,13 @@
       "lineno": 89
     },
     {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "create_asset_by_uuid_and_relatie",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 12.5,
-      "crap": 4.7,
-      "lineno": 300
-    },
-    {
-      "file": "API/clients/eminfra/OnderdeelService.py",
-      "name": "create_onderdeel",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 12.5,
-      "crap": 4.7,
-      "lineno": 8
-    },
-    {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "remove_postit",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 12.5,
-      "crap": 4.7,
-      "lineno": 151
-    },
-    {
       "file": "API/clients/eminfra/RelatieService.py",
       "name": "create_assetrelatie",
       "block_type": "method",
       "complexity": 2,
       "coverage": 12.5,
       "crap": 4.7,
-      "lineno": 20
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_default_document_library_id",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 12.5,
-      "crap": 4.7,
-      "lineno": 314
-    },
-    {
-      "file": "API/auth/authenticator.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 21
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "get_oauth_token",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 57
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "remove_asset_from_parent_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 123
-    },
-    {
-      "file": "API/clients/eminfra/DocumentService.py",
-      "name": "remove_document",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 151
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "get",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 13
+      "lineno": 31
     },
     {
       "file": "API/clients/eminfra/PostitService.py",
@@ -1954,22 +2010,13 @@
       "lineno": 60
     },
     {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "remove_relatie",
+      "file": "API/clients/eminfra/PostitService.py",
+      "name": "add_postit",
       "block_type": "method",
       "complexity": 2,
       "coverage": 14.3,
       "crap": 4.5,
-      "lineno": 125
-    },
-    {
-      "file": "API/clients/onedrive.py",
-      "name": "login_interactive",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 14.3,
-      "crap": 4.5,
-      "lineno": 106
+      "lineno": 78
     },
     {
       "file": "API/auth/authenticator.py",
@@ -1978,25 +2025,25 @@
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 45
+      "lineno": 46
     },
     {
-      "file": "API/auth/cookie.py",
-      "name": "modify_kwargs_for_bearer_token",
+      "file": "API/auth/jwt.py",
+      "name": "__init__",
       "block_type": "method",
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 33
+      "lineno": 21
     },
     {
-      "file": "API/auth/settings.py",
-      "name": "load_settings",
-      "block_type": "function",
+      "file": "API/auth/jwt.py",
+      "name": "get_oauth_token",
+      "block_type": "method",
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 47
+      "lineno": 59
     },
     {
       "file": "API/clients/eminfra/AgentService.py",
@@ -2005,25 +2052,7 @@
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 65
-    },
-    {
-      "file": "API/clients/eminfra/AgentService.py",
-      "name": "remove_betrokkenerelatie",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 86
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "update_beheerobject_status",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 109
+      "lineno": 77
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
@@ -2032,7 +2061,7 @@
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 59
+      "lineno": 60
     },
     {
       "file": "API/clients/eminfra/GeometrieService.py",
@@ -2041,52 +2070,7 @@
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 13
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "put",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 21
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "add_kenmerk_to_assettype",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 56
-    },
-    {
-      "file": "API/clients/eminfra/LocatieService.py",
-      "name": "get_locatie_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 13
-    },
-    {
-      "file": "API/clients/eminfra/LocatieService.py",
-      "name": "_update_locatie_via_wkt",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 82
-    },
-    {
-      "file": "API/clients/eminfra/LocatieService.py",
-      "name": "_update_locatie_via_relatie",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 101
+      "lineno": 19
     },
     {
       "file": "API/clients/eminfra/RelatieService.py",
@@ -2095,52 +2079,34 @@
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 52
+      "lineno": 55
     },
     {
-      "file": "API/clients/locatieservices2.py",
-      "name": "zoek_puntlocatie_via_xy",
+      "file": "API/clients/eminfra/RelatieService.py",
+      "name": "remove_relatie",
       "block_type": "method",
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 25
+      "lineno": 137
     },
     {
-      "file": "API/clients/locatieservices2.py",
-      "name": "zoek_puntlocatie_via_wegsegment",
+      "file": "API/clients/sharepoint.py",
+      "name": "_get_site_id",
       "block_type": "method",
       "complexity": 2,
       "coverage": 16.7,
       "crap": 4.3,
-      "lineno": 34
+      "lineno": 132
     },
     {
-      "file": "API/clients/onedrive.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 16.7,
-      "crap": 4.3,
-      "lineno": 54
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "get_all_legacy_assettypes_generator",
+      "file": "API/clients/eminfra/GeometrieService.py",
+      "name": "update_geometrie_by_uuid",
       "block_type": "method",
       "complexity": 3,
       "coverage": 50.0,
       "crap": 4.1,
-      "lineno": 59
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "get_all_otl_assettypes_generator",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 50.0,
-      "crap": 4.1,
-      "lineno": 63
+      "lineno": 135
     },
     {
       "file": "API/clients/emson.py",
@@ -2149,52 +2115,16 @@
       "complexity": 3,
       "coverage": 50.0,
       "crap": 4.1,
-      "lineno": 102
-    },
-    {
-      "file": "API/clients/emson.py",
-      "name": "get_assetrelaties_by_filter",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 50.0,
-      "crap": 4.1,
-      "lineno": 119
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_is_temporary_workbook",
-      "block_type": "method",
-      "complexity": 3,
-      "coverage": 50.0,
-      "crap": 4.1,
-      "lineno": 393
+      "lineno": 106
     },
     {
       "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "wijzig_boomstructuur_by_uuid",
+      "name": "remove_asset_from_parent_by_uuid",
       "block_type": "method",
       "complexity": 2,
       "coverage": 20.0,
       "crap": 4.0,
-      "lineno": 74
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "_fix_nested_classes",
-      "block_type": "method",
-      "complexity": 4,
-      "coverage": 100.0,
-      "crap": 4.0,
-      "lineno": 156
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 317
+      "lineno": 143
     },
     {
       "file": "API/clients/eminfra/GeometrieService.py",
@@ -2203,7 +2133,16 @@
       "complexity": 2,
       "coverage": 20.0,
       "crap": 4.0,
-      "lineno": 40
+      "lineno": 45
+    },
+    {
+      "file": "API/clients/eminfra/KenmerkService.py",
+      "name": "get_kenmerktype_by_uuid",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 39
     },
     {
       "file": "API/clients/eminfra/KenmerkService.py",
@@ -2212,124 +2151,34 @@
       "complexity": 2,
       "coverage": 20.0,
       "crap": 4.0,
-      "lineno": 63
-    },
-    {
-      "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "name": "get_schadebeheerder_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 14
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "get_toezichter_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 16
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "get_identiteit",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 83
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "get_toezichtgroep",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 90
-    },
-    {
-      "file": "API/clients/emson.py",
-      "name": "get_asset_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 84
-    },
-    {
-      "file": "API/clients/emson.py",
-      "name": "get_assetrelatie_by_uuid",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 93
-    },
-    {
-      "file": "API/clients/onedrive.py",
-      "name": "_load_token",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 95
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "get_access_token",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 20.0,
-      "crap": 4.0,
-      "lineno": 121
-    },
-    {
-      "file": "API/auth/abstract_requester.py",
-      "name": "get",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 70
-    },
-    {
-      "file": "API/auth/abstract_requester.py",
-      "name": "post",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
       "lineno": 76
     },
     {
-      "file": "API/auth/abstract_requester.py",
-      "name": "put",
+      "file": "API/clients/eminfra/LocatieService.py",
+      "name": "get_locatie_by_uuid",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 82
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 13
     },
     {
-      "file": "API/auth/abstract_requester.py",
-      "name": "patch",
+      "file": "API/clients/eminfra/OnderdeelService.py",
+      "name": "create_onderdeel",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 88
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 8
     },
     {
-      "file": "API/auth/abstract_requester.py",
-      "name": "delete",
+      "file": "API/clients/onedrive.py",
+      "name": "login_interactive",
       "block_type": "method",
       "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 94
+      "coverage": 20.0,
+      "crap": 4.0,
+      "lineno": 102
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2338,106 +2187,124 @@
       "complexity": 2,
       "coverage": 25.0,
       "crap": 3.7,
-      "lineno": 65
+      "lineno": 67
     },
     {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_assets_generator",
+      "file": "API/auth/cookie.py",
+      "name": "modify_kwargs_for_bearer_token",
       "block_type": "method",
       "complexity": 2,
       "coverage": 25.0,
       "crap": 3.7,
-      "lineno": 147
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_asset_by_name_generator",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 162
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "get_all_assettypes_generator",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 49
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "get_beheerobjecttypes",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 46
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "get_all_eigenschappen_as_text_generator",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 15
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "list_eigenschap",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 95
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "name": "get_all_eventtypes_generator",
-      "block_type": "method",
-      "complexity": 2,
-      "coverage": 25.0,
-      "crap": 3.7,
-      "lineno": 13
+      "lineno": 33
     },
     {
       "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "get_kenmerktype_by_uuid",
+      "name": "get",
       "block_type": "method",
       "complexity": 2,
       "coverage": 25.0,
       "crap": 3.7,
-      "lineno": 28
+      "lineno": 24
     },
     {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "search_relaties_generator",
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "get_identiteit",
       "block_type": "method",
       "complexity": 2,
       "coverage": 25.0,
       "crap": 3.7,
-      "lineno": 14
+      "lineno": 87
     },
     {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "from_dict",
+      "file": "API/clients/eminfra/ToezichterService.py",
+      "name": "get_toezichtgroep",
       "block_type": "method",
-      "complexity": 3,
-      "coverage": 66.7,
-      "crap": 3.3,
-      "lineno": 143
+      "complexity": 2,
+      "coverage": 25.0,
+      "crap": 3.7,
+      "lineno": 93
+    },
+    {
+      "file": "API/clients/emson.py",
+      "name": "get_asset_by_uuid",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 25.0,
+      "crap": 3.7,
+      "lineno": 89
+    },
+    {
+      "file": "API/clients/locatieservices2.py",
+      "name": "zoek_puntlocatie_via_xy",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 25.0,
+      "crap": 3.7,
+      "lineno": 32
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "get_access_token",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 25.0,
+      "crap": 3.7,
+      "lineno": 118
     },
     {
       "file": "API/clients/sharepoint.py",
       "name": "_is_expected_root_folder_name",
       "block_type": "method",
       "complexity": 2,
+      "coverage": 25.0,
+      "crap": 3.7,
+      "lineno": 411
+    },
+    {
+      "file": "API/clients/eminfra/BeheerobjectService.py",
+      "name": "wijzig_boomstructuur_by_uuid",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 28.6,
+      "crap": 3.5,
+      "lineno": 92
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "create_asset_by_uuid_and_relatie",
+      "block_type": "method",
+      "complexity": 2,
       "coverage": 33.3,
       "crap": 3.2,
-      "lineno": 425
+      "lineno": 337
+    },
+    {
+      "file": "API/clients/eminfra/LocatieService.py",
+      "name": "_update_locatie_via_relatie",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 33.3,
+      "crap": 3.2,
+      "lineno": 101
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "_load_token",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 33.3,
+      "crap": 3.2,
+      "lineno": 91
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "from_dict",
+      "block_type": "method",
+      "complexity": 3,
+      "coverage": 100.0,
+      "crap": 3.0,
+      "lineno": 154
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -2446,52 +2313,367 @@
       "complexity": 3,
       "coverage": 100.0,
       "crap": 3.0,
-      "lineno": 150
+      "lineno": 161
     },
     {
-      "file": "API/clients/sharepoint.py",
-      "name": "write_daily_run_log",
+      "file": "API/clients/eminfra/AssettypeService.py",
+      "name": "get_all_assettypes_generator",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 42.9,
+      "crap": 2.7,
+      "lineno": 53
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "search_assets_generator",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 50.0,
+      "crap": 2.5,
+      "lineno": 176
+    },
+    {
+      "file": "API/clients/emson.py",
+      "name": "get_assetrelatie_by_uuid",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 50.0,
+      "crap": 2.5,
+      "lineno": 97
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 50.0,
+      "crap": 2.5,
+      "lineno": 50
+    },
+    {
+      "file": "API/auth/authenticator.py",
+      "name": "onedrive",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 10.0,
-      "crap": 1.7,
-      "lineno": 1043
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 108
+    },
+    {
+      "file": "API/auth/settings_loader.py",
+      "name": "get_auth_config",
+      "block_type": "function",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 8
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 24
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "update_commentaar",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 135
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "activeer_asset",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 152
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "deactiveer_asset",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 159
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "search_child_assets_generator",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 249
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "create_asset",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 418
+    },
+    {
+      "file": "API/clients/eminfra/BeheerobjectService.py",
+      "name": "get_beheerobject",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 21
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 24
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "change_bestekkoppelingen",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 151
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "end_bestekkoppeling",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 235
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
       "name": "_create_document",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 14.3,
-      "crap": 1.6,
-      "lineno": 40
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 41
     },
     {
-      "file": "API/clients/fs.py",
-      "name": "_process_chunk",
+      "file": "API/clients/eminfra/EMInfraClient.py",
+      "name": "get_oef_schema_as_json",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 16.7,
-      "crap": 1.6,
-      "lineno": 62
-    },
-    {
-      "file": "API/clients/eminfra/DocumentService.py",
-      "name": "_bulk_create",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 20.0,
-      "crap": 1.5,
-      "lineno": 132
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 69
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
       "name": "__post_init__",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 20.0,
-      "crap": 1.5,
-      "lineno": 600
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 273
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 2,
+      "coverage": 100.0,
+      "crap": 2.0,
+      "lineno": 329
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 464
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 528
+    },
+    {
+      "file": "API/clients/eminfra/EigenschapService.py",
+      "name": "update_eigenschap",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 105
+    },
+    {
+      "file": "API/clients/eminfra/EventService.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 22
+    },
+    {
+      "file": "API/clients/eminfra/Generic.py",
+      "name": "get_kenmerktype_and_relatietype_id",
+      "block_type": "function",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 4
+    },
+    {
+      "file": "API/clients/eminfra/SchadebeheerderService.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 15
+    },
+    {
+      "file": "API/clients/eminfra/SchadebeheerderService.py",
+      "name": "add_schadebeheerder",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 57
+    },
+    {
+      "file": "API/clients/fs.py",
+      "name": "_process_chunk",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 64
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "_save_token",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 97
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "list_folder_files",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 151
+    },
+    {
+      "file": "API/clients/onedrive.py",
+      "name": "delete_file",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 155
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "__init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 1390
+    },
+    {
+      "file": "API/clients/sngateway.py",
+      "name": "get_all_asset_filters",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 29
+    },
+    {
+      "file": "API/clients/sngateway.py",
+      "name": "modify_asset_filter",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 0.0,
+      "crap": 2.0,
+      "lineno": 39
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "create_asset_and_relatie",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 9.1,
+      "crap": 1.8,
+      "lineno": 361
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "write_daily_run_log",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 9.1,
+      "crap": 1.8,
+      "lineno": 1057
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "add_bestekkoppeling",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 10.0,
+      "crap": 1.7,
+      "lineno": 310
+    },
+    {
+      "file": "API/clients/eminfra/DocumentService.py",
+      "name": "_bulk_create",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 11.1,
+      "crap": 1.7,
+      "lineno": 143
+    },
+    {
+      "file": "API/clients/eminfra/BestekService.py",
+      "name": "adjust_date_bestekkoppeling",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 16.7,
+      "crap": 1.6,
+      "lineno": 190
+    },
+    {
+      "file": "API/clients/eminfra/GeometrieService.py",
+      "name": "add_geometrie",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 16.7,
+      "crap": 1.6,
+      "lineno": 109
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2500,7 +2682,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 71
+      "lineno": 73
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2509,7 +2691,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 77
+      "lineno": 80
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2518,7 +2700,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 83
+      "lineno": 87
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2527,7 +2709,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 89
+      "lineno": 94
     },
     {
       "file": "API/auth/authenticator.py",
@@ -2536,25 +2718,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 95
-    },
-    {
-      "file": "API/auth/authenticator.py",
-      "name": "onedrive",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
       "lineno": 101
-    },
-    {
-      "file": "API/auth/authenticator.py",
-      "name": "sharepoint",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 107
     },
     {
       "file": "API/auth/cookie.py",
@@ -2566,22 +2730,13 @@
       "lineno": 7
     },
     {
-      "file": "API/auth/jwt.py",
-      "name": "post",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 40
-    },
-    {
       "file": "API/clients/eminfra/AssetService.py",
-      "name": "get_asset_by_uuid",
+      "name": "search_parent_asset",
       "block_type": "method",
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 14
+      "lineno": 319
     },
     {
       "file": "API/clients/eminfra/AssettypeService.py",
@@ -2590,34 +2745,25 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 10
+      "lineno": 17
     },
     {
       "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "get_beheerobject",
+      "name": "wijzig_boomstructuur",
       "block_type": "method",
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 10
+      "lineno": 119
     },
     {
-      "file": "API/clients/eminfra/EMInfraClient.py",
-      "name": "get_oef_schema_as_json",
+      "file": "API/clients/eminfra/DocumentService.py",
+      "name": "get_documents_generator",
       "block_type": "method",
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 74
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 700
+      "lineno": 127
     },
     {
       "file": "API/clients/eminfra/FeedService.py",
@@ -2635,7 +2781,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 1325
+      "lineno": 1337
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -2644,34 +2790,7 @@
       "complexity": 1,
       "coverage": 25.0,
       "crap": 1.4,
-      "lineno": 1343
-    },
-    {
-      "file": "API/clients/sngateway.py",
-      "name": "get_all_asset_filters",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 22
-    },
-    {
-      "file": "API/clients/sngateway.py",
-      "name": "add_new_asset_filter",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 27
-    },
-    {
-      "file": "API/clients/sngateway.py",
-      "name": "modify_asset_filter",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 25.0,
-      "crap": 1.4,
-      "lineno": 35
+      "lineno": 1355
     },
     {
       "file": "API/auth/cert.py",
@@ -2765,39 +2884,12 @@
     },
     {
       "file": "API/auth/jwt.py",
-      "name": "get",
+      "name": "post",
       "block_type": "method",
       "complexity": 1,
       "coverage": 33.3,
       "crap": 1.3,
-      "lineno": 36
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "put",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 45
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "patch",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 49
-    },
-    {
-      "file": "API/auth/jwt.py",
-      "name": "delete",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 53
+      "lineno": 42
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -2806,7 +2898,7 @@
       "complexity": 1,
       "coverage": 33.3,
       "crap": 1.3,
-      "lineno": 57
+      "lineno": 73
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -2815,115 +2907,7 @@
       "complexity": 1,
       "coverage": 33.3,
       "crap": 1.3,
-      "lineno": 66
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "update_commentaar_by_uuid",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 92
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "activeer_asset_by_uuid",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 119
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "deactiveer_asset_by_uuid",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 126
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 14
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 366
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 454
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 526
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 541
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 740
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 786
-    },
-    {
-      "file": "API/clients/eminfra/Generic.py",
-      "name": "get_kenmerktype_and_relatietype_id",
-      "block_type": "function",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 3
-    },
-    {
-      "file": "API/clients/eminfra/GeometrieService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 9
+      "lineno": 94
     },
     {
       "file": "API/clients/eminfra/GraphService.py",
@@ -2933,6 +2917,15 @@
       "coverage": 33.3,
       "crap": 1.3,
       "lineno": 7
+    },
+    {
+      "file": "API/clients/eminfra/KenmerkService.py",
+      "name": "get_kenmerken",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 33.3,
+      "crap": 1.3,
+      "lineno": 130
     },
     {
       "file": "API/clients/eminfra/LocatieService.py",
@@ -2945,30 +2938,12 @@
     },
     {
       "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 7
-    },
-    {
-      "file": "API/clients/eminfra/SchadebeheerderService.py",
       "name": "add_schadebeheerder_by_uuid",
       "block_type": "method",
       "complexity": 1,
       "coverage": 33.3,
       "crap": 1.3,
-      "lineno": 36
-    },
-    {
-      "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 12
+      "lineno": 43
     },
     {
       "file": "API/clients/locatieservices2_domain.py",
@@ -2980,49 +2955,76 @@
       "lineno": 13
     },
     {
-      "file": "API/clients/onedrive.py",
-      "name": "_save_token",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 33.3,
-      "crap": 1.3,
-      "lineno": 101
-    },
-    {
       "file": "API/clients/sharepoint.py",
-      "name": "_save_token",
+      "name": "_get_headers",
       "block_type": "method",
       "complexity": 1,
       "coverage": 33.3,
       "crap": 1.3,
-      "lineno": 1104
+      "lineno": 125
     },
     {
-      "file": "API/auth/settings_loader.py",
-      "name": "get_auth_config",
-      "block_type": "function",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 7
-    },
-    {
-      "file": "API/clients/eminfra/AgentService.py",
-      "name": "__init__",
+      "file": "API/clients/sngateway.py",
+      "name": "add_new_asset_filter",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 7
+      "coverage": 33.3,
+      "crap": 1.3,
+      "lineno": 34
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
-      "name": "__init__",
+      "name": "update_commentaar_by_uuid",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 44.4,
+      "crap": 1.2,
+      "lineno": 121
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "get",
       "block_type": "method",
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 11
+      "lineno": 38
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "put",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 50.0,
+      "crap": 1.1,
+      "lineno": 47
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "patch",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 50.0,
+      "crap": 1.1,
+      "lineno": 51
+    },
+    {
+      "file": "API/auth/jwt.py",
+      "name": "delete",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 50.0,
+      "crap": 1.1,
+      "lineno": 55
+    },
+    {
+      "file": "API/clients/eminfra/AssetService.py",
+      "name": "get_asset_by_uuid",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 50.0,
+      "crap": 1.1,
+      "lineno": 27
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -3031,7 +3033,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 62
+      "lineno": 84
     },
     {
       "file": "API/clients/eminfra/AssetService.py",
@@ -3040,178 +3042,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 80
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "update_commentaar",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 106
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "activeer_asset",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 123
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "deactiveer_asset",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 130
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_child_assets_generator",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 216
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "search_parent_asset",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 284
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "create_asset_and_relatie",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 323
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "create_asset",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 377
-    },
-    {
-      "file": "API/clients/eminfra/AssetService.py",
-      "name": "get_assets_by_filter_gen",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 396
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 7
-    },
-    {
-      "file": "API/clients/eminfra/AssettypeService.py",
-      "name": "get_all_assettypes",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 56
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 7
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "wijzig_boomstructuur",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 97
-    },
-    {
-      "file": "API/clients/eminfra/BeheerobjectService.py",
-      "name": "remove_asset_from_parent",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 149
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "get_bestekkoppeling",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 34
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "change_bestekkoppelingen",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 119
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "adjust_date_bestekkoppeling",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 162
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "end_bestekkoppeling",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 205
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "add_bestekkoppeling",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 268
-    },
-    {
-      "file": "API/clients/eminfra/BestekService.py",
-      "name": "replace_bestekkoppeling",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 334
+      "lineno": 109
     },
     {
       "file": "API/clients/eminfra/DocumentService.py",
@@ -3223,22 +3054,13 @@
       "lineno": 9
     },
     {
-      "file": "API/clients/eminfra/DocumentService.py",
-      "name": "get_documents_generator",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 117
-    },
-    {
       "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__str__",
+      "name": "json",
       "block_type": "method",
       "complexity": 1,
-      "coverage": 50.0,
+      "coverage": 60.0,
       "crap": 1.1,
-      "lineno": 169
+      "lineno": 146
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -3247,340 +3069,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 206
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 237
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 245
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 263
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 272
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 341
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 381
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 393
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 406
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 416
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 432
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 443
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 463
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 482
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 503
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 579
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 617
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 631
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 683
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__hash__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 696
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 715
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 732
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 755
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 771
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 803
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 817
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 833
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 853
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 866
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 874
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 881
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 891
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 921
-    },
-    {
-      "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "__post_init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 936
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 11
-    },
-    {
-      "file": "API/clients/eminfra/EigenschapService.py",
-      "name": "update_eigenschap",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 84
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 10
-    },
-    {
-      "file": "API/clients/eminfra/EventService.py",
-      "name": "search_events_generator",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 117
+      "lineno": 628
     },
     {
       "file": "API/clients/eminfra/FeedService.py",
@@ -3598,7 +3087,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 29
+      "lineno": 34
     },
     {
       "file": "API/clients/eminfra/GeometrieService.py",
@@ -3607,34 +3096,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 57
-    },
-    {
-      "file": "API/clients/eminfra/GeometrieService.py",
-      "name": "add_geometrie",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 99
-    },
-    {
-      "file": "API/clients/eminfra/GeometrieService.py",
-      "name": "update_geometrie",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 135
-    },
-    {
-      "file": "API/clients/eminfra/GraphService.py",
-      "name": "get_graph",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 66
+      "lineno": 63
     },
     {
       "file": "API/clients/eminfra/KenmerkService.py",
@@ -3643,7 +3105,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 10
+      "lineno": 21
     },
     {
       "file": "API/clients/eminfra/KenmerkService.py",
@@ -3652,34 +3114,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 81
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "get_kenmerken",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 118
-    },
-    {
-      "file": "API/clients/eminfra/KenmerkService.py",
-      "name": "get_kenmerk_hoortbij_by_uuid",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 132
-    },
-    {
-      "file": "API/clients/eminfra/LocatieService.py",
-      "name": "get_locatie",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 28
+      "lineno": 94
     },
     {
       "file": "API/clients/eminfra/LocatieService.py",
@@ -3688,7 +3123,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 65
+      "lineno": 64
     },
     {
       "file": "API/clients/eminfra/OnderdeelService.py",
@@ -3700,76 +3135,13 @@
       "lineno": 5
     },
     {
-      "file": "API/clients/eminfra/PostitService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 12
-    },
-    {
-      "file": "API/clients/eminfra/RelatieService.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 11
-    },
-    {
-      "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "name": "get_schadebeheerder",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 11
-    },
-    {
-      "file": "API/clients/eminfra/SchadebeheerderService.py",
-      "name": "add_schadebeheerder",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 48
-    },
-    {
       "file": "API/clients/eminfra/ToezichterService.py",
-      "name": "get_toezichter",
+      "name": "__init__",
       "block_type": "method",
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
       "lineno": 23
-    },
-    {
-      "file": "API/clients/emson.py",
-      "name": "test_connection",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 48
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_get_headers",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 128
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "_should_skip",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 405
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -3778,7 +3150,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 751
+      "lineno": 748
     },
     {
       "file": "API/clients/sharepoint.py",
@@ -3787,25 +3159,7 @@
       "complexity": 1,
       "coverage": 50.0,
       "crap": 1.1,
-      "lineno": 1163
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 1290
-    },
-    {
-      "file": "API/clients/sharepoint.py",
-      "name": "__init__",
-      "block_type": "method",
-      "complexity": 1,
-      "coverage": 50.0,
-      "crap": 1.1,
-      "lineno": 1377
+      "lineno": 1175
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
@@ -3814,34 +3168,250 @@
       "complexity": 1,
       "coverage": 100.0,
       "crap": 1.0,
-      "lineno": 132
+      "lineno": 143
     },
     {
       "file": "API/clients/eminfra/EMInfraDomain.py",
-      "name": "json",
+      "name": "__post_init__",
       "block_type": "method",
       "complexity": 1,
       "coverage": 100.0,
       "crap": 1.0,
-      "lineno": 135
+      "lineno": 255
     },
     {
-      "file": "API/clients/onedrive.py",
-      "name": "list_folder_files",
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
       "block_type": "method",
       "complexity": 1,
       "coverage": 100.0,
       "crap": 1.0,
-      "lineno": 159
+      "lineno": 282
     },
     {
-      "file": "API/clients/onedrive.py",
-      "name": "delete_file",
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
       "block_type": "method",
       "complexity": 1,
       "coverage": 100.0,
       "crap": 1.0,
-      "lineno": 163
+      "lineno": 352
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 75.0,
+      "crap": 1.0,
+      "lineno": 377
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 400
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 413
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 427
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 453
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 476
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 486
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 506
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 552
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 607
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 646
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 661
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 717
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__hash__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 730
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 734
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 768
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 856
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 873
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 894
+    },
+    {
+      "file": "API/clients/eminfra/EMInfraDomain.py",
+      "name": "__post_init__",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 935
+    },
+    {
+      "file": "API/clients/eminfra/GraphService.py",
+      "name": "get_graph",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 65
+    },
+    {
+      "file": "API/clients/eminfra/LocatieService.py",
+      "name": "get_locatie",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 27
+    },
+    {
+      "file": "API/clients/eminfra/SchadebeheerderService.py",
+      "name": "get_schadebeheerder",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 19
+    },
+    {
+      "file": "API/clients/sharepoint.py",
+      "name": "_should_skip",
+      "block_type": "method",
+      "complexity": 1,
+      "coverage": 100.0,
+      "crap": 1.0,
+      "lineno": 391
     }
   ],
   "god_classes_detail": {
@@ -3877,9 +3447,9 @@
   "tools": {
     "ruff": true,
     "mypy": true,
-    "bandit": true,
-    "vulture": true,
-    "pip-audit": true,
+    "bandit": false,
+    "vulture": false,
+    "pip-audit": false,
     "radon": true,
     "pytest": true,
     "lint-imports": false

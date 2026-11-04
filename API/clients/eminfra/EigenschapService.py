@@ -1,9 +1,21 @@
 import logging
 from collections.abc import Generator
 
-from API.clients.eminfra.EMInfraDomain import (Eigenschap, PagingModeEnum, SelectionDTO, ExpressionDTO, TermDTO, QueryDTO,
-                                       OperatorEnum, LogicalOpEnum, EigenschapValueDTO, EigenschapValueUpdateDTO,
-                                       KenmerkTypeEnum, AssetDTO, KenmerkType)
+from API.clients.eminfra.EMInfraDomain import (
+    Eigenschap,
+    PagingModeEnum,
+    SelectionDTO,
+    ExpressionDTO,
+    TermDTO,
+    QueryDTO,
+    OperatorEnum,
+    LogicalOpEnum,
+    EigenschapValueDTO,
+    EigenschapValueUpdateDTO,
+    KenmerkTypeEnum,
+    AssetDTO,
+    KenmerkType,
+)
 from API.clients.eminfra.KenmerkService import KenmerkService
 
 
@@ -11,15 +23,21 @@ class EigenschapService:
     def __init__(self, requester):
         self.requester = requester
 
-
     def get_all_eigenschappen_as_text_generator(self, size: int = 100) -> Generator[str]:
         from API.clients.eminfra.paging import offset_page_generator_get
+
         for _, data_list in offset_page_generator_get(
-            self.requester, "core", "eigenschappen", size, None, None, include_paging_mode=False,
+            self.requester,
+            "core",
+            "eigenschappen",
+            size,
+            None,
+            None,
+            include_paging_mode=False,
         ):
             yield from data_list
 
-    def search_eigenschappen(self, eigenschap_naam: str, uri: str = None) -> list[Eigenschap]:
+    def search_eigenschappen(self, eigenschap_naam: str, uri: str | None = None) -> list[Eigenschap]:
         """
         Search Eigenschap with "eigenschap_naam" (mandatory) and "uri" (optional) parameters.
         The optional parameter "uri" results in one single list item Eigenschap.
@@ -29,28 +47,36 @@ class EigenschapService:
         :param uri:
         :return:
         """
-        query_dto = QueryDTO(size=10, from_=0, pagingMode=PagingModeEnum.OFFSET,
-                             selection=SelectionDTO(
-                                 expressions=[ExpressionDTO(
-                                     terms=[TermDTO(property='naam',
-                                                    operator=OperatorEnum.EQ,
-                                                    value=eigenschap_naam)])]))
+        query_dto = QueryDTO(
+            size=10,
+            from_=0,
+            pagingMode=PagingModeEnum.OFFSET,
+            selection=SelectionDTO(
+                expressions=[
+                    ExpressionDTO(terms=[TermDTO(property="naam", operator=OperatorEnum.EQ, value=eigenschap_naam)])
+                ]
+            ),
+        )
 
         if uri:
             expression_uri = ExpressionDTO(
-                terms=[TermDTO(property='uri',
-                               operator=OperatorEnum.CONTAINS,
-                               value=uri)], logicalOp=LogicalOpEnum.AND)
+                terms=[TermDTO(property="uri", operator=OperatorEnum.CONTAINS, value=uri)], logicalOp=LogicalOpEnum.AND
+            )
             query_dto.selection.expressions.append(expression_uri)
 
-        response = self.requester.post('core/api/eigenschappen/search', data=query_dto.json())
+        response = self.requester.post("core/api/eigenschappen/search", data=query_dto.json())
         if response.status_code != 200:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
 
-        return [Eigenschap.from_dict(item) for item in response.json()['data']]
+        return [Eigenschap.from_dict(item) for item in response.json()["data"]]
 
-    def update_eigenschap_by_uuid(self, asset_uuid: str, eigenschap: EigenschapValueDTO | EigenschapValueUpdateDTO, kenmerktype: KenmerkType = None) -> None:
+    def update_eigenschap_by_uuid(
+        self,
+        asset_uuid: str,
+        eigenschap: EigenschapValueDTO | EigenschapValueUpdateDTO,
+        kenmerktype: KenmerkType = None,
+    ) -> None:
         """
         Updates an eigenschap value on an asset, handling both DTO types.
 
@@ -61,13 +87,7 @@ class EigenschapService:
         :param kenmerktype
         :type kenmerktype: KenmerkType
         """
-        request_body = {
-            "data": [
-                {
-                    "eigenschap": eigenschap.eigenschap.asdict(),
-                    "typedValue": eigenschap.typedValue
-                }]
-        }
+        request_body = {"data": [{"eigenschap": eigenschap.eigenschap.asdict(), "typedValue": eigenschap.typedValue}]}
 
         # Determine how to retrieve the UUID for the kenmerk
         if hasattr(eigenschap, "kenmerkType") and hasattr(eigenschap.kenmerkType, "uuid"):
@@ -75,8 +95,9 @@ class EigenschapService:
         else:
             kenmerk_uuid = kenmerktype.type.get("uuid", None)
 
-        response = self.requester.patch(url=f'core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden',
-                                        json=request_body)
+        response = self.requester.patch(
+            url=f"core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden", json=request_body
+        )
         if response.status_code != 202:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
@@ -95,7 +116,7 @@ class EigenschapService:
     def list_eigenschap(self, kenmerktype_id: str) -> list[Eigenschap]:
         url = f"core/api/kenmerktypes/{kenmerktype_id}/eigenschappen"
         json_dict = self.requester.get(url).json()
-        return [Eigenschap.from_dict(item["eigenschap"]) for item in json_dict['data']]
+        return [Eigenschap.from_dict(item["eigenschap"]) for item in json_dict["data"]]
 
     def get_eigenschappen(self, asset_uuid: str, kenmerktype: KenmerkTypeEnum) -> list[EigenschapValueDTO] | None:
         """
@@ -107,31 +128,32 @@ class EigenschapService:
 
         kenmerk_uuid = kenmerk.type["uuid"]
         # ophalen alle eigenschapwaarden
-        url = f'core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden'
+        url = f"core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden"
         json_dict = self.requester.get(url).json()
-        eigenschap = [EigenschapValueDTO.from_dict(item) for item in json_dict['data']]
+        eigenschap = [EigenschapValueDTO.from_dict(item) for item in json_dict["data"]]
 
         if eigenschap == []:
             return None
         elif len(eigenschap) == 1:
             return eigenschap[0]
         else:
-            raise ValueError('Eigenschappen konden niet opgehaald worden.')
-
+            raise ValueError("Eigenschappen konden niet opgehaald worden.")
 
     def search_eigenschapwaarden(self, asset_uuid: str) -> list[EigenschapValueDTO]:
-        url = f'core/api/assets/{asset_uuid}/kenmerken/cef6a3c0-fd1b-48c3-8ee0-f723e55dd02b/eigenschapwaarden'
+        url = f"core/api/assets/{asset_uuid}/kenmerken/cef6a3c0-fd1b-48c3-8ee0-f723e55dd02b/eigenschapwaarden"
         response = self.requester.post(url=url)
         if response.status_code != 200:
             logging.error(response)
             raise ProcessLookupError(response.content.decode("utf-8"))
 
-        return [EigenschapValueDTO.from_dict(item) for item in response.json()['data']]
+        return [EigenschapValueDTO.from_dict(item) for item in response.json()["data"]]
 
-    def get_eigenschapwaarden(self, asset_uuid: str, kenmerk_uuid: str, eigenschap_naam: str = None) -> list[EigenschapValueDTO]:
-        url = f'core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden'
+    def get_eigenschapwaarden(
+        self, asset_uuid: str, kenmerk_uuid: str, eigenschap_naam: str | None = None
+    ) -> list[EigenschapValueDTO]:
+        url = f"core/api/assets/{asset_uuid}/kenmerken/{kenmerk_uuid}/eigenschapwaarden"
         json_dict = self.requester.get(url).json()
-        eigenschap_value_list = [EigenschapValueDTO.from_dict(item) for item in json_dict['data']]
+        eigenschap_value_list = [EigenschapValueDTO.from_dict(item) for item in json_dict["data"]]
         if eigenschap_naam:
             eigenschap_value_list = [item for item in eigenschap_value_list if item.eigenschap.naam == eigenschap_naam]
         return eigenschap_value_list

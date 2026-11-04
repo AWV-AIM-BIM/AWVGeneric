@@ -1,5 +1,6 @@
 import abc
-from typing import Any, Callable, Optional
+from typing import Any, Optional
+from collections.abc import Callable
 
 from requests import Response, Session
 from requests.adapters import HTTPAdapter
@@ -134,9 +135,7 @@ class AbstractRequester(Session, metaclass=abc.ABCMeta):
 
         error_details = self._get_error_details_from_response(last_response)
         response_summary = str(last_response) if last_response is not None else "<no response>"
-        exception_summary = (
-            f"\nLast exception: {last_exception}" if last_exception is not None else ""
-        )
+        exception_summary = f"\nLast exception: {last_exception}" if last_exception is not None else ""
 
         raise RuntimeError(
             f"{method} request failed after {self.retries} retries. "

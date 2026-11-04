@@ -119,7 +119,10 @@ def run_ruff(source: str, tests: str, scripts: str, tooling: str = "") -> dict[s
     command = _tool("ruff")
     if command is None:
         return {"available": False, "total": 0, "per_rule": {}, "fixable": 0}
-    code, output = _run([*command, "check", "--output-format=json", source, tests, scripts, tooling])
+    paths = [source, tests, scripts]
+    if tooling:
+        paths.append(tooling)
+    code, output = _run([*command, "check", "--output-format=json", *paths])
     try:
         findings = json.loads(output or "[]")
     except json.JSONDecodeError:
@@ -151,9 +154,10 @@ def run_ruff_format(source: str, tests: str, scripts: str, tooling: str = "") ->
     command = _tool("ruff")
     if command is None:
         return {"available": False, "files": 0}
-    format_command = [*command, "format", "--check", source, tests, scripts]
+    paths = [source, tests, scripts]
     if tooling:
-        format_command.append(tooling)
+        paths.append(tooling)
+    format_command = [*command, "format", "--check", *paths]
     code, output = _run(format_command)
     # ruff 0.17 prints "unformatted: File would be reformatted" per file, older
     # versions print "Would reformat: <path>". Counting only the first one makes
@@ -442,7 +446,7 @@ def detect_god_classes(source: str, excludes: tuple[str, ...] = ()) -> dict[str,
             with py_file.open(encoding="utf-8") as f:
                 content_file = f.read()
             tree = ast.parse(content_file)
-        except OSError, SyntaxError, UnicodeDecodeError, ValueError:
+        except (OSError, SyntaxError, UnicodeDecodeError, ValueError):
             # A file that cannot be read is not a god class. It is reported by
             # the "files radon cannot parse" row of the report.
             continue
