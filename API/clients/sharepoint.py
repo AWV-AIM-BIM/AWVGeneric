@@ -41,6 +41,50 @@ class SharepointClient:
         app (ConfidentialClientApplication): MSAL application instance
     """
 
+    def _load_settings_fallback(
+        self,
+        client_id: str | None,
+        tenant_id: str | None,
+        site_url: str | None,
+        client_secret: str | None,
+    ) -> tuple[str | None, str | None, str | None, str | None]:
+        if all([client_id, tenant_id, site_url]) and client_secret is not None:
+            return client_id, tenant_id, site_url, client_secret
+        try:
+            from API.auth.settings import load_settings
+
+            settings = load_settings("settings_sharepoint.json")
+            client_id = client_id or settings.get("client_id")
+            tenant_id = tenant_id or settings.get("tenant_id")
+            site_url = site_url or settings.get("site_url")
+            client_secret = client_secret or settings.get("secret") or settings.get("client_secret")
+        except Exception:
+            pass
+        return client_id, tenant_id, site_url, client_secret
+
+    def _init_msal_app(self, client_id: str, authority: str, client_secret: str | None, use_client_credentials: bool):
+        if use_client_credentials:
+            if not client_secret:
+                raise ValueError("client_secret is required for client credentials flow")
+            return msal.ConfidentialClientApplication(
+                client_id,
+                authority=authority,
+                client_credential=client_secret,
+            )
+        return msal.PublicClientApplication(
+            client_id,
+            authority=authority,
+        )
+
+    def _parse_site_urls(self, site_url: str):
+        parts = site_url.split("/sites/")
+        if len(parts) <= 1:
+            return site_url, None
+        path_parts = parts[1].split("/")
+        if len(path_parts) > 1:
+            return f"{parts[0]}/sites/{path_parts[0]}", parts[1]
+        return site_url, None
+
     def __init__(
         self,
         client_id: str | None = None,
@@ -57,18 +101,9 @@ class SharepointClient:
         """
         Initialize the SharePoint client.
         """
-        # Try to load from settings if not all params provided
-        if not all([client_id, tenant_id, site_url]) or client_secret is None:
-            try:
-                from API.auth.settings import load_settings
-
-                settings = load_settings("settings_sharepoint.json")
-                client_id = client_id or settings.get("client_id")
-                tenant_id = tenant_id or settings.get("tenant_id")
-                site_url = site_url or settings.get("site_url")
-                client_secret = client_secret or settings.get("secret") or settings.get("client_secret")
-            except Exception:
-                pass  # Fall through to validation
+        client_id, tenant_id, site_url, client_secret = self._load_settings_fallback(
+            client_id, tenant_id, site_url, client_secret
+        )
 
         if not site_url:
             raise ValueError("site_url is required for SharepointClient operations")
@@ -85,35 +120,9 @@ class SharepointClient:
             raise ValueError("tenant_id is required for SharepointClient operations")
         authority = f"https://login.microsoftonline.com/{self.tenant_id}"
 
-        if use_client_credentials:
-            if not client_secret:
-                raise ValueError("client_secret is required for client credentials flow")
-            self.app = msal.ConfidentialClientApplication(
-                self.client_id,
-                authority=authority,
-                client_credential=self.client_secret,
-            )
-        else:
-            self.app = msal.PublicClientApplication(
-                self.client_id,
-                authority=authority,
-            )
-        # Extract the parent site URL (up to /sites/<site_name>)
-        # The site_url might be a subsite, but we need the parent site for Graph API access
-        parts = self.site_url.split("/sites/")
-        if len(parts) > 1:
-            # Reconstruct parent site: https://hostname/sites/<first_path_segment>
-            path_parts = parts[1].split("/")
-            if len(path_parts) > 1:
-                # This is a subsite, use the parent site
-                self.parent_site_url = f"{parts[0]}/sites/{path_parts[0]}"
-                self.subsite_path = parts[1]  # Full path after /sites/
-            else:
-                self.parent_site_url = self.site_url
-                self.subsite_path = None
-        else:
-            self.parent_site_url = self.site_url
-            self.subsite_path = None
+        self.app = self._init_msal_app(self.client_id, authority, self.client_secret, use_client_credentials)
+        self.parent_site_url, self.subsite_path = self._parse_site_urls(self.site_url)
+
 
     def get_access_token(self) -> str:
         """Get an access token using client credentials flow."""
@@ -987,70 +996,60 @@ class SharepointClient:
 
         return expected
 
-    def validate_local_mirror(self, local_folder: Path) -> tuple[bool, str]:
-        """
-        Validate local mirror layout.
-
-        Checks that the local mirror contains at minimum:
-        - An 'Overzicht' folder (case-insensitive, created if missing)
-        - An 'Overzicht/[RSA] Overzicht rapporten.xlsx' workbook
-        - A 'logs' folder (created if missing)
-        - All expected bucket folders (created if missing)
-        - At least one bucket folder
-
-        Args:
-            local_folder: Local mirror root folder
-
-        Returns:
-            Tuple of (is_valid, reason)
-        """
-        local_path = Path(local_folder)
-
-        # Ensure Overzicht folder exists
-        overzicht_dir = None
+    def _ensure_overzicht(self, local_path: Path) -> Path:
+        overview_dir = None
         for item in local_path.iterdir():
             if item.is_dir() and item.name.lower() == "overzicht":
-                overzicht_dir = item
+                overview_dir = item
                 break
-
-        if overzicht_dir is None:
-            overzicht_dir = local_path / "Overzicht"
-            overzicht_dir.mkdir(parents=True, exist_ok=True)
+        if overview_dir is None:
+            overview_dir = local_path / "Overzicht"
+            overview_dir.mkdir(parents=True, exist_ok=True)
             logging.info("Created missing 'Overzicht' folder")
+        return overview_dir
 
-        # Check for Overzicht workbook
-        workbook_found = False
-        for item in overzicht_dir.iterdir():
+    def _has_overzicht_workbook(self, overview_dir: Path) -> bool:
+        for item in overview_dir.iterdir():
             if item.is_file() and "overzicht" in item.name.lower() and "rapport" in item.name.lower():
-                workbook_found = True
-                break
+                return True
+        return False
 
-        if not workbook_found:
-            return False, "Missing '[RSA] Overzicht rapporten.xlsx' in Overzicht folder"
-
-        # Ensure logs folder exists
+    def _ensure_logs_folder(self, local_path: Path) -> None:
         logs_dir = local_path / "logs"
         if not logs_dir.exists():
             logs_dir.mkdir(parents=True, exist_ok=True)
             logging.info("Created missing 'logs' folder")
 
-        # Discover and ensure expected bucket folders
+    def _ensure_bucket_folders(self, local_path: Path) -> tuple[bool, str]:
         expected_buckets = self._discover_expected_buckets(local_path)
         if not expected_buckets:
             return False, "No expected buckets found (no Report#### files in Reports/ or ArchivedReports/)"
-
         for bucket in expected_buckets:
             bucket_dir = local_path / bucket
             if not bucket_dir.exists():
                 bucket_dir.mkdir(parents=True, exist_ok=True)
                 logging.info(f"Created missing bucket folder: {bucket}")
-
-        # Verify at least one bucket folder exists
         existing_buckets = [b for b in expected_buckets if (local_path / b).exists()]
         if not existing_buckets:
             return False, "No bucket folders present in local mirror"
+        return True, ""
 
+    def validate_local_mirror(self, local_folder: Path) -> tuple[bool, str]:
+        """
+        Validate local mirror layout.
+        """
+        local_path = Path(local_folder)
+
+        overview_dir = self._ensure_overzicht(local_path)
+        if not self._has_overzicht_workbook(overview_dir):
+            return False, "Missing '[RSA] Overzicht rapporten.xlsx' in Overzicht folder"
+
+        self._ensure_logs_folder(local_path)
+        ok, reason = self._ensure_bucket_folders(local_path)
+        if not ok:
+            return False, reason
         return True, "Local mirror layout is valid"
+
 
     # ---------- Run Log Management ----------
 
@@ -1503,14 +1502,12 @@ def upload_after_run(
 # ---------- CLI Interface ----------
 
 
-def _main():
-    """Command-line interface for SharepointClient."""
+def _build_arg_parser() -> "argparse.ArgumentParser":
     import argparse
 
     parser = argparse.ArgumentParser(description="SharePoint CLI")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Common arguments
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--client-id", required=True, help="Azure AD client ID")
     common.add_argument("--tenant-id", required=True, help="Azure AD tenant ID")
@@ -1518,80 +1515,81 @@ def _main():
     common.add_argument("--document-library-id", help="Document library ID (optional, uses default)")
     common.add_argument("--token-file", default="sharepoint_token.json", help="Token file path")
 
-    # login command
     login_parser = subparsers.add_parser("login", parents=[common], help="Perform interactive login and persist token")
     login_parser.add_argument("--client-secret", help="Client secret (optional for device code flow)")
 
-    # sync-down command
-    sync_down_parser = subparsers.add_parser(
-        "sync-down", parents=[common], help="Mirror SharePoint folder to local folder"
-    )
+    sync_down_parser = subparsers.add_parser("sync-down", parents=[common], help="Mirror SharePoint folder to local folder")
     sync_down_parser.add_argument("--remote-path", default="", help="Remote folder path (empty = entire library)")
     sync_down_parser.add_argument("--local-folder", required=True, help="Local folder to mirror into")
 
-    # sync-up command
     sync_up_parser = subparsers.add_parser("sync-up", parents=[common], help="Mirror local folder to SharePoint folder")
     sync_up_parser.add_argument("--local-folder", required=True, help="Local folder to sync")
     sync_up_parser.add_argument("--remote-path", required=True, help="Remote folder path")
 
-    # upload command
     upload_parser = subparsers.add_parser("upload", parents=[common], help="Legacy top-level file upload")
     upload_parser.add_argument("--local-folder", required=True, help="Local folder containing files")
     upload_parser.add_argument("--extensions", default=".xlsx", help="Comma-separated extensions (e.g., .xlsx,.pdf)")
 
-    args = parser.parse_args()
+    return parser
 
-    # Build client
+
+def _create_client_for_args(args):
     if args.command == "login":
-        # For login, we don't need site_url or client_secret for device code
-        client = SharepointClient(
+        return SharepointClient(
             client_id=args.client_id,
             tenant_id=args.tenant_id,
-            client_secret=args.client_secret or "",
+            client_secret=getattr(args, "client_secret", None) or "",
             site_url=args.site_url,
         )
-    else:
-        client = SharepointClient(
-            client_id=args.client_id,
-            tenant_id=args.tenant_id,
-            client_secret="",  # Will use token file
-            site_url=args.site_url,
-            use_client_credentials=False,
-            token_file=args.token_file,
-        )
+    return SharepointClient(
+        client_id=args.client_id,
+        tenant_id=args.tenant_id,
+        client_secret="",
+        site_url=args.site_url,
+        use_client_credentials=False,
+        token_file=args.token_file,
+    )
 
+
+def _run_command(client, args) -> int:
+    if args.command == "login":
+        client.first_login(args.token_file)
+        return 0
+    if args.command == "sync-down":
+        success = client.sync_library_to_local(
+            args.remote_path,
+            args.local_folder,
+            args.document_library_id,
+        )
+        return 0 if success else 1
+    if args.command == "sync-up":
+        success = client.sync_local_to_library(
+            args.local_folder,
+            args.remote_path,
+            args.document_library_id,
+        )
+        return 0 if success else 1
+    if args.command == "upload":
+        extensions = tuple(e.strip() for e in args.extensions.split(","))
+        success = client.upload_folder_to_library(
+            args.local_folder,
+            args.document_library_id,
+            extensions,
+        )
+        return 0 if success else 1
+    return 1
+
+
+def _main():
+    """Command-line interface for SharepointClient."""
+    parser = _build_arg_parser()
+    args = parser.parse_args()
+    client = _create_client_for_args(args)
     try:
-        if args.command == "login":
-            token = client.first_login(args.token_file)
-            return 0
-
-        elif args.command == "sync-down":
-            success = client.sync_library_to_local(
-                args.remote_path,
-                args.local_folder,
-                args.document_library_id,
-            )
-            return 0 if success else 1
-
-        elif args.command == "sync-up":
-            success = client.sync_local_to_library(
-                args.local_folder,
-                args.remote_path,
-                args.document_library_id,
-            )
-            return 0 if success else 1
-
-        elif args.command == "upload":
-            extensions = tuple(e.strip() for e in args.extensions.split(","))
-            success = client.upload_folder_to_library(
-                args.local_folder,
-                args.document_library_id,
-                extensions,
-            )
-            return 0 if success else 1
-
-    except Exception as exc:
+        return _run_command(client, args)
+    except Exception:
         return 1
+
 
 
 if __name__ == "__main__":
