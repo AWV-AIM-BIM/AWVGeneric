@@ -61,8 +61,12 @@ class EMSONClient:
                     f"EMSON request failed ({response.status_code}) for resource '{resource}': "
                     f"{response.content.decode('utf-8')}"
                 )
+            data = response.json().get('@graph', [])
             cursor = response.headers.get('em-paging-next-cursor')
-            yield cursor, response.json().get('@graph', [])
+            if not data:
+                yield None, []
+                break
+            yield cursor, data
             if cursor is None:
                 break
             query.fromCursor = cursor
