@@ -1,5 +1,6 @@
 from collections.abc import Generator
 from dataclasses import dataclass
+from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
@@ -18,6 +19,15 @@ class Query(BaseDataclass):
     orderByDirection: str | None = None
     fromCursor: str | None = None
     crs: str | None = '3812'  # Default to Belgian Lambert 2008
+
+    def __dict_factory_override__(self):
+        return {
+            k: (v.value if isinstance(v, Enum) else v)
+            for k, v in (
+                (f, getattr(self, f)) for f in self.__dataclass_fields__
+            )
+            if v is not None
+        }
 
 
 class EMSONClient:
