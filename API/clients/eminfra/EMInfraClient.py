@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 from API.clients.eminfra.AgentService import AgentService
 from API.clients.eminfra.AssetService import AssetService

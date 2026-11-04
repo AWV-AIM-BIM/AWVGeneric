@@ -13,16 +13,11 @@ class EigenschapService:
 
 
     def get_all_eigenschappen_as_text_generator(self, size: int = 100) -> Generator[str]:
-        from_ = 0
-
-        while True:
-            url = f"core/api/eigenschappen?from={from_}&size={size}"
-            json_dict = self.requester.get(url).json()
-            yield from json_dict['data']
-            dto_list_total = json_dict['totalCount']
-            from_ = json_dict['from'] + size
-            if from_ >= dto_list_total:
-                break
+        from API.clients.eminfra.paging import offset_page_generator_get
+        for _, data_list in offset_page_generator_get(
+            self.requester, "core", "eigenschappen", size, None, None, include_paging_mode=False,
+        ):
+            yield from data_list
 
     def search_eigenschappen(self, eigenschap_naam: str, uri: str = None) -> list[Eigenschap]:
         """
