@@ -50,16 +50,16 @@ def extract_asset_uuid(value: str | None) -> str | None:
     return match.group(0) if match else text
 
 
-def read_keuringen(excel_path: Path) -> pd.DataFrame:
+def read_keuringen(excel_path: Path, sheet_name: str, excel_cols: list[str] = EXCEL_COLUMNS) -> pd.DataFrame:
     """Read the Excel file into a DataFrame with the fixed column structure."""
-    df = pd.read_excel(excel_path, sheet_name="assets", dtype=str)
-    missing = [col for col in EXCEL_COLUMNS if col not in df.columns]
+    df = pd.read_excel(excel_path, sheet_name=sheet_name, dtype=str)
+    missing = [col for col in excel_cols if col not in df.columns]
     if missing:
         raise KeyError(
             f"Missing columns {missing} in {excel_path.name}. "
             f"Available columns: {list(df.columns)}"
         )
-    return df[EXCEL_COLUMNS]
+    return df[excel_cols]
 
 
 def _parse_bijlage_from_eigenschapwaarde(eigenschapwaarde: EigenschapValueDTO) -> tuple[str, str, str|None]:
