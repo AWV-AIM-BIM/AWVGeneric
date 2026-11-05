@@ -37,7 +37,6 @@ OUTPUT_DIR = Path.home() / "Downloads" / "Documenten_Keuring"
 UUID_RE = re.compile(
     r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
 )
-KENMERK_UUID_BIJLAGE = 'e67cd3d0-54b0-4db0-987d-9ef33e17d1ff'
 
 
 def extract_asset_uuid(value: str | None) -> str | None:

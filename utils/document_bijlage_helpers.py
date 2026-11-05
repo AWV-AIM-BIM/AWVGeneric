@@ -4,7 +4,6 @@ import logging
 import re
 from pathlib import Path
 
-from API.clients.eminfra.EMInfraClient import EMInfraClient
 from API.clients.eminfra.EMInfraDomain import EigenschapValueDTO
 
 KENMERK_UUID_BIJLAGE = "e67cd3d0-54b0-4db0-987d-9ef33e17d1ff"
