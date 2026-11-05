@@ -52,7 +52,7 @@ def extract_asset_uuid(value: str | None) -> str | None:
 
 def read_keuringen(excel_path: Path, sheet_name: str, excel_cols: list[str] = EXCEL_COLUMNS) -> pd.DataFrame:
     """Read the Excel file into a DataFrame with the fixed column structure."""
-    df = pd.read_excel(excel_path, sheet_name=sheet_name, dtype=str)
+    df = pd.read_excel(io=excel_path, sheet_name=sheet_name, dtype=str)
     missing = [col for col in excel_cols if col not in df.columns]
     if missing:
         raise KeyError(
