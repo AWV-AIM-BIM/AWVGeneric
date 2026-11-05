@@ -19,6 +19,8 @@ from API.auth.enums import AuthType, Environment
 from API.clients.eminfra.EMInfraClient import EMInfraClient
 from API.clients.eminfra.EMInfraDomain import EigenschapValueDTO
 
+from utils.document_bijlage_helpers import KENMERK_UUID_BIJLAGE, download_bijlage
+
 EXCEL_FILE_NAME = "ElektrischeKeuring_rapport.xlsx"
 EXCEL_COLUMNS = [
     "assetId.identificator",
@@ -80,34 +82,21 @@ def download_documents_for_assets(
     output_dir.mkdir(parents=True, exist_ok=True)
 
     total = 0
-    counter = 0
-    for idx, row in df.iterrows():
-        counter += 1
+    for _, row in df.iterrows():
         asset_uuid = extract_asset_uuid(row["assetId.identificator"])
         if not asset_uuid:
             continue
 
         asset_dir = output_dir / asset_uuid
-        asset_dir.mkdir(parents=True, exist_ok=True)
-
-        eigenschapwaarden = client.eigenschap_service.get_eigenschapwaarden(asset_uuid=asset_uuid, kenmerk_uuid=KENMERK_UUID_BIJLAGE, eigenschap_naam='bijlage')
-        if len(eigenschapwaarden) == 1:
-            eigenschapwaarde = eigenschapwaarden[0]
-        else:
-            logging.error(f'Asset: {asset_uuid} heeft een bijlage')
-            continue
-
-        bestandsnaam, uri, document_uuid = _parse_bijlage_from_eigenschapwaarde(eigenschapwaarde=eigenschapwaarde)
-        final_path = asset_dir / bestandsnaam
-
         try:
-            file = client.requester.get(url=f"core/api/otl/assets/{asset_uuid}/documenten/{document_uuid}")
-
-            with open(final_path, 'wb') as f:
-                logging.info(f'Writing file {bestandsnaam} to temp location: {asset_dir}.')
-                f.write(file.content)
-
-            total += 1
+            path = download_bijlage(
+                output_folder=asset_dir,
+                asset_uuid=asset_uuid,
+                client=client,
+                kenmerk_uuid=KENMERK_UUID_BIJLAGE,
+            )
+            if path is not None:
+                total += 1
         except Exception as exc:  # noqa: BLE001
             logging.error(
                 "Kon document van asset %s niet downloaden: %s",
