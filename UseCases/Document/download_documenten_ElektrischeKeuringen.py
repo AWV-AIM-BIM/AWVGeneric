@@ -86,10 +86,9 @@ def download_documents_for_assets(
         if not asset_uuid:
             continue
 
-        asset_dir = output_dir / asset_uuid
         try:
             path = download_bijlage(
-                output_folder=asset_dir,
+                output_folder=output_dir,
                 asset_uuid=asset_uuid,
                 client=client,
                 kenmerk_uuid=KENMERK_UUID_BIJLAGE,
@@ -114,7 +113,7 @@ if __name__ == "__main__":
     client = EMInfraClient(authenticator=auth)
 
     excel_path = Path(__file__).with_name(EXCEL_FILE_NAME)
-    df = read_keuringen(excel_path)
+    df = read_keuringen(excel_path=excel_path, sheet_name='assets', excel_cols=EXCEL_COLUMNS)
     print(f"{len(df)} rijen gelezen uit {excel_path.name}.")
 
     total = download_documents_for_assets(
