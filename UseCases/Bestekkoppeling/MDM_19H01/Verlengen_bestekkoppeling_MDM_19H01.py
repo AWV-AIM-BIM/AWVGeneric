@@ -10,7 +10,8 @@ from API.auth.enums import AuthType, Environment
 from UseCases.utils import configure_logger, load_settings_path
 from utils.date_helpers import format_datetime
 
-EINDDATUM = datetime(year=2026, month=12, day=10, hour=0, minute=0)
+EINDDATUM_BESTAAND = datetime(year=2026, month=12, day=10, hour=0, minute=0)
+EINDDATUM_NIEUW = datetime(2027, month=12, day=10, hour=0, minute=0)
 OUTPUT_EXCEL_PATH = Path('Verlengen_bestekkoppeling_MDM_19H01.xlsx')
 EDELTA_BESTEKNUMMER = 'MDM/19H01'
 
@@ -18,7 +19,7 @@ EDELTA_BESTEKNUMMER = 'MDM/19H01'
 def verleng_bestekkoppelingen(client: EMInfraClient,
                               df: pd.DataFrame,
                               bestekref: BestekRef,
-                              einddatum: datetime = EINDDATUM,
+                              einddatum: datetime = EINDDATUM_NIEUW,
                               output_excel_path: Path = OUTPUT_EXCEL_PATH) -> Path:
     """
     Verleng de einddatum van bestekkoppelingen voor een lijst van uuid's (assets) in een Dataframe
@@ -44,14 +45,14 @@ def verleng_bestekkoppelingen(client: EMInfraClient,
 
         index, matching_bestekkoppeling = next(((i, x) for i, x in enumerate(bestekkoppelingen)
                                                 if
-                                                x.status == BestekKoppelingStatusEnum.INACTIEF and
+                                                x.status == BestekKoppelingStatusEnum.ACTIEF and
                                                 x.bestekRef.uuid == bestekref.uuid and
-                                                x.categorie == BestekCategorieEnum.WERKBESTEK), (None, None))
+                                                x.categorie == BestekCategorieEnum.WERKBESTEK and
+                                                datetime.fromisoformat(x.eindDatum).date() ==
+                                                EINDDATUM_BESTAAND.date()
+                                                ), (None, None))
 
-        if (matching_bestekkoppeling
-                and
-                datetime.fromisoformat(matching_bestekkoppeling.eindDatum).date() !=
-                datetime(year=2026, month=12, day=10).date()):
+        if matching_bestekkoppeling:
             logging.debug(f'Verleng bestekkoppeling {matching_bestekkoppeling.bestekRef.eDeltaBesteknummer}')
             bestekkoppelingen[index].eindDatum = format_datetime(einddatum)
             # Update all the bestekkoppelingen for this asset
@@ -78,14 +79,14 @@ def verleng_bestekkoppelingen(client: EMInfraClient,
 
 
 if __name__ == '__main__':
-    configure_logger()
+    config_path = Path(__file__).parent.parent / "config" / "settings_AWV_applications.json.json"
     logging.info(
-        f'Verlengen van bestekkoppeling "{EDELTA_BESTEKNUMMER}" naar {format_datetime(EINDDATUM)}.'
+        f'Verlengen van bestekkoppeling "{EDELTA_BESTEKNUMMER}" naar {format_datetime(EINDDATUM_NIEUW)}.'
     )
-    eminfra_client = EMInfraClient(env=Environment.PRD, auth_type=AuthType.JWT, settings_path=load_settings_path())
+    eminfra_client = EMInfraClient(env=Environment.PRD, auth_type=AuthType.JWT, settings_path=config_path)
 
     logging.info("Query assets...")
-    input_filepath = Path.home() / 'Downloads' / 'MDM19H01.xlsx'
-    df_assets = pd.read_excel(input_filepath, sheet_name='Sheet1', header=0, usecols=["uuid", "naampad"])
+    input_filepath = Path.home() / 'Downloads' / '[RSA] Bestekkoppelingen die bijna vervallen (komende 30 dagen).xlsx'
+    df_assets = pd.read_excel(input_filepath, sheet_name='Resultaat', header=2, usecols=["uuid", "naampad"])
     bestekref = eminfra_client.bestek_service.get_bestekref(eDelta_besteknummer=EDELTA_BESTEKNUMMER)
     verleng_bestekkoppelingen(client=eminfra_client, df=df_assets, bestekref=bestekref)
