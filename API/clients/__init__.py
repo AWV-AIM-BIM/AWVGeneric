@@ -1,22 +1,7 @@
-"""AWV API service clients."""
+"""AWV API service clients.
 
-from API.clients.eminfra import EMInfraClient
-from API.clients.sngateway import SNGatewayClient
-from API.clients.emson import EMSONClient
-from API.clients.locatieservices2 import Locatieservices2Client
-from API.clients.fs import FSClient
-from API.clients.onedrive import OneDriveClient
-from API.clients.sharepoint import SharepointClient
+Import clients from their submodules directly, e.g.::
 
-__all__ = [
-    "EMInfraClient",
-    "SNGatewayClient",
-    "EMSONClient",
-    "Locatieservices2Client",
-    "FSClient",
-    "OneDriveClient",
-    "SharepointClient",
-]
-
-# Direct access to modules
-from API.clients import eminfra, sngateway, emson, locatieservices2, fs, onedrive, sharepoint
+    from API.clients.eminfra import EMInfraClient
+    from API.clients.onedrive import OneDriveClient
+"""
